@@ -156,3 +156,62 @@ body::after {
   .lore-panel { padding: 23px; }
   .spec { min-height: 0; }
 }
+
+
+/* Единый курсор главной страницы для всех внутренних разделов */
+.cursor-glow {
+  position: fixed;
+  z-index: 18;
+  pointer-events: none;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(134,54,71,.08), transparent 68%);
+  transform: translate(-50%,-50%);
+}
+.custom-cursor {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(220,168,178,.78);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%,-50%);
+  transition: width .18s, height .18s, background .18s, opacity .18s;
+  box-shadow: 0 0 14px rgba(154,66,83,.22);
+}
+.custom-cursor::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #e3c2c8;
+  transform: translate(-50%,-50%);
+}
+body.cursor-ready { cursor: none; }
+body.cursor-ready a,
+body.cursor-ready button,
+body.cursor-ready input,
+body.cursor-ready select,
+body.cursor-ready textarea { cursor: none; }
+body.cursor-ready .custom-cursor { opacity: 1; }
+body.cursor-hover .custom-cursor {
+  width: 38px;
+  height: 38px;
+  background: rgba(119,48,64,.15);
+  border-color: #e1a6b1;
+}
+@media (pointer: coarse) {
+  .cursor-glow, .custom-cursor { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-glow, .custom-cursor { display: none !important; }
+  body.cursor-ready, body.cursor-ready a, body.cursor-ready button { cursor: auto; }
+}
