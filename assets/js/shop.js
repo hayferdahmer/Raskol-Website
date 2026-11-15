@@ -143,8 +143,8 @@
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     $('#rollBtn').disabled=true;$('#rollBtn').textContent='Идёт открытие…';
     $('#rollResult').textContent='Снимаем печать…';
-    const itemWidth=118, gap=9, cardWidth=118, center=$('.roulette-window').clientWidth/2;
-    const target=(winnerIndex*(itemWidth+gap))-(center-cardWidth/2);
+    const winnerCard=track.children[winnerIndex];
+    const target=winnerCard.offsetLeft+(winnerCard.offsetWidth/2)-($('.roulette-window').clientWidth/2);
     const duration=reducedMotion?80:6200;
     requestAnimationFrame(()=>{track.style.transition='transform '+duration+'ms cubic-bezier(.08,.72,.12,1)';track.style.transform='translateX(-'+target+'px)';});
     setTimeout(()=>{rolling=false;showWinner(winner);},duration+120);
