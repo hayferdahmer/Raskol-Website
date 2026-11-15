@@ -23,14 +23,14 @@
     {id:'season-eclipse',cat:'season',name:'Затмение',type:'Сезонный эффект',desc:'Кольцо тени с редкими серебряными искрами.',price:520,icon:'☾',collection:'season'}
   ];
   const cases = [
-    {id:'two-crowns',name:'Две короны',group:'crown',price:249,items:32,desc:'Геральдика, титулы и регалии двух старых домов.',icon:'♛',glow:'rgba(199,164,119,.28)'},
-    {id:'blood-oath',name:'Кровавая клятва',group:'crown',price:399,items:28,desc:'Багряные эффекты и церемониальные облики.',icon:'⚔',glow:'rgba(166,58,76,.3)'},
-    {id:'ashfall',name:'Пеплопад',group:'ash',price:99,items:24,desc:'Пыльные следы, дымка и сумрачные спутники.',icon:'✧',glow:'rgba(151,129,135,.24)'},
-    {id:'black-embers',name:'Чёрные угли',group:'ash',price:179,items:26,desc:'Тёмные ауры и редкие титулы забытого двора.',icon:'◈',glow:'rgba(118,62,76,.3)'},
-    {id:'winter-solstice',name:'Зимнее солнцестояние',group:'season',price:299,items:30,desc:'Сезонные украшения, доступные в зимней коллекции.',icon:'❄',glow:'rgba(122,154,190,.25)'},
-    {id:'eclipse',name:'Затмение',group:'season',price:499,items:22,desc:'Серебро, тень и редкие эффекты ночного неба.',icon:'☾',glow:'rgba(126,119,173,.3)'},
-    {id:'old-kingdom',name:'Старое королевство',group:'archive',price:149,items:18,desc:'Архивная подборка ранних косметических серий.',icon:'♜',glow:'rgba(172,128,84,.24)'},
-    {id:'last-vow',name:'Последний обет',group:'archive',price:349,items:20,desc:'Архивные знаки, титулы и памятные эффекты.',icon:'†',glow:'rgba(148,68,87,.28)'}
+    {id:'two-crowns',name:'Две короны',group:'crown',price:249,items:11,desc:'Геральдика, титулы и регалии двух старых домов.',icon:'♛',glow:'rgba(199,164,119,.28)'},
+    {id:'blood-oath',name:'Кровавая клятва',group:'crown',price:399,items:11,desc:'Багряные эффекты и церемониальные облики.',icon:'⚔',glow:'rgba(166,58,76,.3)'},
+    {id:'ashfall',name:'Пеплопад',group:'ash',price:99,items:11,desc:'Пыльные следы, дымка и сумрачные спутники.',icon:'✧',glow:'rgba(151,129,135,.24)'},
+    {id:'black-embers',name:'Чёрные угли',group:'ash',price:179,items:11,desc:'Тёмные ауры и редкие титулы забытого двора.',icon:'◈',glow:'rgba(118,62,76,.3)'},
+    {id:'winter-solstice',name:'Зимнее солнцестояние',group:'season',price:299,items:11,desc:'Сезонные украшения, доступные в зимней коллекции.',icon:'❄',glow:'rgba(122,154,190,.25)'},
+    {id:'eclipse',name:'Затмение',group:'season',price:499,items:11,desc:'Серебро, тень и редкие эффекты ночного неба.',icon:'☾',glow:'rgba(126,119,173,.3)'},
+    {id:'old-kingdom',name:'Старое королевство',group:'archive',price:149,items:11,desc:'Архивная подборка ранних косметических серий.',icon:'♜',glow:'rgba(172,128,84,.24)'},
+    {id:'last-vow',name:'Последний обет',group:'archive',price:349,items:11,desc:'Архивные знаки, титулы и памятные эффекты.',icon:'†',glow:'rgba(148,68,87,.28)'}
   ];
   const rewards = [
     {name:'Знак старого дома',icon:'♜',rarity:'common',label:'Обычная'},
@@ -101,6 +101,7 @@
     if(rolling)return;currentCase=c;currentWinner=null;
     $('#modalTitle').textContent=c.name;$('#modalDesc').textContent=c.desc+' В коллекции — '+c.items+' косметических реликвий. Открытие бесплатное и не списывает указанную проектную цену.';
     $('#rollResult').textContent='Ларец запечатан. Готов ли ты снять печать?';
+    $('#prizePool').innerHTML=rewards.map(item=>'<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+'</small></div>').join('');
     currentTier='standard';renderRitual();$('#rollProgress').style.transform='scaleX(0)';
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     dialog.classList.remove('is-rolling','is-won');
