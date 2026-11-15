@@ -6,6 +6,32 @@
   canvas.setAttribute('aria-hidden', 'true');
   document.body.appendChild(canvas);
 
+  // Курсор и мягкое свечение повторяют поведение главной страницы.
+  if (!reduced && window.matchMedia('(pointer: fine)').matches) {
+    const glow = document.createElement('div');
+    const cursor = document.createElement('div');
+    glow.className = 'cursor-glow';
+    cursor.className = 'custom-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    document.body.append(glow, cursor);
+    document.body.classList.add('cursor-ready');
+
+    window.addEventListener('pointermove', (event) => {
+      glow.style.left = event.clientX + 'px';
+      glow.style.top = event.clientY + 'px';
+      cursor.style.left = event.clientX + 'px';
+      cursor.style.top = event.clientY + 'px';
+    }, { passive: true });
+
+    const interactive = 'a, button, input, select, textarea, [role="button"]';
+    document.addEventListener('pointerover', (event) => {
+      if (event.target.closest?.(interactive)) document.body.classList.add('cursor-hover');
+    });
+    document.addEventListener('pointerout', (event) => {
+      if (!event.relatedTarget?.closest?.(interactive)) document.body.classList.remove('cursor-hover');
+    });
+  }
+
   const targets = document.querySelectorAll(
     'main > *, main section, .class-card, .detail-head, .facts, .fact, .spec, .foot'
   );
