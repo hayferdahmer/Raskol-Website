@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090709">
+<meta name="description" content="Интерактивное дерево специализации Оружие — РАСКОЛ. 20 талантов, ранги, требования и очки развития.">
+<title>Оружие · Древо талантов — РАСКОЛ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/atmosphere.css">
+<style>
+:root{color-scheme:dark;--bg:#090709;--panel:#171014;--panel2:#21151b;--silk:#e8ddda;--mist:#b9a9a8;--muted:#8d7d80;--red:#a66a75;--line:rgba(193,126,137,.24);--gold:#c7a477;--display:'Cormorant Garamond',Georgia,serif;--ui:'Inter',Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,rgba(83,31,44,.2),transparent 42%),var(--bg);color:var(--silk);font:16px/1.55 var(--ui)}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}.wrap{width:min(1420px,calc(100% - 48px));margin:auto}
+.top{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font:10px var(--ui);letter-spacing:.18em;text-transform:uppercase}.brand{font:600 17px var(--display);letter-spacing:.2em}.brand small{display:block;font:8px var(--ui);color:var(--red);letter-spacing:.28em;margin-top:4px}.nav{display:flex;gap:24px;color:#c7b8b8}.nav a:hover{color:#e5a7b0}
+.hero{padding:64px 0 36px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end}.eyebrow{font:600 10px var(--ui);letter-spacing:.3em;color:var(--red);text-transform:uppercase}.hero h1{font:500 clamp(52px,7vw,88px)/.9 var(--display);text-transform:uppercase;letter-spacing:.055em;margin:12px 0}.hero p{max-width:720px;color:var(--mist);font:20px/1.5 var(--display);margin:0}.crest{width:142px;height:142px;filter:drop-shadow(0 10px 28px #000)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:16px 18px;border:1px solid var(--line);background:linear-gradient(100deg,rgba(54,26,36,.7),rgba(14,10,13,.9));margin-bottom:18px}.points{display:flex;gap:18px;align-items:center}.points strong{font:600 25px var(--display);color:#f0d8d8}.points small{display:block;color:var(--muted);font:9px var(--ui);letter-spacing:.16em;text-transform:uppercase}.meter{width:180px;height:4px;background:#38252c;overflow:hidden}.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#78414d,#d6a4aa);transition:width .3s}
+.actions{display:flex;gap:10px;align-items:center}.btn{border:1px solid rgba(193,126,137,.45);background:rgba(44,22,30,.8);padding:10px 15px;font:10px var(--ui);letter-spacing:.13em;text-transform:uppercase;cursor:pointer;transition:.25s}.btn:hover:not(:disabled){border-color:#d6a4aa;background:#3b202a}.btn:disabled{opacity:.35;cursor:not-allowed}.btn.ghost{background:transparent;color:var(--mist)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}.tree-panel,.detail-panel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(27,16,22,.96),rgba(10,8,10,.98));box-shadow:0 22px 70px #0005}.tree-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.tree-head h2{font:500 27px var(--display);letter-spacing:.08em;text-transform:uppercase;margin:0}.tree-head span{font:9px var(--ui);letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.tree{position:relative;padding:30px 24px 36px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(6,132px);gap:12px;isolation:isolate}.connections{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:visible}.connections path{fill:none;stroke:rgba(166,106,117,.42);stroke-width:1.5;stroke-dasharray:4 5;filter:drop-shadow(0 0 4px rgba(166,106,117,.25))}
+.node{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:10px 7px;border:1px solid rgba(193,126,137,.25);background:linear-gradient(150deg,rgba(39,24,31,.96),rgba(14,10,13,.98));cursor:pointer;text-align:center;transition:transform .25s,border-color .25s,box-shadow .25s,opacity .25s;z-index:1}
+.node:hover{transform:translateY(-3px);border-color:#bd818b;box-shadow:0 8px 24px #0008,0 0 20px #8b455322}.node.selected{border-color:#e1b1b6;box-shadow:inset 0 0 0 1px #a66a75,0 0 24px #a66a7533}.node.locked{opacity:.48;filter:saturate(.55)}.node.purchased{border-color:rgba(199,164,119,.75)}.node.available{border-color:rgba(166,106,117,.8)}
+.node .sigil{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(193,126,137,.38);border-radius:50%;color:#d9b5b8;font:20px var(--display);background:radial-gradient(circle,rgba(166,106,117,.2),transparent 70%)}.node.purchased .sigil{color:var(--gold);border-color:rgba(199,164,119,.7)}
+.node .name{font:500 15px/1.1 var(--display);color:var(--silk);max-width:100%;overflow-wrap:anywhere}.node .rank{font:9px var(--ui);letter-spacing:.12em;color:var(--mist)}.node .kind{font:8px var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.row-label{position:absolute;left:8px;transform:translateX(-100%);font:8px var(--ui);letter-spacing:.13em;color:#806d71;text-transform:uppercase;writing-mode:vertical-rl;opacity:.8}
+.detail-panel{position:sticky;top:18px;min-height:560px}.detail-top{padding:24px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 50% 0,rgba(117,52,68,.22),transparent 72%)}.detail-kicker{font:9px var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--red)}.detail-top h2{font:500 35px/1 var(--display);margin:10px 0}.detail-type{display:inline-block;border:1px solid rgba(193,126,137,.35);padding:5px 8px;color:#d5b6ba;font:8px var(--ui);letter-spacing:.14em;text-transform:uppercase}.detail-body{padding:22px 24px}.detail-body p{color:var(--mist);font:18px/1.45 var(--display);margin:0 0 18px}.detail-stat{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(193,126,137,.14);font:11px var(--ui);gap:12px}.detail-stat span{color:var(--muted)}.detail-stat strong{text-align:right;color:#e7d8d7;font-weight:500}.detail-actions{padding:18px 24px 24px}.detail-actions .btn{width:100%;padding:14px}.requirements{margin-top:12px;color:var(--muted);font:10px/1.6 var(--ui)}.legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 22px;border-top:1px solid var(--line);color:var(--muted);font:9px var(--ui);letter-spacing:.08em}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:#a66a75}.dot.gold{background:#c7a477}.dot.dim{background:#69565b}
+.notice{margin:18px 0 60px;padding:15px 18px;border-left:2px solid var(--red);background:rgba(20,12,16,.7);color:var(--mist);font:12px/1.7 var(--ui)}.notice strong{color:var(--silk)}.foot{padding:28px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font:9px var(--ui);letter-spacing:.12em;text-transform:uppercase}
+button:focus-visible,a:focus-visible{outline:2px solid #e3b4ba;outline-offset:3px}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.detail-panel{position:relative;top:auto;min-height:0}.detail-body{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}.detail-body p{grid-column:1/-1}}
+@media(max-width:650px){.wrap{width:calc(100% - 28px)}.hero{grid-template-columns:1fr;padding-top:42px}.crest{display:none}.tree{padding:20px 8px;grid-template-rows:repeat(6,116px);gap:7px}.node{padding:6px 3px}.node .sigil{width:30px;height:30px;font-size:17px}.node .name{font-size:12px}.node .kind{font-size:7px}.tree-head{padding:16px}.tree-head h2{font-size:22px}.toolbar{align-items:flex-start}.points{gap:10px}.meter{width:90px}.actions{width:100%}.actions .btn{flex:1}.detail-body{display:block}.nav{gap:12px}.nav a:nth-child(2){display:none}.foot{flex-direction:column;gap:12px}}
+@media(prefers-reduced-motion:reduce){.node,.meter i{transition:none}}
+</style>
+</head>
+<body><div class="wrap">
+<header class="top"><a class="brand" href="../../index.html">РАСКОЛ<small>ДВЕ КОРОНЫ</small></a><nav class="nav"><a href="../../index.html">Главная</a><a href="../index.html">Классы</a><a href="../../shop/index.html">Империал</a></nav></header>
+<main>
+<section class="hero"><div><div class="eyebrow">Воин · специализация I</div><h1>Оружие</h1><p>Путь дисциплины и точного удара. Развивай мастерство, открывай приёмы и собирай собственную конфигурацию из двадцати талантов.</p></div>
+<svg class="crest" viewBox="0 0 160 160" role="img" aria-label="Герб специализации Оружие"><defs><linearGradient id="m" x2="1" y2="1"><stop stop-color="#f0d9d8"/><stop offset=".5" stop-color="#9e6872"/><stop offset="1" stop-color="#4b202b"/></linearGradient></defs><path d="M80 5 142 34 132 112 80 153 28 112 18 34Z" fill="#160e12" stroke="url(#m)" stroke-width="2"/><path d="M80 15 131 39 122 105 80 139 38 105 29 39Z" fill="none" stroke="#a66a75" opacity=".6"/><path d="m88 24 27 31-13 12-29-30-24 72 10 8 43-48M47 103l17 18m-28-6 17 17m-2-28 18 17" fill="none" stroke="url(#m)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 146h60" stroke="#a66a75"/></svg></section>
+<section class="toolbar" aria-label="Состояние дерева"><div class="points"><div><small>Очки развития</small><strong id="points">46</strong><small>свободно</small></div><div><small>Вложено</small><strong id="spent">0</strong><small>из 46</small></div><div><small>Прогресс</small><div class="meter"><i id="meter"></i></div></div></div><div class="actions"><button class="btn ghost" id="reset" type="button">Сбросить сборку</button><button class="btn" id="clearSave" type="button">Очистить локальное сохранение</button></div></section>
+<section class="layout">
+<div class="tree-panel"><div class="tree-head"><h2>Древо мастерства</h2><span>20 талантов · 6 рядов</span></div><div class="tree" id="tree"><svg class="connections" id="connections" aria-hidden="true"></svg></div><div class="legend"><span><i class="dot gold"></i>Вложены очки</span><span><i class="dot"></i>Можно изучить</span><span><i class="dot dim"></i>Пока недоступно</span></div></div>
+<aside class="detail-panel" aria-live="polite"><div class="detail-top"><div class="detail-kicker" id="detailKicker">Выбери талант</div><h2 id="detailName">Путь начинается</h2><span class="detail-type" id="detailType">Древо специализации</span></div><div class="detail-body"><p id="detailLore">Нажми на любой узел, чтобы увидеть описание, максимальный ранг и требования для изучения.</p><div class="detail-stat"><span>Текущий ранг</span><strong id="detailRank">—</strong></div><div class="detail-stat"><span>Максимальный ранг</span><strong id="detailMax">—</strong></div><div class="detail-stat"><span>Ряд дерева</span><strong id="detailRow">—</strong></div><div class="detail-stat"><span>Тип таланта</span><strong id="detailKind">—</strong></div><div class="detail-stat"><span>Требования</span><strong id="detailReq">—</strong></div></div><div class="detail-actions"><button class="btn" id="buy" type="button" disabled>Выбрать талант</button><div class="requirements" id="status">Сборка сохраняется только в этом браузере.</div></div></aside>
+</section>
+<div class="notice"><strong>Важно.</strong> Это интерактивная веб-модель дерева по текущему исходнику RaskolClasses. Она позволяет экспериментировать с распределением очков и сохраняет сборку локально в браузере, но не подключена к аккаунту игрока и не изменяет персонажа на сервере. Игровая прокачка остаётся в плагине.</div>
+</main><footer class="foot"><span>РАСКОЛ · ДВЕ КОРОНЫ</span><a href="../specializations.html">← Все специализации</a></footer></div>
+<script>
+(()=>{
+'use strict';
+const nodes=[
+{id:'arms_training',r:1,c:1,max:5,type:'passive_stat',name:'Школа оружия',lore:'+2% физического урона способностей за ранг.',req:{}},
+{id:'hardened_skin',r:1,c:2,max:4,type:'passive_stat',name:'Закалённая кожа',lore:'+2% физического сопротивления за ранг.',req:{}},
+{id:'precision',r:1,c:3,max:5,type:'passive_stat',name:'Точность',lore:'+1% шанса критического удара в ближнем бою за ранг.',req:{}},
+{id:'field_medkit',r:1,c:4,max:3,type:'passive_stat',name:'Полевой лечебный набор',lore:'+3% исходящего лечения за ранг.',req:{}},
+{id:'deep_wounds',r:2,c:1,max:3,type:'passive_proc',name:'Глубокие раны',lore:'Критический удар накладывает кровотечение; урон в секунду увеличивается на 0,5 за ранг.',req:{}},
+{id:'sword_and_board',r:2,c:2,max:3,type:'passive_stat',name:'Меч и щит',lore:'+3% парирования за ранг.',req:{}},
+{id:'fenrir_blood',r:2,c:3,max:1,type:'unlock_ability',name:'Кровь Фенрира',lore:'Открывает способность старого набора (слот 4).',req:{}},
+{id:'rend_master',r:3,c:1,max:3,type:'enhance_ability',name:'Мастер рваных ран',lore:'Увеличивает длительность кровотечения на 1 секунду за ранг.',req:{deep_wounds:1}},
+{id:'whirlwind_slash',r:3,c:2,max:1,type:'unlock_ability',name:'Вихревой удар',lore:'Новая способность: секторный физический урон в дуге 60°, перезарядка 12 секунд.',req:{}},
+{id:'war_acumen',r:3,c:3,max:3,type:'passive_stat',name:'Воинская смекалка',lore:'+2% WP за ранг.',req:{}},
+{id:'execute_drill',r:3,c:4,max:2,type:'enhance_ability',name:'Отработка казни',lore:'Увеличивает базовый урон tyr_strike на 6% за ранг.',req:{}},
+{id:'bloodletting',r:4,c:1,max:3,type:'passive_stat',name:'Кровопускание',lore:'Увеличивает максимальное число стаков кровотечения на 1 за ранг.',req:{rend_master:2}},
+{id:'shield_wall_echo',r:4,c:2,max:2,type:'enhance_ability',name:'Эхо стены щитов',lore:'Увеличивает длительность balder_skin на 1 секунду за ранг.',req:{}},
+{id:'mortal_strike',r:4,c:3,max:1,type:'unlock_ability',name:'Смертельный удар',lore:'Новая способность: физический урон и эффект снижения лечения на 3 секунды.',req:{whirlwind_slash:1}},
+{id:'second_wind',r:4,c:4,max:2,type:'passive_proc',name:'Второе дыхание',lore:'10% шанса за ранг: при здоровье ниже 35% мгновенно восстанавливает 8% здоровья.',req:{}},
+{id:'executioner',r:5,c:1,max:3,type:'enhance_ability',name:'Палач',lore:'Повышает порог добивания на 2 процентных пункта за ранг (25% → 31%).',req:{mortal_strike:1}},
+{id:'titan_grip',r:5,c:2,max:3,type:'passive_stat',name:'Хватка титана',lore:'+5% физического пробития за ранг.',req:{}},
+{id:'berserkers_echo',r:5,c:3,max:2,type:'enhance_ability',name:'Эхо берсерка',lore:'Сокращает перезарядку berserkergang на 7 секунд за ранг.',req:{}},
+{id:'battle_trance',r:5,c:4,max:1,type:'passive_proc',name:'Боевой транс',lore:'Каждый третий удар даёт 5 единиц ярости.',req:{}},
+{id:'ragnarok',r:6,c:2,max:1,type:'ultimate',name:'Рагнарёк',lore:'Ультимативный талант: множитель добивания ×3,5 и взрыв кровотечения (перенос старого набора).',req:{executioner:2}}
+];
+const gates=[0,5,10,15,20,30],labels={passive_stat:'Пассивный атрибут',passive_proc:'Пассивный эффект',unlock_ability:'Новая способность',enhance_ability:'Усиление способности',ultimate:'Ультимативный талант'};
+const icons={passive_stat:'✧',passive_proc:'◈',unlock_ability:'⚔',enhance_ability:'⌘',ultimate:'✹'};
+const ranks=Object.create(null);let selected='arms_training';
+const tree=document.getElementById('tree'),svg=document.getElementById('connections');
+function spent(){return Object.values(ranks).reduce((a,b)=>a+b,0)}
+function rowOpen(row){return spent()>=gates[row-1]}
+function prereqsMet(n){return Object.entries(n.req).every(([id,rank])=>(ranks[id]||0)>=rank)}
+function reason(n){if((ranks[n.id]||0)>=n.max)return'Максимальный ранг уже изучен';if(!rowOpen(n.r))return'Нужно вложить '+gates[n.r-1]+' очков в это дерево';for(const [id,rank] of Object.entries(n.req)){const p=nodes.find(x=>x.id===id);if((ranks[id]||0)<rank)return'Требуется «'+p.name+'» · ранг '+rank}if(46-spent()<=0)return'Свободные очки закончились';return'Можно изучить следующий ранг'}
+function status(n){if((ranks[n.id]||0)>0)return'purchased';return rowOpen(n.r)&&prereqsMet(n)&&spent()<46?'available':'locked'}
+function render(){
+ tree.querySelectorAll('.node,.row-label').forEach(e=>e.remove());
+ nodes.forEach(n=>{const s=status(n),b=document.createElement('button');b.type='button';b.className='node '+s+(selected===n.id?' selected':'');b.style.gridRow=n.r;b.style.gridColumn=n.c;b.dataset.id=n.id;b.setAttribute('aria-pressed',String(selected===n.id));b.innerHTML='<span class="sigil">'+icons[n.type]+'</span><span class="name">'+n.name+'</span><span class="rank">'+(ranks[n.id]||0)+' / '+n.max+'</span><span class="kind">'+labels[n.type]+'</span>';b.addEventListener('click',()=>{selected=n.id;render()});tree.appendChild(b)});
+ document.getElementById('points').textContent=46-spent();document.getElementById('spent').textContent=spent();document.getElementById('meter').style.width=(spent()/46*100)+'%';
+ renderDetail();requestAnimationFrame(drawConnections);
+ try{localStorage.setItem('raskol-arms-demo',JSON.stringify(ranks))}catch(e){}
+}
+function renderDetail(){
+ const n=nodes.find(x=>x.id===selected);if(!n)return;const rank=ranks[n.id]||0,s=status(n);
+ document.getElementById('detailKicker').textContent='Ряд '+n.r+' · позиция '+n.c;
+ document.getElementById('detailName').textContent=n.name;
+ document.getElementById('detailType').textContent=labels[n.type];
+ document.getElementById('detailLore').textContent=n.lore;
+ document.getElementById('detailRank').textContent=rank;
+ document.getElementById('detailMax').textContent=n.max;
+ document.getElementById('detailRow').textContent=n.r+' из 6 · порог '+gates[n.r-1]+' очков';
+ document.getElementById('detailKind').textContent=labels[n.type];
+ const req=Object.entries(n.req);document.getElementById('detailReq').textContent=req.length?req.map(([id,v])=>{const p=nodes.find(x=>x.id===id);return p.name+' '+v+'/'+(ranks[id]||0)}).join(', '):'Нет';
+ const btn=document.getElementById('buy');btn.disabled=s==='locked'||rank>=n.max;btn.textContent=rank>=n.max?'Максимальный ранг':s==='locked'?'Талант недоступен':'Изучить ранг · 1 очко';
+ document.getElementById('status').textContent=reason(n)+'. Сборка хранится локально в этом браузере.';
+}
+function drawConnections(){
+ const box=tree.getBoundingClientRect(),w=tree.clientWidth,h=tree.clientHeight;svg.setAttribute('viewBox','0 0 '+w+' '+h);svg.innerHTML='';
+ nodes.forEach(n=>Object.keys(n.req).forEach(id=>{const from=tree.querySelector('[data-id="'+id+'"]'),to=tree.querySelector('[data-id="'+n.id+'"]');if(!from||!to)return;const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();const x1=a.left-box.left+a.width/2,y1=a.top-box.top+a.height/2,x2=b.left-box.left+b.width/2,y2=b.top-box.top+b.height/2;const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d','M '+x1+' '+y1+' C '+x1+' '+(y1+45)+', '+x2+' '+(y2-45)+', '+x2+' '+y2);svg.appendChild(path)}));
+}
+document.getElementById('buy').addEventListener('click',()=>{const n=nodes.find(x=>x.id===selected);if(!n||status(n)==='locked'||(ranks[n.id]||0)>=n.max||spent()>=46)return;ranks[n.id]=(ranks[n.id]||0)+1;render()});
+document.getElementById('reset').addEventListener('click',()=>{if(!confirm('Сбросить все вложенные очки в этой демонстрационной сборке?'))return;Object.keys(ranks).forEach(k=>delete ranks[k]);render()});
+document.getElementById('clearSave').addEventListener('click',()=>{try{localStorage.removeItem('raskol-arms-demo')}catch(e){}Object.keys(ranks).forEach(k=>delete ranks[k]);render()});
+try{const saved=JSON.parse(localStorage.getItem('raskol-arms-demo')||'{}');nodes.forEach(n=>{const v=Number(saved[n.id]);if(Number.isInteger(v)&&v>=0&&v<=n.max)ranks[n.id]=v});}catch(e){}
+render();window.addEventListener('resize',()=>requestAnimationFrame(drawConnections),{passive:true});
+})();
+</script>
+<script src="../../assets/js/atmosphere.js" defer></script>
+</body></html>
