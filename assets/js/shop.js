@@ -17,10 +17,13 @@
     {id:'title-keeper',cat:'titles',name:'Хранитель клятвы',type:'Титул',desc:'Знак верности выбранному пути.',price:250,icon:'⚜',collection:'regalia'},
     {id:'frame-garnet',cat:'interface',name:'Гранатовая рамка',type:'Оформление интерфейса',desc:'Бордовая рамка профиля и карточек.',price:220,icon:'▣',collection:'crimson'},
     {id:'banner-court',cat:'interface',name:'Знамя двора',type:'Оформление профиля',desc:'Фон профиля с геральдическим орнаментом.',price:320,icon:'⚑',collection:'regalia'},
-    {id:'bundle-embers',cat:'bundles',name:'Набор «Тлеющий двор»',type:'Коллекционный набор',desc:'След углей, титул и рамка профиля.',price:790,icon:'❖',collection:'ash',flag:'Набор'},
-    {id:'bundle-crown',cat:'bundles',name:'Набор «Две короны»',type:'Коллекционный набор',desc:'Печать, аура и знамя двора.',price:1090,icon:'♛',collection:'regalia',flag:'Набор'},
-    {id:'season-winter',cat:'season',name:'Снежная печать',type:'Сезонная косметика',desc:'Зимний орнамент ограниченного сезона.',price:350,icon:'❄',collection:'season'},
-    {id:'season-eclipse',cat:'season',name:'Затмение',type:'Сезонный эффект',desc:'Кольцо тени с редкими серебряными искрами.',price:520,icon:'☾',collection:'season'}
+    {id:'bundle-embers',cat:'bundles',name:'Набор «Тлеющий двор»',type:'Коллекционный набор',desc:'Только визуальные предметы: след углей, титул и рамка профиля. Без характеристик и игровых эффектов.',price:790,icon:'❖',collection:'ash',flag:'Набор'},
+    {id:'bundle-crown',cat:'bundles',name:'Набор «Две короны»',type:'Коллекционный набор',desc:'Только визуальные предметы: печать, аура и знамя двора. Без характеристик и игровых эффектов.',price:1090,icon:'♛',collection:'regalia',flag:'Набор'},
+    {id:'season-winter',cat:'season',name:'Снежная печать',type:'Сезонная косметика',desc:'Только визуальный зимний орнамент ограниченного сезона.',price:350,icon:'❄',collection:'season'},
+    {id:'season-eclipse',cat:'season',name:'Затмение',type:'Сезонный эффект',desc:'Только декоративное кольцо тени с серебряными искрами; не влияет на бой и характеристики.',price:520,icon:'☾',collection:'season'},
+    {id:'subscription-court',cat:'subscription',name:'Покровительство двора',type:'Косметическая подписка · 30 дней',desc:'Ежемесячная подборка обликов профиля, рамок и титулов. Без ускорения прогресса и игровых бонусов.',price:490,icon:'♛',collection:'regalia',flag:'Подписка'},
+    {id:'subscription-ash',cat:'subscription',name:'Пепельный договор',type:'Косметическая подписка · 30 дней',desc:'Сезонная косметика, декоративные следы и оформление профиля. Никаких боевых преимуществ.',price:390,icon:'✧',collection:'ash',flag:'Подписка'},
+    {id:'pass-season',cat:'battlepass',name:'Путь двух корон',type:'Боевой пропуск · сезон',desc:'Косметическая дорожка наград за игровые задания: титулы, рамки, облики и визуальные эффекты. Не даёт опыта, валюты или усиления персонажа.',price:790,icon:'⚜',collection:'regalia',flag:'Сезонный пропуск'}
   ];
   const cases = [
     {id:'two-crowns',name:'Две короны',group:'crown',price:249,items:11,desc:'Геральдика, титулы и регалии двух старых домов.',icon:'♛',glow:'rgba(199,164,119,.28)'},
@@ -57,7 +60,7 @@
   const rarityColors = {common:'#aaa4a1',uncommon:'#83b18c',rare:'#86a9dc',relic:'#d5a4e8',legendary:'#e7bd76'};
   const rarityGlows = {common:'rgba(170,164,161,.24)',uncommon:'rgba(131,177,140,.3)',rare:'rgba(134,169,220,.35)',relic:'rgba(213,164,232,.42)',legendary:'rgba(231,189,118,.5)'};
   const rarityBackgrounds = {common:'rgba(170,164,161,.1)',uncommon:'rgba(131,177,140,.12)',rare:'rgba(134,169,220,.13)',relic:'rgba(213,164,232,.14)',legendary:'rgba(231,189,118,.16)'};
-  const categoryNames = {appearance:'Облик',effects:'Эффект',pets:'Спутник',titles:'Титул',interface:'Оформление',bundles:'Набор',season:'Сезонное'};
+  const categoryNames = {appearance:'Облик',effects:'Эффект',pets:'Спутник',titles:'Титул',interface:'Оформление',bundles:'Набор',season:'Сезонное',subscription:'Подписка',battlepass:'Боевой пропуск'};
   let currentCategory='all', currentCollection=null, currentCase=null, rolling=false, currentWinner=null;
   const art = icon => '<svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 8 101 31 101 83 60 110 19 83 19 31Z" fill="none" stroke="#c7a477" stroke-opacity=".7"/><path d="M60 22 88 38 88 75 60 92 32 75 32 38Z" fill="#542432" stroke="#a66a75"/><text x="60" y="69" text-anchor="middle" font-size="36" fill="#e0c5a3">'+icon+'</text><path d="M60 8V22M19 31 32 38M101 31 88 38" stroke="#e1c49e"/></svg>';
   const chestSvg = '<svg class="chest" viewBox="0 0 140 110" aria-hidden="true"><defs><linearGradient id="wood" x1="0" x2="1"><stop stop-color="#29151d"/><stop offset=".5" stop-color="#77404a"/><stop offset="1" stop-color="#211018"/></linearGradient><linearGradient id="metal"><stop stop-color="#76502f"/><stop offset=".5" stop-color="#e0bd83"/><stop offset="1" stop-color="#70482d"/></linearGradient></defs><path d="M17 42Q20 12 70 12t53 30v17H17Z" fill="url(#wood)" stroke="url(#metal)" stroke-width="3"/><path d="M12 55h116v43H12z" fill="url(#wood)" stroke="url(#metal)" stroke-width="3"/><path d="M27 55v43M113 55v43M60 55v43" stroke="#c69d68" stroke-width="3"/><path d="M60 38h20v29H60z" fill="url(#metal)" stroke="#e2c18d" stroke-width="2"/><circle cx="70" cy="51" r="5" fill="#2a131a"/><path d="M17 70h111M22 91h106" stroke="#d0a773" stroke-width="2"/></svg>';
@@ -197,7 +200,20 @@
   $('#closeModal').addEventListener('click',closeCaseModal);$('#modalClose2').addEventListener('click',closeCaseModal);
   caseModal.addEventListener('click',e=>{if(e.target===caseModal)closeCaseModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(productModal.classList.contains('open'))closeModal(productModal);if(caseModal.classList.contains('open'))closeCaseModal();}});
-  const revealTargets=$$('.reveal');
+
+  const linkCode=$('#linkCode'),linkStatus=$('#linkStatus');
+  $('#verifyLinkCode').addEventListener('click',()=>{
+    const code=(linkCode.value||'').replace(/\s/g,'');
+    if(!/^\d{6,8}$/.test(code)){linkStatus.textContent='Введи одноразовый код из 6–8 цифр, выданный командой /link.';return;}
+    linkStatus.textContent='Код принят интерфейсом, но не проверен: Identity API не подключён. Привязка UUID не выполнена.';
+  });
+  const dailyLimit=$('#dailyLimit'),monthlyLimit=$('#monthlyLimit');
+  $('#saveLimits').addEventListener('click',()=>{
+    const day=Math.max(0,Math.floor(Number(dailyLimit.value)||0));
+    const month=Math.max(0,Math.floor(Number(monthlyLimit.value)||0));
+    $('#limitPreview').textContent='Предпросмотр: не более '+day.toLocaleString('ru-RU')+' И в сутки и '+month.toLocaleString('ru-RU')+' И за месяц. Это локальный макет, сервер не применяет лимит.';
+  });
+  const revealTargets=$('.reveal');
   if('IntersectionObserver'in window&&!reducedMotion){
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.1,rootMargin:'0px 0px -35px 0px'});
     revealTargets.forEach(el=>observer.observe(el));
