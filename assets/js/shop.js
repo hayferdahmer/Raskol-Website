@@ -128,7 +128,7 @@
     const keys=['common','uncommon','rare','relic','legendary'];
     const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
     $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(tier.weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
-    $('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
+    $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
   }
   $('#ritualTiers').addEventListener('click',e=>{
     const button=e.target.closest('[data-tier]');
