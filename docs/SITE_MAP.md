@@ -194,3 +194,16 @@
 - [RaskolClasses — RUNBOOK](https://github.com/hayferdahmer/RaskolClasses/blob/main/docs/RUNBOOK.md): подтверждённая серверная конфигурация Paper 26.2 + Java 25.
 - [RaskolZones — ROADMAP](https://github.com/hayferdahmer/RaskolZones/blob/main/docs/ROADMAP.md): фактическая стадия разработки территориального плагина.
 - [RaskolVault — README](https://github.com/hayferdahmer/RaskolVault/blob/main/README.md) и [CHANGELOG](https://github.com/hayferdahmer/RaskolVault/blob/main/CHANGELOG.md): состав и история экономических модулей.
+
+
+## Каталог классов
+
+- `classes/index.html` — обзор шести игровых классов.
+- `classes/warrior.html` — Воин.
+- `classes/hunter.html` — Охотник.
+- `classes/priest.html` — Жрец.
+- `classes/mage.html` — Маг.
+- `classes/rogue.html` — Разбойник.
+- `classes/warlock.html` — Чернокнижник.
+
+Страница каждого класса содержит краткий профиль, основной атрибут, ресурс, его восстановление и три специализации. Подробные числовые параметры способностей и деревьев остаются в технической документации RaskolClasses и игровых конфигурациях.
