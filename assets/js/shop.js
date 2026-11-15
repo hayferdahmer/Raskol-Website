@@ -23,14 +23,14 @@
     {id:'season-eclipse',cat:'season',name:'Затмение',type:'Сезонный эффект',desc:'Кольцо тени с редкими серебряными искрами.',price:520,icon:'☾',collection:'season'}
   ];
   const cases = [
-    {id:'two-crowns',name:'Две короны',group:'crown',price:249,items:32,desc:'Геральдика, титулы и регалии двух старых домов.',icon:'♛',glow:'rgba(199,164,119,.28)'},
-    {id:'blood-oath',name:'Кровавая клятва',group:'crown',price:399,items:28,desc:'Багряные эффекты и церемониальные облики.',icon:'⚔',glow:'rgba(166,58,76,.3)'},
-    {id:'ashfall',name:'Пеплопад',group:'ash',price:99,items:24,desc:'Пыльные следы, дымка и сумрачные спутники.',icon:'✧',glow:'rgba(151,129,135,.24)'},
-    {id:'black-embers',name:'Чёрные угли',group:'ash',price:179,items:26,desc:'Тёмные ауры и редкие титулы забытого двора.',icon:'◈',glow:'rgba(118,62,76,.3)'},
-    {id:'winter-solstice',name:'Зимнее солнцестояние',group:'season',price:299,items:30,desc:'Сезонные украшения, доступные в зимней коллекции.',icon:'❄',glow:'rgba(122,154,190,.25)'},
-    {id:'eclipse',name:'Затмение',group:'season',price:499,items:22,desc:'Серебро, тень и редкие эффекты ночного неба.',icon:'☾',glow:'rgba(126,119,173,.3)'},
-    {id:'old-kingdom',name:'Старое королевство',group:'archive',price:149,items:18,desc:'Архивная подборка ранних косметических серий.',icon:'♜',glow:'rgba(172,128,84,.24)'},
-    {id:'last-vow',name:'Последний обет',group:'archive',price:349,items:20,desc:'Архивные знаки, титулы и памятные эффекты.',icon:'†',glow:'rgba(148,68,87,.28)'}
+    {id:'two-crowns',name:'Две короны',group:'crown',price:249,items:11,desc:'Геральдика, титулы и регалии двух старых домов.',icon:'♛',glow:'rgba(199,164,119,.28)'},
+    {id:'blood-oath',name:'Кровавая клятва',group:'crown',price:399,items:11,desc:'Багряные эффекты и церемониальные облики.',icon:'⚔',glow:'rgba(166,58,76,.3)'},
+    {id:'ashfall',name:'Пеплопад',group:'ash',price:99,items:11,desc:'Пыльные следы, дымка и сумрачные спутники.',icon:'✧',glow:'rgba(151,129,135,.24)'},
+    {id:'black-embers',name:'Чёрные угли',group:'ash',price:179,items:11,desc:'Тёмные ауры и редкие титулы забытого двора.',icon:'◈',glow:'rgba(118,62,76,.3)'},
+    {id:'winter-solstice',name:'Зимнее солнцестояние',group:'season',price:299,items:11,desc:'Сезонные украшения, доступные в зимней коллекции.',icon:'❄',glow:'rgba(122,154,190,.25)'},
+    {id:'eclipse',name:'Затмение',group:'season',price:499,items:11,desc:'Серебро, тень и редкие эффекты ночного неба.',icon:'☾',glow:'rgba(126,119,173,.3)'},
+    {id:'old-kingdom',name:'Старое королевство',group:'archive',price:149,items:11,desc:'Архивная подборка ранних косметических серий.',icon:'♜',glow:'rgba(172,128,84,.24)'},
+    {id:'last-vow',name:'Последний обет',group:'archive',price:349,items:11,desc:'Архивные знаки, титулы и памятные эффекты.',icon:'†',glow:'rgba(148,68,87,.28)'}
   ];
   const rewards = [
     {name:'Знак старого дома',icon:'♜',rarity:'common',label:'Обычная'},
@@ -45,7 +45,13 @@
     {name:'Печать двух корон',icon:'♛',rarity:'relic',label:'Реликтовая'},
     {name:'Корона затмения',icon:'✦',rarity:'legendary',label:'Легендарная'}
   ];
-  const rarityWeights = [{key:'common',weight:65},{key:'uncommon',weight:25},{key:'rare',weight:9},{key:'relic',weight:.9},{key:'legendary',weight:.1}];
+  const ritualTiers = {
+    standard:{surcharge:0,weights:[65,25,9,.9,.1]},
+    tempered:{surcharge:100,weights:[50,30,15,4,1]},
+    royal:{surcharge:250,weights:[35,30,22,10,3]},
+    imperial:{surcharge:500,weights:[20,25,30,18,7]}
+  };
+  let currentTier='standard';
   const rarityNames = {common:'Обычная',uncommon:'Необычная',rare:'Редкая',relic:'Реликтовая',legendary:'Легендарная'};
   const rarityIcons = {common:'✧',uncommon:'❖',rare:'◈',relic:'♛',legendary:'✦'};
   const rarityColors = {common:'#aaa4a1',uncommon:'#83b18c',rare:'#86a9dc',relic:'#d5a4e8',legendary:'#e7bd76'};
@@ -95,9 +101,11 @@
     if(rolling)return;currentCase=c;currentWinner=null;
     $('#modalTitle').textContent=c.name;$('#modalDesc').textContent=c.desc+' В коллекции — '+c.items+' косметических реликвий. Открытие бесплатное и не списывает указанную проектную цену.';
     $('#rollResult').textContent='Ларец запечатан. Готов ли ты снять печать?';
+    $('#prizePool').innerHTML=rewards.map(item=>'<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+'</small></div>').join('');
+    currentTier='standard';renderRitual();$('#rollProgress').style.transform='scaleX(0)';
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     dialog.classList.remove('is-rolling','is-won');
-    $('#rollBtn').disabled=false;$('#rollBtn').textContent='Снять печать';
+    $('#rollBtn').disabled=false;$('#rollBtn').textContent='Начать обряд';
     buildIdleReel();caseModal.classList.add('open');document.body.style.overflow='hidden';
   }
   function buildIdleReel(){
@@ -105,11 +113,28 @@
     track.innerHTML=Array.from({length:12},(_,i)=>{const item=rewards[i%rewards.length];return '<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>';}).join('');
   }
   function chooseReward(){
+    const keys=['common','uncommon','rare','relic','legendary'];
+    const weights=ritualTiers[currentTier].weights;
     const roll=Math.random()*100;let edge=0,rarity='common';
-    for(const tier of rarityWeights){edge+=tier.weight;if(roll<edge){rarity=tier.key;break;}}
+    for(let i=0;i<keys.length;i++){edge+=weights[i];if(roll<edge){rarity=keys[i];break;}}
     const pool=rewards.filter(item=>item.rarity===rarity);
     return pool[Math.floor(Math.random()*pool.length)];
   }
+  function renderRitual(){
+    if(!currentCase)return;
+    const tier=ritualTiers[currentTier],total=currentCase.price+tier.surcharge;
+    $('#ritualTotal').innerHTML=total+' <i>ИМП.</i>';
+    $('#ritualTotalNote').textContent='Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.';
+    const keys=['common','uncommon','rare','relic','legendary'];
+    const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
+    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(tier.weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
+    $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
+  }
+  $('#ritualTiers').addEventListener('click',e=>{
+    const button=e.target.closest('[data-tier]');
+    if(!button||rolling)return;
+    currentTier=button.dataset.tier;renderRitual();
+  });
   function makeReel(winner){
     const sequence=Array.from({length:36},(_,i)=>rewards[(i*7+Math.floor(Math.random()*rewards.length))%rewards.length]);
     const winnerIndex=31;sequence[winnerIndex]=winner;
@@ -132,22 +157,40 @@
   function showWinner(item){
     currentWinner=item;dialog.classList.remove('is-rolling');dialog.classList.add('is-won');
     $('#rollResult').textContent='Печать сорвана. Реликвия найдена.';
+    $('#rollProgress').style.transform='scaleX(1)';
     const panel=$('#winPanel');panel.style.setProperty('--rarity-color',rarityColors[item.rarity]);panel.style.setProperty('--rarity-glow',rarityGlows[item.rarity]);panel.style.setProperty('--rarity-bg',rarityBackgrounds[item.rarity]);
     panel.innerHTML='<div class="win-kicker">Твоя находка · демонстрационный результат</div><div class="win-icon">'+item.icon+'</div><h3>'+item.name+'</h3><p>Косметическая реликвия · '+(item.rarity==='legendary'?'особая находка':'не влияет на игровой баланс')+'</p><span class="win-rarity">'+rarityNames[item.rarity]+' редкость</span>';
-    panel.classList.add('show');$('#rollBtn').disabled=false;$('#rollBtn').textContent='Открыть ещё раз';celebrate(item.rarity);
+    panel.classList.add('show');$('#rollBtn').disabled=false;$('#rollBtn').textContent='Повторить обряд';celebrate(item.rarity);
   }
   function roll(){
     if(rolling)return;rolling=true;currentWinner=null;
     const winner=chooseReward();const {track,winnerIndex}=makeReel(winner);
-    dialog.classList.remove('is-won');dialog.classList.add('is-rolling');
+    dialog.classList.remove('is-won');dialog.classList.add('is-charging','is-rolling');
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
-    $('#rollBtn').disabled=true;$('#rollBtn').textContent='Идёт открытие…';
-    $('#rollResult').textContent='Снимаем печать…';
+    $('#rollBtn').disabled=true;$('#rollBtn').textContent='Печать снимается…';
+    $('#rollResult').textContent='Древняя печать откликается…';
+    $('#rollProgress').style.transform='scaleX(0)';
     const winnerCard=track.children[winnerIndex];
     const target=winnerCard.offsetLeft+(winnerCard.offsetWidth/2)-($('.roulette-window').clientWidth/2);
-    const duration=reducedMotion?80:6200;
-    requestAnimationFrame(()=>{track.style.transition='transform '+duration+'ms cubic-bezier(.08,.72,.12,1)';track.style.transform='translateX(-'+target+'px)';});
-    setTimeout(()=>{rolling=false;showWinner(winner);},duration+120);
+    const duration=reducedMotion?100:7800;
+    const begin=()=>{
+      dialog.classList.remove('is-charging');
+      const started=performance.now();
+      const tick=now=>{
+        const p=Math.min(1,(now-started)/duration);
+        const eased=p*p*(3-2*p);
+        track.style.transform='translate3d('+(-target*eased)+'px,0,0)';
+        $('#rollProgress').style.transform='scaleX('+p+')';
+        if(p<.18)$('#rollResult').textContent='Печать трескается…';
+        else if(p<.72)$('#rollResult').textContent='Реликвии проходят перед взором…';
+        else if(p<.94)$('#rollResult').textContent='Последние мгновения…';
+        else $('#rollResult').textContent='Печать почти сорвана…';
+        if(p<1)requestAnimationFrame(tick);
+        else {rolling=false;dialog.classList.remove('is-rolling');showWinner(winner);}
+      };
+      requestAnimationFrame(tick);
+    };
+    if(reducedMotion)begin();else window.setTimeout(begin,720);
   }
   $('#rollBtn').addEventListener('click',roll);
   function closeCaseModal(){if(rolling)return;closeModal(caseModal);}
