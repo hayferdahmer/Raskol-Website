@@ -4,7 +4,7 @@
   const $=(s,r=document)=>r.querySelector(s);
   const tabs=[...document.querySelectorAll('[data-tab]')];
   function activate(name){
-    tabs.forEach(t=>{const active=t.dataset.tab===name;t.classList.toggle('active',active);t.setAttribute('aria-selected',String(active));});
+    tabs.forEach(t=>{const active=t.dataset.tab===name;t.classList.toggle('active',active);t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;});
     document.querySelectorAll('.account-pane').forEach(p=>{const active=p.id==='tab-'+name;p.hidden=!active;p.classList.toggle('active',active);});
     const url=new URL(window.location.href);url.searchParams.set('tab',name);history.replaceState(null,'',url);
   }
