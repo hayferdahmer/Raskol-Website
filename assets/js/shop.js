@@ -90,7 +90,7 @@
   productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal);});
   function renderCases(group='all'){
     const list=cases.filter(c=>group==='all'||c.group===group);
-    $('#caseGrid').innerHTML=list.map(c=>'<article class="case-card" style="--case-glow:'+c.glow+'"><div class="case-visual">'+chestSvg+'</div><div class="case-rank"><span>'+({crown:'Королевская серия',ash:'Пепельная серия',season:'Сезонная серия',archive:'Архив'}[c.group])+'</span><span>✦ '+c.items+'</span></div><h3 class="case-name">'+c.name+'</h3><p>'+c.desc+'</p><div class="project-price">Проектная цена · не списывается</div><div class="price">'+c.price+' <small>ИМП.</small></div><button class="case-open" type="button" data-case="'+c.id+'">Открыть ларец · демо ↗</button></article>').join('');
+    $('#caseGrid').innerHTML=list.map(c=>'<article class="case-card" style="--case-glow:'+c.glow+'"><div class="case-visual">'+chestSvg+'</div><div class="case-rank"><span>'+({crown:'Королевская серия',ash:'Пепельная серия',season:'Сезонная серия',archive:'Архив'}[c.group])+'</span><span>✦ '+c.items+'</span></div><h3 class="case-name">'+c.name+'</h3><p>'+c.desc+'</p><div class="project-price">Проектная цена · не списывается</div><div class="price">'+c.price+' <small>ИМП.</small></div><button class="case-open" type="button" data-case="'+c.id+'">Крутить ларец · демо ↗</button></article>').join('');
   }
   renderCases();
   $('#caseGrid').addEventListener('click',e=>{const b=e.target.closest('[data-case]');if(!b)return;openCase(cases.find(c=>c.id===b.dataset.case));});
@@ -181,7 +181,7 @@
       const started=performance.now();
       const tick=now=>{
         const p=Math.min(1,(now-started)/duration);
-        const eased=p*p*(3-2*p);
+        const eased=1-Math.pow(1-p,5);
         track.style.transform='translate3d('+(-target*eased)+'px,0,0)';
         $('#rollProgress').style.transform='scaleX('+p+')';
         if(p<.18)$('#rollResult').textContent='Печать трескается…';
@@ -201,18 +201,6 @@
   caseModal.addEventListener('click',e=>{if(e.target===caseModal)closeCaseModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(productModal.classList.contains('open'))closeModal(productModal);if(caseModal.classList.contains('open'))closeCaseModal();}});
 
-  const linkCode=$('#linkCode'),linkStatus=$('#linkStatus');
-  $('#verifyLinkCode').addEventListener('click',()=>{
-    const code=(linkCode.value||'').replace(/\s/g,'');
-    if(!/^\d{6,8}$/.test(code)){linkStatus.textContent='Введи одноразовый код из 6–8 цифр, выданный командой /link.';return;}
-    linkStatus.textContent='Код принят интерфейсом, но не проверен: Identity API не подключён. Привязка UUID не выполнена.';
-  });
-  const dailyLimit=$('#dailyLimit'),monthlyLimit=$('#monthlyLimit');
-  $('#saveLimits').addEventListener('click',()=>{
-    const day=Math.max(0,Math.floor(Number(dailyLimit.value)||0));
-    const month=Math.max(0,Math.floor(Number(monthlyLimit.value)||0));
-    $('#limitPreview').textContent='Предпросмотр: не более '+day.toLocaleString('ru-RU')+' И в сутки и '+month.toLocaleString('ru-RU')+' И за месяц. Это локальный макет, сервер не применяет лимит.';
-  });
   const revealTargets=$('.reveal');
   if('IntersectionObserver'in window&&!reducedMotion){
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.1,rootMargin:'0px 0px -35px 0px'});
