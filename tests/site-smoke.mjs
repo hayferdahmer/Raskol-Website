@@ -93,3 +93,8 @@ assert.ok((await readFile(resolve(root,'account/index.html'),'utf8')).includes('
 assert.ok(mobileCss.includes('.shop-page .hero')&&mobileCss.includes('.shop-page .hero-art'),'Shop hero rules must be scoped and must not override the homepage hero');
 assert.ok(!/^[ \\t]*\\.hero\\s*\\{/m.test(mobileCss)&&!/^[ \\t]*\\.section\\s*\\{/m.test(mobileCss),'Shared mobile CSS must not globally override homepage hero or section layout');
 assert.ok(mobileCss.includes('max-width: 430px')&&mobileCss.includes('.case-grid')&&mobileCss.includes('.class-detail'),'iPhone-width shop roulette and class detail layouts need explicit coverage');
+
+
+const classCatalog=await readFile(resolve(root,'classes/index.html'),'utf8'),classStyles=await readFile(resolve(root,'assets/css/classes.css'),'utf8');
+assert.ok(!/\\sstyle\\s*=/.test(classCatalog),'Class catalog must not keep presentation in inline style attributes');
+for(const selector of ['.catalog-callout{','.catalog-callout__eyebrow{','.catalog-callout__title{','.catalog-callout__description{','.catalog-callout__actions{','.catalog-callout__link{'])assert.ok(classStyles.includes(selector),'Missing extracted class catalog component '+selector);
