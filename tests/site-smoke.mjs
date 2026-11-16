@@ -111,3 +111,11 @@ const supportMarkup=await readFile(resolve(root,'support/index.html'),'utf8'),su
 assert.ok(supportMarkup.includes('../assets/css/components.css'),'Support page must load the shared component layer');
 assert.ok(!supportStyles.includes('.support-nav{display:flex')&&!supportStyles.includes('.support-button{'),'Support navigation and button must have one shared component owner');
 assert.ok(sharedComponents.includes('.support-nav{')&&sharedComponents.includes('.support-button{'),'Shared component layer must own support navigation and button styles');
+
+const cinemaCss=await readFile(resolve(root,'assets/css/cinemagraph.css'),'utf8');
+assert.ok(cinemaCss.includes('background-image:url("../images/cinema-clouds.svg")')&&cinemaCss.includes('background-image:url("../images/cinema-mist-back.svg")')&&cinemaCss.includes('background-image:url("../images/cinema-mist-front.svg")'),'Cinematic atmosphere must use three independent alpha textures');
+assert.ok(cinemaCss.includes('--rsk-cinema-opacity:.42')&&cinemaCss.includes('animation:rsk-cinema-embers 24s ease-in-out infinite alternate'),'Sparse ember layer must retain its pre-0aef6f3 density and timing');
+for(const asset of ['cinema-clouds.svg','cinema-mist-back.svg','cinema-mist-front.svg']){
+ const svg=await readFile(resolve(root,'assets/images',asset),'utf8');
+ assert.ok(svg.includes('<feTurbulence')&&svg.includes('<feColorMatrix')&&svg.includes('viewBox="0 0 1800 1000"'),'Atmosphere texture must contain an alpha-masked organic noise field: '+asset);
+}

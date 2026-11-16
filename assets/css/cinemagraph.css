@@ -30,7 +30,7 @@
   .hero-art[data-rsk-cinemagraph] picture img { object-position:54% center; }
   .hero-art .rsk-cinema-clouds { filter:blur(16px); }
   .hero-art .rsk-cinema-layer { inset:-12%; }
-  .hero-art .rsk-cinema-embers { background-size:150px 190px,220px 250px,280px 230px; }
+  .hero-art .rsk-cinema-embers { animation-duration:24s; }
 }
 @media(prefers-reduced-motion:reduce) {
   .hero-art[data-rsk-cinemagraph] .rsk-cinema-layer { animation:none!important; transition:none!important; transform:none!important; translate:none!important; }
