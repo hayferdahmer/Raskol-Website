@@ -1,4 +1,4 @@
-#define AppVersion "0.5.0"
+﻿#define AppVersion "0.5.0"
 #define DistDir AddBackslash(SourcePath) + "..\dist"
 
 [Setup]
