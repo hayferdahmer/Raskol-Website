@@ -226,7 +226,7 @@
     collapse.setAttribute('aria-label', collapsed ? 'Развернуть плеер' : 'Свернуть плеер');
     persist();
   });
-  const initialCollapsed = typeof saved.collapsed === 'boolean' ? saved.collapsed : window.matchMedia('(max-width: 800px)').matches;
+  const initialCollapsed = typeof saved.collapsed === 'boolean' ? saved.collapsed : true;
   if (initialCollapsed) {
     player.classList.add('is-collapsed');
     collapse.textContent = '+';
