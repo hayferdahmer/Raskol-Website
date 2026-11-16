@@ -6,6 +6,10 @@ const root=process.cwd(),files=[];
 async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:true})){if(['.git','node_modules'].includes(entry.name))continue;const path=join(dir,entry.name);if(entry.isDirectory())await walk(path);else files.push(path);}}
 await walk(root);
 const htmlFiles=files.filter(path=>extname(path)==='.html'),jsFiles=files.filter(path=>extname(path)==='.js'),cssFiles=files.filter(path=>extname(path)==='.css');
+const designTokens=await readFile(resolve(root,'assets/css/tokens.css'),'utf8');
+assert.ok(designTokens.includes('--rsk-color-void:#090709')&&designTokens.includes('--rsk-color-gold:#c7a477')&&designTokens.includes('--rsk-font-display:'),'Shared RASKOL design tokens are incomplete');
+for(const path of htmlFiles){const html=await readFile(path,'utf8');if(relative(root,path)==='index.html')assert.ok(!html.includes('tokens.css'),'Homepage must remain isolated from the internal design-token layer');else assert.ok(html.includes('tokens.css'),'Internal page must load shared design tokens: '+relative(root,path));}
+
 assert.ok(htmlFiles.length>=5,'Expected public HTML pages');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');const ids=[...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);assert.equal(new Set(ids).size,ids.length,'Duplicate IDs in '+relative(root,path));for(const m of html.matchAll(/(?:href|src)="([^"]+)"/g)){const target=m[1].split('#')[0].split('?')[0];if(!target||target.startsWith('http:')||target.startsWith('https:')||target.startsWith('mailto:')||target.startsWith('tel:')||target.startsWith('data:')||target.startsWith('//'))continue;let resolved=resolve(join(path,'..'),decodeURIComponent(target));if(target.endsWith('/'))resolved=resolve(resolved,'index.html');assert.ok(files.includes(resolved),'Broken local reference in '+relative(root,path)+': '+target);}}
 for(const path of jsFiles)new vm.Script(await readFile(path,'utf8'),{filename:relative(root,path)});
@@ -40,6 +44,7 @@ assert.ok(siteUi.includes('shouldAutoplay')&&siteUi.includes('resumeAt')&&siteUi
 assert.ok(siteUi.includes('document.hidden) persist()')&&!siteUi.includes('if (document.hidden) audio.pause()'),'Background music must not pause when the browser tab is hidden');
 assert.ok(siteUi.includes('rsk-music-shuffle')&&siteUi.includes('rsk-music-repeat')&&siteUi.includes('rsk-music-progress'),'Music player must provide shuffle, repeat and seeking controls');
 assert.ok(siteUi.includes('rsk-page-transition')&&siteUi.includes('rsk-transition-crest')&&siteUiCss.includes('.rsk-music-player')&&siteUiCss.includes('#preloader .preload-crest'),'Global crest transition, branded preloader and compact music player are required');
+assert.equal((siteUiCss.match(/^\.rsk-music-player\{/gm)||[]).length,1,'Music player must have one canonical base rule');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('site-ui.js')&&html.includes('site-ui.css'),'Missing global site UI layer on '+relative(root,path));}
 assert.ok(media.includes('Прямые эфиры')&&media.includes('Интеграция ещё не подключена'),'Media hub must disclose that stream integration is not connected');
 assert.ok(home.includes('support/index.html'),'Homepage must link to the support center');
