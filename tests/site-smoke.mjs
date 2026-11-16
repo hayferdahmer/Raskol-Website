@@ -114,7 +114,9 @@ assert.ok(sharedComponents.includes('.support-nav{')&&sharedComponents.includes(
 
 const cinemaCss=await readFile(resolve(root,'assets/css/cinemagraph.css'),'utf8');
 assert.ok(cinemaCss.includes('background-image:url("../images/cinema-clouds.svg")')&&cinemaCss.includes('background-image:url("../images/cinema-mist-back.svg")')&&cinemaCss.includes('background-image:url("../images/cinema-mist-front.svg")'),'Cinematic atmosphere must use three independent alpha textures');
-assert.ok(cinemaCss.includes('--rsk-cinema-opacity:.42')&&cinemaCss.includes('animation:rsk-cinema-embers 24s ease-in-out infinite alternate'),'Sparse ember layer must retain its pre-0aef6f3 density and timing');
+assert.ok(cinemaCss.includes('--rsk-cinema-opacity:.16')&&cinemaCss.includes('animation:rsk-cinema-embers 38s ease-in-out infinite alternate'),'Sparse ember layer must retain its pre-0aef6f3 density and timing');
+const homeMarkup=await readFile(resolve(root,'index.html'),'utf8');
+assert.ok(homeMarkup.includes('const count=innerWidth<700?4:10')&&homeMarkup.includes('r:.45+Math.random()*.75')&&homeMarkup.includes('v:.035+Math.random()*.09')&&homeMarkup.includes('a:.05+Math.random()*.11'),'Canvas embers must stay sparse, small, slow and dim');
 for(const asset of ['cinema-clouds.svg','cinema-mist-back.svg','cinema-mist-front.svg']){
  const svg=await readFile(resolve(root,'assets/images',asset),'utf8');
  assert.ok(svg.includes('<feTurbulence')&&svg.includes('<feColorMatrix')&&svg.includes('viewBox="0 0 1800 1000"'),'Atmosphere texture must contain an alpha-masked organic noise field: '+asset);

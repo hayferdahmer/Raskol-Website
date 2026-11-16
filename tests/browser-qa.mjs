@@ -55,7 +55,7 @@ try{
           const resources=await Promise.all(layers.map(async layer=>({name:layer.name,ok:layer.image?((await fetch(layer.image)).ok):false})));
           return {layers,resources,emberDuration:embers?getComputedStyle(embers).animationDuration:null,emberOpacity:embers?getComputedStyle(embers).getPropertyValue('--rsk-cinema-opacity').trim():null,canvas:Boolean(canvas)};
         });
-        if(atmosphere.layers.some(layer=>!layer.image)||atmosphere.resources.some(resource=>!resource.ok)||atmosphere.emberDuration!=='24s'||atmosphere.emberOpacity!=='.42'||!atmosphere.canvas){
+        if(atmosphere.layers.some(layer=>!layer.image)||atmosphere.resources.some(resource=>!resource.ok)||atmosphere.emberDuration!=='38s'||atmosphere.emberOpacity!=='.16'||!atmosphere.canvas){
           report.runtimeErrors.push({route,viewport:viewport.width,message:'Cinematic texture loading or sparse ember regression',atmosphere});
         }
         if(viewport.width===390){
