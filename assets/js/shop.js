@@ -60,7 +60,7 @@
   function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
   // Проценты показываем с точностью до тысячной, убирая незначащие нули.
   function formatPercent(value){const safe=Math.min(100,Math.max(0.001,Number(value)||0));return Number(safe.toFixed(3)).toString().replace('.',',')+'%';}
-  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+formatPercent(chance)+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
+  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+formatPercent(chance)</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
     standard:{surcharge:0,factors:[1,1,1,1,1]},
     tempered:{surcharge:100,factors:[.82,1.05,1.25,1.55,1.8]},
@@ -152,7 +152,7 @@
     $('#ritualTotalNote').textContent=currentRollIsBonus?'Бонусная прокрутка за серию из 10 открытий. Списания нет.':('Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.');
     const keys=['common','uncommon','rare','relic','legendary'];
     const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
-    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+formatPercent(weights[i])+'%</b><small>'+labels[i]+'</small></div>').join('');
+    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+formatPercent(weights[i])</b><small>'+labels[i]+'</small></div>').join('');
     $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
     renderPrizePool();
   }
