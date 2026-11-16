@@ -1,0 +1,52 @@
+{
+  "contractVersion": "1",
+  "status": {
+    "state": "unknown",
+    "online": null,
+    "players": {
+      "online": null,
+      "max": null
+    },
+    "minecraftVersion": "26.2",
+    "serverSoftware": "Paper",
+    "updatedAt": null,
+    "stale": true
+  },
+  "worlds": [
+    {
+      "id": "example-world",
+      "name": "Публичное название мира",
+      "state": "unknown",
+      "description": null
+    }
+  ],
+  "events": [
+    {
+      "id": "example-event",
+      "title": "Название опубликованного события",
+      "summary": "Краткое описание после редакционного утверждения.",
+      "startsAt": null,
+      "endsAt": null,
+      "state": "draft",
+      "url": null
+    }
+  ],
+  "leaderboard": {
+    "id": "example-board",
+    "updatedAt": null,
+    "entries": [
+      {
+        "rank": 1,
+        "publicId": "public-player-id",
+        "displayName": "Игрок",
+        "score": 0,
+        "scoreLabel": "Очки"
+      }
+    ]
+  },
+  "notes": [
+    "Это пример формы контракта, а не реальные данные production-сервера.",
+    "Не публиковать UUID, IP, hostname, координаты, инвентарь, права и приватные сообщения.",
+    "Поля с null означают отсутствие подтверждённых данных; их нельзя заменять вымышленными значениями."
+  ]
+}
