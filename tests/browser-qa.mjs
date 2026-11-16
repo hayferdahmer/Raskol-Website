@@ -37,6 +37,7 @@ try{
   for(const route of routes){
     const context=await browser.newContext({viewport:{width:1440,height:1000}});
     const page=await context.newPage();
+    await page.addInitScript(()=>{try{localStorage.clear();sessionStorage.clear();}catch(_){}});
     page.on('pageerror',error=>report.runtimeErrors.push({route,message:error.message}));
     for(const viewport of viewports){
       await page.setViewportSize({width:viewport.width,height:viewport.height});
@@ -61,7 +62,7 @@ try{
       if(metrics.documentWidth>viewport.width+1||metrics.overflowElements.length)report.overflow.push({route,viewport:viewport.width,documentWidth:metrics.documentWidth,bodyWidth:metrics.bodyWidth,elements:metrics.overflowElements,scrollOverflow:metrics.scrollOverflow});
       if((route==='/classes/specializations.html'&&(viewport.width===320||viewport.width===390))||((route==='/shop/'||route==='/support/')&&viewport.width===320)||(route==='/shop/'&&viewport.width===768)||(route.startsWith('/classes/')&&route.endsWith('.html')&&viewport.width===320)||(route==='/'&&viewport.width===768))report.diagnostics.push({route,viewport:viewport.width,bodyWidth:metrics.bodyWidth,documentWidth:metrics.documentWidth,h1:metrics.h1,filterStyles:metrics.filterStyles});
       if(!metrics.hasMain||metrics.mainCount!==1)report.runtimeErrors.push({route,message:'Expected exactly one main landmark'});
-      if(route==='/shop/'&&viewport.width===390&&!metrics.shopNavVisible)report.keyboard.push({route,viewport:viewport.width,message:'Shop navigation is hidden on mobile'});
+      if(route==='/shop/'&&viewport.width<=980&&!metrics.shopNavVisible)report.keyboard.push({route,viewport:viewport.width,message:'Shop navigation is hidden on tablet or mobile'});
       if(!metrics.skip||!metrics.skipTarget)report.keyboard.push({route,viewport:viewport.width,message:'Skip link or its target is missing'});
       if([1440,768,390,320].includes(viewport.width)){
         await page.addStyleTag({content:'.reveal,.rsk-reveal{opacity:1!important;transform:none!important;transition:none!important}'});
