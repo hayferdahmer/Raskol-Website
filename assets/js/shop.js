@@ -160,7 +160,8 @@
     const button=e.target.closest('[data-tier]');
     if(!button||rolling)return;
     currentTier=button.dataset.tier;renderRitual();
-  });\n  function makeReel(winner){
+  });
+  function makeReel(winner){
     const pool=getCaseRewards(currentCase);
     // Длинная дорожка даёт рулетке запас хода и не подводит победный предмет к краю.
     const sequence=Array.from({length:64},()=>pool[Math.floor(Math.random()*pool.length)]);
@@ -299,7 +300,8 @@
       requestAnimationFrame(tick);
     };
     if(reducedMotion)begin();else window.setTimeout(begin,720);
-  }\n  $('#rollBtn').addEventListener('click',()=>roll(false));
+  }
+  $('#rollBtn').addEventListener('click',()=>roll(false));
   renderLoyalty();
   $('#claimBonusBtn').addEventListener('click',()=>{
     if(!demoState.bonusReady||rolling)return;
