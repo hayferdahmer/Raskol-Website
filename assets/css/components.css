@@ -1,0 +1,24 @@
+/* RASKOL · Общие компоненты портала
+   Слой объединяет повторяющиеся элементы мира, фракций, экосистемы и медиа. */
+.rsk-nav,.world-nav{display:flex;flex-wrap:wrap;gap:22px;color:#c7b8b8}
+.rsk-nav a,.world-nav a{display:inline-flex;align-items:center;min-height:40px;transition:color .25s ease}
+.rsk-nav a:hover,.world-nav a:hover,.world-back:hover{color:#e5a7b0}
+
+.rsk-button,.world-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border:1px solid rgba(193,126,137,.42);font:9px var(--rsk-font-ui);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;touch-action:manipulation;transition:background .3s,border-color .3s,transform .3s}
+.rsk-button:hover,.world-action:hover{background:rgba(166,106,117,.13);border-color:rgba(220,157,169,.75);transform:translateY(-2px)}
+.rsk-button--primary,.world-action.primary{background:linear-gradient(110deg,rgba(105,42,58,.55),rgba(33,18,25,.8));border-color:rgba(199,164,119,.42)}
+.rsk-button:focus-visible,.world-action:focus-visible,.rsk-nav a:focus-visible,.world-nav a:focus-visible,.world-footer a:focus-visible{outline:2px solid var(--rsk-color-gold);outline-offset:4px;border-radius:2px}
+
+.rsk-card,.world-card{position:relative;min-height:230px;padding:28px;border:1px solid var(--rsk-color-border);background:linear-gradient(145deg,rgba(37,22,29,.88),rgba(13,9,12,.96));overflow:hidden;transition:border-color .35s,transform .4s,box-shadow .4s}
+.rsk-card::before,.world-card:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 90% 0,rgba(166,106,117,.13),transparent 58%);pointer-events:none}
+.rsk-card>*,.world-card>*{position:relative}
+.rsk-card:hover,.world-card:hover{transform:translateY(-4px);border-color:rgba(208,139,151,.58);box-shadow:0 18px 45px #0007}
+.rsk-card h3,.world-card h3{margin:6px 0 10px;font:500 34px/1.05 var(--rsk-font-display);letter-spacing:.045em}
+.rsk-card p,.world-card p{margin:0;color:var(--rsk-color-mist);font-size:17px}
+.rsk-card__footer,.world-card .world-card-foot{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:24px;padding-top:14px;border-top:1px solid rgba(193,126,137,.16);color:#d9c6c6;font:9px var(--rsk-font-ui);letter-spacing:.15em;text-transform:uppercase}
+
+.rsk-panel,.world-note{margin-top:20px;padding:18px 20px;border-left:2px solid var(--rsk-color-crimson-muted);background:rgba(20,12,16,.72);color:var(--rsk-color-mist);font:13px/1.7 var(--rsk-font-ui)}
+.rsk-panel strong,.world-note strong{color:var(--rsk-color-silk)}
+
+.world-nav a,.world-footer a,.world-action{min-height:40px;display:inline-flex;align-items:center}
+@media(prefers-reduced-motion:reduce){.rsk-button,.world-action,.rsk-card,.world-card{transition:none}}

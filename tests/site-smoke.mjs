@@ -9,6 +9,13 @@ const htmlFiles=files.filter(path=>extname(path)==='.html'),jsFiles=files.filter
 const designTokens=await readFile(resolve(root,'assets/css/tokens.css'),'utf8');
 assert.ok(designTokens.includes('--rsk-color-void:#090709')&&designTokens.includes('--rsk-color-gold:#c7a477')&&designTokens.includes('--rsk-font-display:'),'Shared RASKOL design tokens are incomplete');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');if(relative(root,path)==='index.html')assert.ok(!html.includes('tokens.css'),'Homepage must remain isolated from the internal design-token layer');else assert.ok(html.includes('tokens.css'),'Internal page must load shared design tokens: '+relative(root,path));}
+const sharedClassPages=['classes/index.html','classes/hunter.html','classes/mage.html','classes/priest.html','classes/rogue.html','classes/warlock.html','classes/warrior.html'];
+for(const path of sharedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('classes.css'),'Shared class stylesheet is missing from '+path);assert.ok(!/<style\\b/i.test(html),'Repeated class-page styles must live in classes.css, not inline: '+path);}
+const portalPages=['world/index.html','factions/index.html','systems/index.html','map/index.html','media/index.html'];
+const componentsCss=await readFile(resolve(root,'assets/css/components.css'),'utf8'),portalCss=await readFile(resolve(root,'assets/css/world.css'),'utf8');
+for(const path of portalPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Portal component foundation is missing from '+path);}
+assert.ok(componentsCss.includes('.rsk-button')&&componentsCss.includes('.rsk-card')&&componentsCss.includes('.rsk-panel')&&componentsCss.includes('.rsk-nav'),'Shared component primitives are incomplete');
+assert.ok(!/^\\.world-action\\{/m.test(portalCss)&&!/^\\.world-card\\{/m.test(portalCss)&&!/^\\.world-nav\\{/m.test(portalCss)&&!/^\\.world-note\\{/m.test(portalCss),'Shared portal base component rules must have one owner in components.css; responsive overrides may remain local');
 
 assert.ok(htmlFiles.length>=5,'Expected public HTML pages');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');const ids=[...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);assert.equal(new Set(ids).size,ids.length,'Duplicate IDs in '+relative(root,path));for(const m of html.matchAll(/(?:href|src)="([^"]+)"/g)){const target=m[1].split('#')[0].split('?')[0];if(!target||target.startsWith('http:')||target.startsWith('https:')||target.startsWith('mailto:')||target.startsWith('tel:')||target.startsWith('data:')||target.startsWith('//'))continue;let resolved=resolve(join(path,'..'),decodeURIComponent(target));if(target.endsWith('/'))resolved=resolve(resolved,'index.html');assert.ok(files.includes(resolved),'Broken local reference in '+relative(root,path)+': '+target);}}
@@ -41,6 +48,9 @@ assert.ok(home.includes('href="#faq">Частые вопросы</a>'),'FAQ must
 assert.ok(siteUi.includes('opengameart.org/sites/default/files/The_Bards_Tale.mp3')&&siteUi.includes('audio.play()')&&siteUi.includes('audio.preload'),'Background music must use the credited CC0 source');
 assert.ok((siteUi.split('opengameart.org/sites/default/files/').length-1)>=6,'The RASKOL soundtrack needs at least six CC0 tracks');
 assert.ok(siteUi.includes('shouldAutoplay')&&siteUi.includes('resumeAt')&&siteUi.includes('sessionStorage'),'Autoplay attempt and playback position must persist between page navigations');
+const musicIndexDeclaration=siteUi.indexOf('let index = Number.isInteger(session.index)');
+const musicResumeDeclaration=siteUi.indexOf('let resumeAt = session.index === index');
+assert.ok(musicIndexDeclaration>=0&&musicResumeDeclaration>musicIndexDeclaration,'Music player must initialize the track index before restoring playback position');
 assert.ok(siteUi.includes('document.hidden) persist()')&&!siteUi.includes('if (document.hidden) audio.pause()'),'Background music must not pause when the browser tab is hidden');
 assert.ok(siteUi.includes('rsk-music-shuffle')&&siteUi.includes('rsk-music-repeat')&&siteUi.includes('rsk-music-progress'),'Music player must provide shuffle, repeat and seeking controls');
 assert.ok(siteUi.includes('rsk-page-transition')&&siteUi.includes('rsk-transition-crest')&&siteUiCss.includes('.rsk-music-player')&&siteUiCss.includes('#preloader .preload-crest'),'Global crest transition, branded preloader and compact music player are required');
