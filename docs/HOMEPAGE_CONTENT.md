@@ -311,7 +311,7 @@
 
 ### Какой адрес сервера?
 
-Основной HOST: `raskolpro.play.ski`. Резервный IP: `raskol.play.ski`.
+Anycast: `raskolpro.play.ski`. Дополнительный адрес SRV: `raskol.play.ski`.
 
 ### Когда начнётся первый сезон?
 
