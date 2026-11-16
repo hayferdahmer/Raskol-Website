@@ -20,10 +20,10 @@ assert.ok(shop.includes("$$('.ritual-tier').forEach("),'Ritual tier controls mus
 const oddsMatch=shop.match(/const caseOdds=\{([\s\S]*?)\n  \};/);assert.ok(oddsMatch,'Per-case odds tables are missing');const oddsTables=[...oddsMatch[1].matchAll(/\[([^\]]+)\]/g)].map(m=>m[1].split(',').map(Number));assert.equal(oddsTables.length,8,'Expected one base odds table per case');for(const weights of oddsTables)assert.ok(Math.abs(weights.reduce((sum,n)=>sum+n,0)-100)<0.000001,'Each case odds table must total exactly 100%');
 for(const id of ['two-crowns','blood-oath','ashfall','black-embers','winter-solstice','eclipse','old-kingdom','last-vow'])assert.ok(shop.includes("'"+id+"'"),'Missing case reward pool '+id);
 assert.ok(shopHtml.includes('id="reelSoundToggle"'),'Physical Reel sound control is missing from the case dialog');
-assert.ok(content.includes('data-rsk-cinemagraph')&&content.includes('rsk-cinema-active'),'Cinemagraph scene activation must be visibility-aware');
+assert.ok(atmosphere.includes('data-rsk-cinemagraph')&&atmosphere.includes('rsk-cinema-active')&&atmosphereCss.includes('rsk-cinema-clouds'),'Cinemagraph scene activation and layer motion primitives are missing');
 assert.ok(shop.includes('modalReturnFocus')&&shop.includes('activeModal'),'Modal focus management is missing');
 assert.ok(account.includes('ArrowRight')&&account.includes('Home')&&account.includes('End'),'Account tab keyboard controls are missing');
-const home=await readFile(resolve(root,'index.html'),'utf8'),media=await readFile(resolve(root,'media/index.html'),'utf8');
+const home=await readFile(resolve(root,'index.html'),'utf8'),media=await readFile(resolve(root,'media/index.html'),'utf8'),atmosphere=await readFile(resolve(root,'assets/js/atmosphere.js'),'utf8'),atmosphereCss=await readFile(resolve(root,'assets/css/atmosphere.css'),'utf8');
 const support=await readFile(resolve(root,'support/index.html'),'utf8');
 assert.ok(files.includes(resolve(root,'assets/images/raskol-crest.webp')),'Shared RASKOL crest asset is missing');
 assert.ok(home.includes('raskolpro.play.ski')&&home.includes('raskol.play.ski'),'Both approved public connection addresses must be visible');
