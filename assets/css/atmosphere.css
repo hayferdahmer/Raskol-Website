@@ -236,6 +236,8 @@ body.cursor-active .cursor-glow { opacity: 1; }
   transform: translate3d(0,0,0); transition: opacity 1.8s ease; will-change: transform, opacity;
 }
 [data-rsk-cinemagraph].rsk-cinema-active [data-rsk-cinema-layer] { opacity: var(--rsk-cinema-opacity, .7); }
+[data-rsk-cinemagraph] [data-rsk-cinema-layer] { animation-play-state: paused; }
+[data-rsk-cinemagraph].rsk-cinema-active [data-rsk-cinema-layer] { animation-play-state: running; }
 [data-rsk-cinema-layer="clouds"] { animation: rsk-cinema-clouds 92s linear infinite alternate; }
 [data-rsk-cinema-layer="mist-back"] { animation: rsk-cinema-mist-back 58s ease-in-out infinite alternate; }
 [data-rsk-cinema-layer="mist-front"] { animation: rsk-cinema-mist-front 74s ease-in-out infinite alternate; }
