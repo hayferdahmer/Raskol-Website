@@ -98,3 +98,9 @@ assert.ok(mobileCss.includes('max-width: 430px')&&mobileCss.includes('.case-grid
 const classCatalog=await readFile(resolve(root,'classes/index.html'),'utf8'),classStyles=await readFile(resolve(root,'assets/css/classes.css'),'utf8');
 assert.ok(!/\sstyle\s*=/.test(classCatalog),'Class catalog must not keep presentation in inline style attributes');
 for(const selector of ['.catalog-callout{','.catalog-callout__eyebrow{','.catalog-callout__title{','.catalog-callout__description{','.catalog-callout__actions{','.catalog-callout__link{'])assert.ok(classStyles.includes(selector),'Missing extracted class catalog component '+selector);
+
+
+const supportMarkup=await readFile(resolve(root,'support/index.html'),'utf8'),supportStyles=await readFile(resolve(root,'support/support.css'),'utf8'),sharedComponents=await readFile(resolve(root,'assets/css/components.css'),'utf8');
+assert.ok(supportMarkup.includes('../assets/css/components.css'),'Support page must load the shared component layer');
+assert.ok(!supportStyles.includes('.support-nav{display:flex')&&!supportStyles.includes('.support-button{'),'Support navigation and button must have one shared component owner');
+assert.ok(sharedComponents.includes('.support-nav{')&&sharedComponents.includes('.support-button{'),'Shared component layer must own support navigation and button styles');
