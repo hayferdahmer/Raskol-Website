@@ -61,7 +61,8 @@ try{
       if(!metrics.hasMain||metrics.mainCount!==1)report.runtimeErrors.push({route,message:'Expected exactly one main landmark'});
       if(!metrics.skip||!metrics.skipTarget)report.keyboard.push({route,viewport:viewport.width,message:'Skip link or its target is missing'});
       if(viewport.width===1440||viewport.width===390){
-        await page.addStyleTag({content:'.reveal{opacity:1!important;transform:none!important;transition:none!important}'});\n        const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+        await page.addStyleTag({content:'.reveal{opacity:1!important;transform:none!important;transition:none!important}'});
+        const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
         for(const v of axe.violations)report.axe.push({route,viewport:viewport.width,id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.slice(0,8).map(n=>({target:n.target,summary:n.failureSummary?.slice(0,260)}))});
         const shot=resolve(root,'artifacts/browser-qa',route==='/'?'home':route.replaceAll('/','_').replace(/^_+|_+$/g,''));
         if(viewport.width===1440||viewport.width===390){
@@ -156,7 +157,8 @@ const summary={
   reducedMotionFindings:report.motion.length,
   interactionChecks:report.interactions
 };
-await writeFile(resolve(root,'artifacts/browser-qa/report.json'),JSON.stringify({summary,report},null,2));\nconsole.log('BROWSER_QA_DIAGNOSTICS '+JSON.stringify(report.diagnostics));
+await writeFile(resolve(root,'artifacts/browser-qa/report.json'),JSON.stringify({summary,report},null,2));
+console.log('BROWSER_QA_DIAGNOSTICS '+JSON.stringify(report.diagnostics));
 console.log('BROWSER_QA_SUMMARY '+JSON.stringify(summary));
 if(report.overflow.length||report.axe.some(x=>x.impact==='critical'||x.impact==='serious')||report.runtimeErrors.length||report.keyboard.length||report.motion.length||report.interactions.some(x=>!x.passed)){
   console.error('BROWSER_QA_FINDINGS '+JSON.stringify({overflow:report.overflow,axe:report.axe,runtimeErrors:report.runtimeErrors,keyboard:report.keyboard,motion:report.motion,interactions:report.interactions},null,2));
