@@ -2,7 +2,7 @@
 
 Установщик размещает в стандартной папке `%APPDATA%\.minecraft\mods`:
 
-- `raskolhud-client-0.5.0.jar` — клиентский HUD;
+- `raskolhud-client-0.5.1.jar` — клиентский HUD;
 - `fabric-api-0.161.0+26.2.jar` — зависимость Fabric API.
 
 Поддерживаемая конфигурация: Minecraft 26.2, Java 25, Fabric Loader 0.19.5.
