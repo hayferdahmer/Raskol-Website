@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--world-bg:#090709;--world-panel:#171014;--world-panel2:#21151b;--world-silk:#e8ddda;--world-mist:#b9a9a8;--world-muted:#8d7d80;--world-red:#a66a75;--world-line:rgba(193,126,137,.24);--world-gold:#c7a477;--world-display:'Cormorant Garamond',Georgia,serif;--world-ui:'Inter',Arial,sans-serif}
+:root{color-scheme:dark;--world-bg:var(--rsk-color-void);--world-panel:var(--rsk-color-panel);--world-panel2:var(--rsk-color-panel-raised);--world-silk:var(--rsk-color-silk);--world-mist:var(--rsk-color-mist);--world-muted:var(--rsk-color-muted);--world-red:var(--rsk-color-crimson-muted);--world-line:var(--rsk-color-border);--world-gold:var(--rsk-color-gold);--world-display:var(--rsk-font-display);--world-ui:var(--rsk-font-ui)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
 body{margin:0;background:radial-gradient(ellipse at 50% 0,rgba(83,31,44,.22),transparent 46%),var(--world-bg);color:var(--world-silk);font:18px/1.65 var(--world-display)}
