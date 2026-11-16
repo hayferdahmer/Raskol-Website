@@ -285,7 +285,7 @@
         const speed=delta/Math.max(1,now-(tick.lastTime||now))*1000;
         previousPosition=position;tick.lastTime=now;
         track.style.filter=speed>24?'blur('+Math.min(.72,speed/1250).toFixed(3)+'px)':'none';
-        const itemWidth=track.children[0]?.getBoundingClientRect().width||127;
+        const itemWidth=track.children[1]&&track.children[0]?track.children[1].offsetLeft-track.children[0].offsetLeft:127;
         const crossed=Math.floor(position/itemWidth);
         if(crossed>reelAudio.lastTick)playReelTick(crossed,speed);
         if(p>.66){dialog.classList.add('is-braking');$('#rollResult').textContent='Инерция угасает…'}
@@ -300,9 +300,9 @@
           track.style.filter='none';
           const settleStarted=performance.now();
           const settle=stamp=>{
-            const t=Math.min(1,(stamp-settleStarted)/260);
+            const t=Math.min(1,(stamp-settleStarted)/(reducedMotion?1:260));
             const rebound=1-Math.pow(1-t,3);
-            const offset=4*(1-rebound);
+            const offset=reducedMotion?0:4*(1-rebound);
             track.style.transform='translate3d('+(-target-offset)+'px,0,0)';
             if(t<1)requestAnimationFrame(settle);
             else {
