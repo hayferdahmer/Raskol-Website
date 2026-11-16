@@ -26,19 +26,19 @@
 Страница и структура каталога подготовлены. Реальных загрузок пока нет; позиции добавляются после получения и проверки материалов.
 
 
-## Опубликованная позиция: RaskolHUD 0.5.0
+## Опубликованная позиция: RaskolHUD 0.5.1
 
 - Категория: клиентский мод / интерфейс.
-- Файл: `RaskolHUD-Installer-0.5.0.exe` (Windows x64).
-- Состав: `raskolhud-client-0.5.0.jar` и `fabric-api-0.161.0+26.2.jar`.
+- Файл: `RaskolHUD-Installer-0.5.1.exe` (Windows x64).
+- Состав: `raskolhud-client-0.5.1.jar` и `fabric-api-0.161.0+26.2.jar`.
 - Игра: Minecraft 26.2.
 - Загрузчик: Fabric Loader 0.19.5 или новее, совместимый с Minecraft 26.2.
 - Java: 25.
 - Установка: стандартная папка `%APPDATA%\.minecraft\mods`. Для отдельного каталога стороннего лаунчера требуется ручное копирование файлов в `mods` конкретного профиля.
 - Установщик удаляет только старые файлы RaskolHUD и Fabric API по соответствующим шаблонам имён, остальные моды не затрагивает.
 - Исходный код мода: https://github.com/hayferdahmer/RaskolHUD-mod
-- Сборка клиента закреплена на коммите `2df368a807fc693be497b7a1e7a54327ccc58e43`.
+- Сборка клиента закреплена на коммите `632693391188c0c6222b21123721fd48b69c6cc7`.
 - Fabric API скачивается с официального Maven Fabric: https://maven.fabricmc.net/
-- Выпуск установщика и файл SHA-256: https://github.com/hayferdahmer/Raskol-Website/releases/tag/raskolhud-installer-v0.5.0
+- Выпуск установщика и файл SHA-256: https://github.com/hayferdahmer/Raskol-Website/releases/tag/raskolhud-installer-v0.5.1
 
 Ограничения: установщик не устанавливает Minecraft, Java или Fabric Loader; не настраивает сторонние лаунчеры; не включает серверный Paper-мост. Перед запуском игры закрой Minecraft Launcher и саму игру.
