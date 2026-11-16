@@ -160,7 +160,7 @@
 
 ### Границы миграции
 
-- `classes/specializations.html` и `classes/specializations/arms.html` пока сохраняют уникальные inline-стили: их структуры и интерактивные состояния отличаются от каталога и detail-страниц классов.
+- `classes/specializations.html` и `classes/specializations/arms.html` используют отдельные `specializations.css` и `talent-tree.css`: их структуры и интерактивные состояния отличаются от каталога и detail-страниц классов, поэтому они остаются самостоятельными page-specific слоями.
 - Карточки магазина, рулетка, профиль и support-панели остаются локальными, пока не подтверждена одинаковая семантика и поведение.
 - Главная `index.html` не подключает `tokens.css`, `components.css` или `classes.css`.
 
