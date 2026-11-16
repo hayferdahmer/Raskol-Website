@@ -1,0 +1,17 @@
+/* Общая фирменная эмблема РАСКОЛА для всех страниц */
+.brand,.world-brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
+.brand-emblem,.rsk-brand-crest{width:42px;height:48px;flex:0 0 auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(156,62,80,.34));mix-blend-mode:screen}
+.rsk-brand-copy{display:flex;flex-direction:column;line-height:1.05}
+.brand small,.world-brand small,.rsk-brand-copy small{display:block;margin-top:4px;font:8px var(--ui,Arial,sans-serif);letter-spacing:.28em;color:var(--red,#a66a75)}
+.world-brand{font:600 17px var(--world-display,Georgia,serif);letter-spacing:.2em}
+.rsk-document-brand{display:inline-flex;align-items:center;gap:12px;margin-bottom:22px;font:600 18px Georgia,serif;letter-spacing:.18em;color:#e8ddda;text-decoration:none}
+.rsk-document-brand img{width:54px;height:60px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(156,62,80,.35))}
+.rsk-document-brand small{display:block;margin-top:5px;font:8px Arial,sans-serif;letter-spacing:.28em;color:#a66a75}
+.account-profile-preview{margin:0 0 34px;padding:26px;border:1px solid rgba(193,126,137,.24);background:linear-gradient(145deg,rgba(37,22,29,.72),rgba(13,9,12,.86))}
+.account-profile-preview h2{margin:5px 0 8px;font:500 34px Georgia,serif;color:#e8ddda}
+.account-profile-preview p{margin:0;color:#b9a9a8}
+.account-profile-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:20px}
+.account-profile-stat{padding:14px;border:1px solid rgba(193,126,137,.16);background:rgba(9,7,9,.42)}
+.account-profile-stat span{display:block;color:#a66a75;font:9px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.account-profile-stat strong{display:block;margin-top:8px;color:#e8ddda;font:500 24px Georgia,serif}
+@media(max-width:700px){.brand-emblem,.rsk-brand-crest{width:36px;height:42px}.account-profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.account-profile-preview{padding:20px}}
