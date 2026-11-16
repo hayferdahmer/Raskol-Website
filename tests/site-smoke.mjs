@@ -38,3 +38,21 @@ assert.ok(support.includes('не отправляются')&&support.includes('�
 assert.ok(support.includes('Мои обращения')&&support.includes('База знаний')&&support.includes('Апелляции'),'Support center is missing a core section');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('rsk-brand-crest')||html.includes('brand-emblem')||html.includes('rsk-document-brand'),'Missing RASKOL crest on '+relative(root,path));assert.ok(!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(html)&&!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(html),'A raw server IP or legacy host is published in '+relative(root,path));}
 console.log('PASS: '+htmlFiles.length+' HTML, '+jsFiles.length+' JS and '+cssFiles.length+' CSS files; IDs, local paths, syntax, styles and key interactions checked.');
+
+
+const ecosystem=await readFile(resolve(root,'systems/index.html'),'utf8'),worldCss=await readFile(resolve(root,'assets/css/world.css'),'utf8');
+assert.ok(ecosystem.includes('<h1>Экосистема РАСКОЛА</h1>'),'Systems hub must use the approved Ecosystem name');
+assert.ok(ecosystem.includes('href="../classes/index.html">Каталог классов</a>'),'Classes must remain accessible as a subsystem of the ecosystem');
+assert.ok(worldCss.includes('@media(max-width:560px)')&&worldCss.includes('min-height:48px'),'Shared portal actions must retain comfortable mobile touch targets');
+for(const path of ['world/index.html','factions/index.html','map/index.html','media/index.html','support/index.html']){
+ const html=await readFile(resolve(root,path),'utf8');
+ assert.ok(html.includes('Экосистема'),'Shared portal navigation must expose the Ecosystem entry');
+ assert.ok(!html.includes('>Классы</a>'),'Classes must not be duplicated as a top-level shared portal navigation item');
+}
+
+const mobileCss=await readFile(resolve(root,'assets/css/mobile.css'),'utf8'),brandCss=await readFile(resolve(root,'assets/css/brand.css'),'utf8');
+assert.ok(brandCss.includes('@import url("./mobile.css")'),'Shared mobile layer must be loaded by branded pages');
+for(const width of ['900px','680px','380px'])assert.ok(mobileCss.includes('max-width: '+width),'Missing responsive breakpoint '+width);
+assert.ok(mobileCss.includes('.nav a,.world-nav a,.support-nav a')&&mobileCss.includes('display: inline-flex !important'),'Mobile navigation must not hide existing links');
+assert.ok(mobileCss.includes('.catalog-grid')&&mobileCss.includes('.roulette-window')&&mobileCss.includes('.account-tabs')&&mobileCss.includes('.support-form-layout'),'Shop, roulette, account and support need mobile layouts');
+assert.ok(mobileCss.includes('prefers-reduced-motion')&&mobileCss.includes('hover: none'),'Mobile layer must respect reduced motion and touch input');

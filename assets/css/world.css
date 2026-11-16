@@ -66,3 +66,10 @@ a{color:inherit;text-decoration:none}
 @media(max-width:800px){.world-top{align-items:flex-start;padding:18px 0;flex-direction:column}.world-nav{gap:12px 18px}.world-hero{padding:72px 0 52px}.world-section-head{display:block}.world-section-head p{margin-top:12px}.world-fact-grid,.world-steps{grid-template-columns:1fr}.world-list li{display:block}.world-list b{display:block;margin-bottom:4px}}
 @media(max-width:560px){.world-shell{width:calc(100% - 30px)}.world-grid{grid-template-columns:1fr}.world-card{min-height:0;padding:23px}.world-hero h1{font-size:clamp(48px,15vw,76px)}.world-hero p{font-size:19px}.world-map-panel{padding:32px 22px}.world-footer{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.world-action,.world-card{transition:none}}
+
+
+/* Мобильная доступность общей навигации и интерактивных элементов */
+.world-nav a,.world-footer a,.world-action{min-height:40px;display:inline-flex;align-items:center}
+.world-nav a:focus-visible,.world-action:focus-visible,.world-footer a:focus-visible{outline:2px solid var(--world-gold);outline-offset:4px;border-radius:2px}
+@media(max-width:800px){.world-top{gap:12px}.world-nav{width:100%;gap:4px 18px;align-items:center}.world-nav a{padding:6px 0;white-space:nowrap}}
+@media(max-width:560px){.world-top{padding:14px 0}.world-brand{font-size:16px}.world-nav{gap:2px 14px;font-size:10px;letter-spacing:.11em}.world-nav a{min-height:38px}.world-actions{display:grid;grid-template-columns:1fr;width:100%}.world-action{width:100%;min-height:48px}.world-section{padding:32px 0 52px}.world-card .world-card-foot{align-items:flex-start;flex-direction:column;gap:8px}}
