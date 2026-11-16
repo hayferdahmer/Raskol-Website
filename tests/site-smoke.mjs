@@ -15,10 +15,17 @@ for(const id of ['productModal','caseModal','closeProductModal','closeModal','mo
 for(const id of ['linkCode','verifyLinkCode','linkStatus','dailyLimit','monthlyLimit','saveLimits','limitPreview'])assert.ok(accountHtml.includes('id="'+id+'"'),'Missing account element '+id);
 assert.ok(shop.includes('getBoundingClientRect()'),'Roulette geometry must be measured from rendered rectangles');assert.ok(shop.includes('t+t*t*t-t*t*t*t'),'Roulette deceleration must ease continuously into its stop');
 assert.ok(shop.includes('function getCaseRewards('),'Case-specific reward pools are missing');assert.ok(shop.includes('function getRarityWeights('),'Case-specific tier probability calculation is missing');
-assert.ok(shop.includes("$('.ritual-tier').forEach("),'Ritual tier controls must be selected as a collection');
-assert.ok(!/(?<!\\$)\\$\\('\.ritual-tier'\\)\\.forEach/.test(shop),'A single querySelector result cannot be iterated as a collection');
+assert.ok(shop.includes("$$('.ritual-tier').forEach("),'Ritual tier controls must be selected as a collection');
+assert.ok(!shop.includes("$('.ritual-tier').forEach("),'A single querySelector result cannot be iterated as a collection');
 const oddsMatch=shop.match(/const caseOdds=\{([\s\S]*?)\n  \};/);assert.ok(oddsMatch,'Per-case odds tables are missing');const oddsTables=[...oddsMatch[1].matchAll(/\[([^\]]+)\]/g)].map(m=>m[1].split(',').map(Number));assert.equal(oddsTables.length,8,'Expected one base odds table per case');for(const weights of oddsTables)assert.ok(Math.abs(weights.reduce((sum,n)=>sum+n,0)-100)<0.000001,'Each case odds table must total exactly 100%');
 for(const id of ['two-crowns','blood-oath','ashfall','black-embers','winter-solstice','eclipse','old-kingdom','last-vow'])assert.ok(shop.includes("'"+id+"'"),'Missing case reward pool '+id);
 assert.ok(shop.includes('modalReturnFocus')&&shop.includes('activeModal'),'Modal focus management is missing');
 assert.ok(account.includes('ArrowRight')&&account.includes('Home')&&account.includes('End'),'Account tab keyboard controls are missing');
+const home=await readFile(resolve(root,'index.html'),'utf8'),media=await readFile(resolve(root,'media/index.html'),'utf8');
+assert.ok(files.includes(resolve(root,'assets/images/raskol-crest.webp')),'Shared RASKOL crest asset is missing');
+assert.ok(home.includes('raskolpro.play.ski')&&home.includes('raskol.play.ski'),'Both approved public connection addresses must be visible');
+assert.ok(!home.includes('ip143-20-155-14.joinserver.xyz')&&!home.includes('143.20.155.14'),'Legacy host and IP must be removed from homepage');
+assert.ok(home.includes('Профиль игрока')&&!home.includes('Смотреть трейлер')&&!home.includes('trailerModal'),'Homepage CTA and trailer placeholder must be updated');
+assert.ok(media.includes('Прямые эфиры')&&media.includes('Интеграция ещё не подключена'),'Media hub must disclose that stream integration is not connected');
+for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('rsk-brand-crest')||html.includes('brand-emblem')||html.includes('rsk-document-brand'),'Missing RASKOL crest on '+relative(root,path));assert.ok(!html.includes('143.20.155.14')&&!html.includes('ip143-20-155-14.joinserver.xyz'),'A raw server IP or legacy host is published in '+relative(root,path));}
 console.log('PASS: '+htmlFiles.length+' HTML, '+jsFiles.length+' JS and '+cssFiles.length+' CSS files; IDs, local paths, syntax, styles and key interactions checked.');
