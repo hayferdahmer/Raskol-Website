@@ -23,38 +23,38 @@
 /* Музыкальный зал: полноценный компактный плеер */
 .rsk-music-player{position:fixed;left:18px;bottom:18px;z-index:70;width:min(390px,calc(100vw - 28px));padding:12px 14px 10px;border:1px solid rgba(188,124,137,.34);background:radial-gradient(ellipse at 0 0,rgba(119,48,64,.2),transparent 55%),linear-gradient(145deg,rgba(28,16,22,.97),rgba(8,7,9,.97));box-shadow:0 18px 55px rgba(0,0,0,.52),inset 0 1px rgba(255,232,233,.08),inset 0 0 35px rgba(113,42,58,.12),0 0 28px rgba(110,39,55,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#e8ddda;transition:width .35s,border-color .35s,box-shadow .4s}
 .rsk-music-player::before{content:"";position:absolute;inset:4px;border:1px solid rgba(188,124,137,.1);pointer-events:none}
-.rsk-music-top{display:grid;grid-template-columns:42px minmax(0,1fr) 34px 24px;gap:10px;align-items:center}
+.rsk-music-top{display:grid;grid-template-columns:42px minmax(0,1fr) 44px 44px;gap:10px;align-items:center}
 .rsk-music-crest{width:40px;height:44px;object-fit:contain;filter:drop-shadow(0 0 9px rgba(165,75,91,.42))}
 .rsk-music-meta{min-width:0;display:grid;gap:2px}
-.rsk-music-kicker{font:600 7px Inter,Arial,sans-serif;letter-spacing:.25em;text-transform:uppercase;color:#ad7580}
+.rsk-music-kicker{font:600 8px Inter,Arial,sans-serif;letter-spacing:.25em;text-transform:uppercase;color:#ad7580}
 .rsk-music-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 18px/1.05 'Cormorant Garamond',Georgia,serif;color:#f0e4e0}
-.rsk-music-subtitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:8px Inter,Arial,sans-serif;color:#9c898d;letter-spacing:.035em}
+.rsk-music-subtitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:9px Inter,Arial,sans-serif;color:#9c898d;letter-spacing:.035em}
 .rsk-music-control,.rsk-music-small,.rsk-music-collapse{position:relative;z-index:1;display:grid;place-items:center;border:1px solid rgba(190,126,137,.35);background:linear-gradient(145deg,rgba(92,38,52,.72),rgba(24,13,18,.94));color:#ead9d9;cursor:pointer;transition:background .22s,border-color .22s,transform .22s,box-shadow .22s}
-.rsk-music-control{width:34px;height:34px;font:14px Arial,sans-serif}
+.rsk-music-control{width:44px;height:44px;font:14px Arial,sans-serif}
 .rsk-music-control.needs-gesture{border-color:rgba(224,160,170,.78);box-shadow:0 0 18px rgba(169,75,94,.32);animation:rsk-play-prompt 2.1s ease-in-out infinite}
-.rsk-music-collapse{width:24px;height:28px;border:0;background:transparent;color:#a88c91;font-size:16px}
+.rsk-music-collapse{width:44px;height:44px;border:0;background:transparent;color:#a88c91;font-size:16px}
 .rsk-music-control:hover,.rsk-music-small:hover{border-color:#d6a2ab;background:rgba(112,43,60,.8);transform:translateY(-1px)}
-.rsk-music-progress-row{display:grid;grid-template-columns:30px minmax(0,1fr) 30px;gap:8px;align-items:center;margin:9px 0 5px;color:#8f7c81;font:8px Inter,Arial,sans-serif;font-variant-numeric:tabular-nums}
-.rsk-music-progress,.rsk-music-volume{width:100%;height:3px;margin:0;accent-color:#b47b86;cursor:pointer}
-.rsk-music-controls{display:grid;grid-template-columns:26px 26px minmax(0,1fr) 26px 26px;gap:6px;align-items:center}
-.rsk-music-small{width:25px;height:25px;font:13px Arial,sans-serif;background:rgba(65,32,43,.5)}
+.rsk-music-progress-row{display:grid;grid-template-columns:30px minmax(0,1fr) 30px;gap:8px;align-items:center;margin:9px 0 5px;color:#8f7c81;font:9px Inter,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.rsk-music-progress,.rsk-music-volume{width:100%;height:22px;margin:0;accent-color:#b47b86;cursor:pointer}
+.rsk-music-controls{display:grid;grid-template-columns:44px 44px minmax(0,1fr) 44px 44px;gap:6px;align-items:center}
+.rsk-music-small{width:44px;height:44px;font:13px Arial,sans-serif;background:rgba(65,32,43,.5)}
 .rsk-music-small.is-active{color:#f1c5cc;border-color:rgba(215,146,158,.7);background:rgba(110,45,60,.7);box-shadow:0 0 13px rgba(159,66,86,.18)}
-.rsk-music-select{width:100%;min-width:0;height:27px;padding:0 7px;border:1px solid rgba(190,126,137,.2);border-radius:0;background:rgba(13,9,12,.82);color:#d7c7c6;font:9px Inter,Arial,sans-serif}
+.rsk-music-select{width:100%;min-width:0;height:44px;padding:0 7px;border:1px solid rgba(190,126,137,.2);border-radius:0;background:rgba(13,9,12,.82);color:#d7c7c6;font:9px Inter,Arial,sans-serif}
 .rsk-music-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px}
 .rsk-volume-label{display:flex;align-items:center;gap:8px;min-width:125px;color:#947f84;font:7px Inter,Arial,sans-serif;letter-spacing:.15em}
 .rsk-volume-label input{width:72px}
-.rsk-music-status{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a77c85;font:8px Inter,Arial,sans-serif;text-align:right}
-.rsk-music-credit{margin-top:7px;padding-top:6px;border-top:1px solid rgba(188,124,137,.1);color:#78696e;font:7px Inter,Arial,sans-serif;text-align:right;letter-spacing:.04em}
+.rsk-music-status{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a77c85;font:9px Inter,Arial,sans-serif;text-align:right}
+.rsk-music-credit{margin-top:7px;padding-top:6px;border-top:1px solid rgba(188,124,137,.1);color:#78696e;font:8px Inter,Arial,sans-serif;text-align:right;letter-spacing:.04em}
 .rsk-music-credit a{color:#b88b91;text-decoration:underline;text-underline-offset:2px}
 .rsk-music-player.is-playing .rsk-music-crest{animation:rsk-music-pulse 3.4s ease-in-out infinite}
 @keyframes rsk-play-prompt{50%{box-shadow:0 0 22px rgba(201,107,126,.48)}}
 @keyframes rsk-music-pulse{50%{filter:drop-shadow(0 0 16px rgba(205,111,128,.72));transform:scale(1.035)}}
-.rsk-music-player.is-collapsed{width:66px;padding:9px}
+.rsk-music-player.is-collapsed{width:72px;padding:9px}
 .rsk-music-player.is-collapsed .rsk-music-meta,.rsk-music-player.is-collapsed .rsk-music-play,.rsk-music-player.is-collapsed .rsk-music-progress-row,.rsk-music-player.is-collapsed .rsk-music-controls,.rsk-music-player.is-collapsed .rsk-music-bottom,.rsk-music-player.is-collapsed .rsk-music-credit{display:none}
 .rsk-music-player.is-collapsed .rsk-music-top{grid-template-columns:42px 1fr}
 .rsk-music-player.is-collapsed .rsk-music-collapse{grid-column:2;position:absolute;right:3px;top:3px}
 .rsk-music-player.is-collapsed .rsk-music-crest{width:44px;height:48px}
-@media(max-width:600px){.rsk-music-player{left:10px;bottom:10px;width:min(370px,calc(100vw - 20px));padding:10px 11px 9px}.rsk-music-player.is-collapsed{width:60px}.rsk-music-title{font-size:16px}}
+@media(max-width:600px){.rsk-music-player{left:10px;bottom:10px;width:min(370px,calc(100vw - 20px));padding:10px 11px 9px}.rsk-music-player.is-collapsed{width:68px}.rsk-music-title{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.rsk-music-player,.rsk-music-control,.rsk-music-small{transition:none}.rsk-music-player.is-playing .rsk-music-crest,.rsk-music-control.needs-gesture{animation:none}}
 /* Единая художественная рамка: тонкая гравировка вместо плоских прямоугольников */
 .world-card,.world-map-panel,.world-note,.info-panel,.appeal-panel,.locked-panel,.account-card,.account-profile-preview,.support-action,.ticket-form,.support-aside,.product,.collection,.case-card,.class-card,.spec,.fact,.lore-panel{
@@ -94,3 +94,5 @@
 @media(prefers-reduced-motion:reduce){.world-card,.support-action,.case-card,.collection,.class-card,.spec{transition:none}.world-card:hover,.support-action:hover,.case-card:hover,.collection:hover,.class-card:hover,.spec:hover{transform:none}}
 
 .world-card>*,.world-map-panel>*,.world-note>*,.info-panel>*,.appeal-panel>*,.locked-panel>*,.account-card>*,.account-profile-preview>*,.support-action>*,.ticket-form>*,.support-aside>*,.product>*,.collection>*,.case-card>*,.class-card>*,.spec>*,.fact>*,.lore-panel>*{position:relative;z-index:1}
+
+.rsk-music-player :focus-visible{outline:2px solid #c7a477;outline-offset:3px;box-shadow:0 0 0 4px rgba(199,164,119,.18)}
