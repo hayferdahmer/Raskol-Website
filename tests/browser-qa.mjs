@@ -147,6 +147,20 @@ try{
   if(!tabsOk)report.runtimeErrors.push({route:'/account/',message:'Account tabs keyboard or aria-labelledby relationship failed'});
   await accountContext.close();
 
+  // На широком экране плеер тоже начинает с компактного состояния.
+  const desktopPlayerContext=await browser.newContext({viewport:{width:1440,height:900}});
+  const desktopPlayerPage=await desktopPlayerContext.newPage();
+  await desktopPlayerPage.addInitScript(()=>{try{localStorage.clear();sessionStorage.clear();}catch(_){}});
+  await desktopPlayerPage.goto('http://127.0.0.1:4173/world/',{waitUntil:'domcontentloaded'});
+  await desktopPlayerPage.waitForSelector('.rsk-music-player');
+  const desktopPlayerCollapsed=await desktopPlayerPage.locator('.rsk-music-player').evaluate(el=>el.classList.contains('is-collapsed'));
+  await desktopPlayerPage.locator('.rsk-music-collapse').click();
+  const desktopPlayerExpanded=!(await desktopPlayerPage.locator('.rsk-music-player').evaluate(el=>el.classList.contains('is-collapsed')));
+  const desktopPlayerOk=desktopPlayerCollapsed&&desktopPlayerExpanded;
+  report.interactions.push({name:'desktop player starts compact and expands on demand',passed:desktopPlayerOk});
+  if(!desktopPlayerOk)report.runtimeErrors.push({route:'/world/',message:'Desktop player compact default or expand control failed'});
+  await desktopPlayerContext.close();
+
   // На узких экранах плеер не перекрывает текст, но остаётся доступен для раскрытия.
   const mobilePlayerContext=await browser.newContext({viewport:{width:390,height:844}});
   const mobilePlayerPage=await mobilePlayerContext.newPage();
