@@ -49,11 +49,11 @@
 .rsk-music-player.is-playing .rsk-music-crest{animation:rsk-music-pulse 3.4s ease-in-out infinite}
 @keyframes rsk-play-prompt{50%{box-shadow:0 0 22px rgba(201,107,126,.48)}}
 @keyframes rsk-music-pulse{50%{filter:drop-shadow(0 0 16px rgba(205,111,128,.72));transform:scale(1.035)}}
-.rsk-music-player.is-collapsed{width:64px;height:64px;padding:8px;background:rgba(8,7,9,.62);box-shadow:0 10px 28px rgba(0,0,0,.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.rsk-music-player.is-collapsed::before{inset:3px}
+.rsk-music-player.is-collapsed{width:64px;height:64px;padding:8px;background:transparent;border-color:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.rsk-music-player.is-collapsed::before{display:none}
 .rsk-music-player.is-collapsed .rsk-music-meta,.rsk-music-player.is-collapsed .rsk-music-play,.rsk-music-player.is-collapsed .rsk-music-progress-row,.rsk-music-player.is-collapsed .rsk-music-controls,.rsk-music-player.is-collapsed .rsk-music-bottom,.rsk-music-player.is-collapsed .rsk-music-credit{display:none}
 .rsk-music-player.is-collapsed .rsk-music-top{display:block;height:46px}
-.rsk-music-player.is-collapsed .rsk-music-collapse{position:absolute;inset:8px;width:44px;height:44px;border:1px solid rgba(190,126,137,.45);background:rgba(9,7,9,.38);color:#f0d9dd;font-size:20px}
+.rsk-music-player.is-collapsed .rsk-music-collapse{position:absolute;inset:8px;width:44px;height:44px;border:1px solid rgba(190,126,137,.38);border-radius:50%;background:rgba(9,7,9,.24);color:#f0d9dd;font-size:20px}
 .rsk-music-player.is-collapsed .rsk-music-crest{width:44px;height:48px;opacity:.88}
 @media(max-width:600px){.rsk-music-player{left:auto;right:10px;bottom:10px;width:min(370px,calc(100vw - 20px));padding:10px 11px 9px}.rsk-music-player.is-collapsed{width:64px;height:64px;padding:8px}.rsk-music-title{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.rsk-music-player,.rsk-music-control,.rsk-music-small{transition:none}.rsk-music-player.is-playing .rsk-music-crest,.rsk-music-control.needs-gesture{animation:none}}
