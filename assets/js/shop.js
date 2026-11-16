@@ -35,19 +35,20 @@
     {id:'old-kingdom',name:'Старое королевство',group:'archive',price:149,items:11,desc:'Архивная подборка ранних косметических серий.',icon:'♜',glow:'rgba(172,128,84,.24)'},
     {id:'last-vow',name:'Последний обет',group:'archive',price:349,items:11,desc:'Архивные знаки, титулы и памятные эффекты.',icon:'†',glow:'rgba(148,68,87,.28)'}
   ];
-  const rewards = [
-    {name:'Знак старого дома',icon:'♜',rarity:'common',label:'Обычная'},
-    {name:'Пепельный след',icon:'✧',rarity:'common',label:'Обычная'},
-    {name:'Титул странника',icon:'†',rarity:'common',label:'Обычная'},
-    {name:'Гранатовая рамка',icon:'▣',rarity:'uncommon',label:'Необычная'},
-    {name:'Сумрачный шлейф',icon:'〰',rarity:'uncommon',label:'Необычная'},
-    {name:'Знамя забытого двора',icon:'⚑',rarity:'uncommon',label:'Необычная'},
-    {name:'Аура регента',icon:'◈',rarity:'rare',label:'Редкая'},
-    {name:'Ворон-вестник',icon:'♧',rarity:'rare',label:'Редкая'},
-    {name:'Мантия пепла',icon:'♟',rarity:'relic',label:'Реликтовая'},
-    {name:'Печать двух корон',icon:'♛',rarity:'relic',label:'Реликтовая'},
-    {name:'Корона затмения',icon:'✦',rarity:'legendary',label:'Легендарная'}
-  ];
+  const rarityByIndex=['common','common','common','uncommon','uncommon','uncommon','rare','rare','relic','relic','legendary'];
+  const rewardIcons=['♜','✧','†','▣','〰','⚑','◈','♧','♟','♛','✦'];
+  const caseThemes={
+    'two-crowns':['Знак северного дома','Пепел коронации','Титул младшего наследника','Рамка золотой печати','Шлейф королевского бала','Знамя западного двора','Аура регента','Ворон королевской почты','Мантия первого престола','Печать двух корон','Корона объединённых земель'],
+    'blood-oath':['Клеймо кровной клятвы','След алого клинка','Титул последнего свидетеля','Рамка багряной присяги','Шлейф алой стали','Знамя дома крови','Аура красного зарева','Ворон кровавого гонца','Мантия красного суда','Печать нерушимого обета','Корона алого договора'],
+    'ashfall':['Пепельная крупица','След сгоревшего письма','Титул пережившего пепел','Рамка серого праха','Шлейф тлеющих углей','Знамя пепельного ветра','Аура последнего костра','Моль из пепельной мглы','Мантия сожжённой клятвы','Печать пеплопада','Корона возрождения из праха'],
+    'black-embers':['Чёрный уголь','След ночного жара','Титул хранителя углей','Рамка обсидиановой золы','Шлейф чёрного дыма','Знамя безымянной кузни','Аура угасающего пламени','Ворон чёрной сажи','Мантия угольного короля','Печать чёрных углей','Корона вечного жара'],
+    'winter-solstice':['Снежная крупица','След зимнего ветра','Титул хранителя солнцестояния','Рамка ледяного круга','Шлейф северного сияния','Знамя долгой ночи','Аура морозной звезды','Снежная сова','Мантия ледяного двора','Печать зимнего солнца','Корона белого затмения'],
+    'eclipse':['Осколок лунной тени','След серебряной ночи','Титул свидетеля затмения','Рамка лунного диска','Шлейф звёздной пыли','Знамя скрытого светила','Аура чёрного солнца','Ночной ворон','Мантия лунного затвора','Печать полного затмения','Корона вечной ночи'],
+    'old-kingdom':['Монета старого двора','След древней дороги','Титул архивариуса короны','Рамка первого летописца','Шлейф пыльных хроник','Знамя павшего королевства','Аура старого герба','Ворон архивных башен','Мантия последнего монарха','Печать старого королевства','Корона забытой династии'],
+    'last-vow':['Осколок последнего обета','След клятвенного пути','Титул верного до конца','Рамка нерушимой клятвы','Шлейф свечного пламени','Знамя последнего рубежа','Аура вечного обещания','Ворон последнего посланника','Мантия клятвохранителя','Печать последнего обета','Корона несгибаемой воли']
+  };
+  function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
+  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=currentRollIsBonus?bonusOdds:ritualTiers[currentTier].weights;const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
     standard:{surcharge:0,weights:[65,25,9,.9,.1]},
     tempered:{surcharge:100,weights:[50,30,15,4,1]},
@@ -109,7 +110,7 @@
     if(rolling)return;currentCase=c;currentWinner=null;currentRollIsBonus=false;
     $('#modalTitle').textContent=c.name;$('#modalDesc').textContent=c.desc+' В коллекции — '+c.items+' косметических реликвий. Открытие бесплатное и не списывает указанную проектную цену.';
     $('#rollResult').textContent='Ларец запечатан. Готов ли ты снять печать?';
-    $('#prizePool').innerHTML=rewards.map(item=>'<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+'</small></div>').join('');
+    renderPrizePool();
     currentTier='standard';renderRitual();$('#rollProgress').style.transform='scaleX(0)';
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     dialog.classList.remove('is-rolling','is-won');
@@ -118,14 +119,14 @@
   }
   function buildIdleReel(){
     const track=$('#rouletteTrack');track.style.transition='none';track.style.transform='translateX(0)';
-    track.innerHTML=Array.from({length:12},(_,i)=>{const item=rewards[i%rewards.length];return '<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>';}).join('');
+    track.innerHTML=Array.from({length:12},(_,i)=>{const pool=getCaseRewards(currentCase);const item=pool[i%pool.length];return '<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>';}).join('');
   }
   function chooseReward(weightsOverride){
     const keys=['common','uncommon','rare','relic','legendary'];
     const weights=weightsOverride||ritualTiers[currentTier].weights;
     const roll=Math.random()*100;let edge=0,rarity='common';
     for(let i=0;i<keys.length;i++){edge+=weights[i];if(roll<edge){rarity=keys[i];break;}}
-    const pool=rewards.filter(item=>item.rarity===rarity);
+    const pool=getCaseRewards(currentCase).filter(item=>item.rarity===rarity);
     return pool[Math.floor(Math.random()*pool.length)];
   }
   function renderRitual(){
@@ -137,7 +138,8 @@
     const keys=['common','uncommon','rare','relic','legendary'];
     const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
     $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
-    $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
+    $('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
+    renderPrizePool();
   }
   $('#ritualTiers').addEventListener('click',e=>{
     const button=e.target.closest('[data-tier]');
@@ -145,8 +147,9 @@
     currentTier=button.dataset.tier;renderRitual();
   });
   function makeReel(winner){
-    const sequence=Array.from({length:36},(_,i)=>rewards[(i*7+Math.floor(Math.random()*rewards.length))%rewards.length]);
-    const winnerIndex=31;sequence[winnerIndex]=winner;
+    const pool=getCaseRewards(currentCase);
+    const sequence=Array.from({length:44},(_,i)=>pool[(i*7+Math.floor(Math.random()*pool.length))%pool.length]);
+    const winnerIndex=37;sequence[winnerIndex]=winner;
     const track=$('#rouletteTrack');track.style.transition='none';track.style.transform='translateX(0)';
     track.innerHTML=sequence.map(item=>'<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>').join('');
     return {track,winnerIndex};
