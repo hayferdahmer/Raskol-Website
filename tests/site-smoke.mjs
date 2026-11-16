@@ -7,7 +7,7 @@ async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:tru
 await walk(root);
 const htmlFiles=files.filter(path=>extname(path)==='.html'),jsFiles=files.filter(path=>extname(path)==='.js'),cssFiles=files.filter(path=>extname(path)==='.css');
 const designTokens=await readFile(resolve(root,'assets/css/tokens.css'),'utf8');
-const brandCss=await readFile(resolve(root,'assets/css/brand.css'),'utf8');assert.ok(brandCss.includes('.rsk-skip-link:focus-visible')&&brandCss.includes('prefers-reduced-motion:reduce'),'Global keyboard navigation and reduced-motion support are missing');
+const accessibilityBrandCss=await readFile(resolve(root,'assets/css/brand.css'),'utf8');assert.ok(accessibilityBrandCss.includes('.rsk-skip-link:focus-visible')&&accessibilityBrandCss.includes('prefers-reduced-motion:reduce'),'Global keyboard navigation and reduced-motion support are missing');
 
 assert.ok(designTokens.includes('--rsk-color-void:#090709')&&designTokens.includes('--rsk-color-gold:#c7a477')&&designTokens.includes('--rsk-font-display:'),'Shared RASKOL design tokens are incomplete');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');const rel=relative(root,path);if(rel==='index.html'){assert.ok(!html.includes('tokens.css'),'Homepage must remain isolated from the internal design-token layer');assert.ok(html.includes('brand.css'),'Homepage must load the shared brand accessibility layer');}else assert.ok(html.includes('tokens.css'),'Internal page must load shared design tokens: '+rel);const skip=html.match(/<a class="rsk-skip-link" href="#([^"]+)">/);assert.ok(skip,'Keyboard skip link is missing from '+rel);assert.ok(new RegExp('id="'+skip[1]+'"').test(html),'Skip link target is missing from '+rel);}
