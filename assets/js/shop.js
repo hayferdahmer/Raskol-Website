@@ -221,12 +221,12 @@
       const viewportRect=viewport.getBoundingClientRect();
       const target=winnerRect.left-viewportRect.left+winnerRect.width/2-viewportRect.width/2;
       const started=performance.now();
-      const progressAt=p=>{if(p<.12){const t=p/.12;return .06*t*t;}if(p<.72)return .06+.64*((p-.12)/.60);const t=(p-.72)/.28;return .70+.30*(1-Math.pow(1-t,5));};
+      const progressAt=p=>{if(p<.12){const t=p/.12;return .06*t*t;}if(p<.72)return .06+.64*((p-.12)/.60);const t=(p-.72)/.28;return .70+.30*(t+t*t*t-t*t*t*t);};
       const tick=now=>{
         const p=Math.min(1,(now-started)/duration);
         const eased=reducedMotion?1:progressAt(p);
         track.style.transform='translate3d('+(-target*eased)+'px,0,0)';
-        track.style.filter=p<.72&&!reducedMotion?'blur(.32px)':'none';
+        const speed=reducedMotion?0:(progressAt(Math.min(1,p+.003))-eased)/.003;track.style.filter=speed>0?'blur('+Math.min(.38,speed*.34).toFixed(3)+'px)':'none';
         $('#rollProgress').style.transform='scaleX('+p+')';
         if(p<.18)$('#rollResult').textContent='Печать трескается…';
         else if(p<.58)$('#rollResult').textContent='Реликвии проходят перед взором…';
