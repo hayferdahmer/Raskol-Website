@@ -25,7 +25,43 @@
 </section>
 <section class="wrap section case-section reveal" id="cases"><div class="case-intro"><div><div class="eyebrow">Зал случайных реликвий · тестовый режим</div><h2>Чертог кейсов</h2></div><p>Выбери запечатанный ларец, изучи демонстрационный пул и пройди ритуал открытия. В финале ты увидишь конкретную выпавшую реликвию и её редкость. Награды только косметические.</p></div>
 <div class="case-gate" id="caseGate"><div class="age-mark">18+</div><div class="eyebrow">Предупреждение перед входом</div><h3>Чертог случайных реликвий</h3><p>Раздел предназначен только для совершеннолетних. Не совершай покупки под влиянием эмоций и не трать средства, которые не готов потерять. Сейчас открытия бесплатны и демонстрационны: реальных платежей, списаний и выдачи предметов нет.</p><div class="gate-checks"><label><input type="checkbox" id="ageCheck"> Мне исполнилось 18 лет.</label><label><input type="checkbox" id="riskCheck"> Я понимаю, что случайный результат не гарантирует конкретную награду, и ознакомился с предупреждением.</label></div><div class="hero-actions" style="justify-content:center"><button class="btn" id="enterCaseHall" disabled>Подтвердить и войти</button><a class="btn ghost" href="../index.html">Покинуть раздел</a></div><div class="eyebrow" style="margin-top:16px;color:var(--shop-muted)">Подтверждение возраста является самодекларацией, не проверкой документа.</div></div>
-<div id="caseContent" hidden><div class="case-nav" id="caseTabs"><button class="case-tab active" data-group="all">Все ларцы</button><button class="case-tab" data-group="crown">Королевские</button><button class="case-tab" data-group="ash">Пепельные</button><button class="case-tab" data-group="season">Сезонные</button><button class="case-tab" data-group="archive">Архивные</button></div><div class="case-grid" id="caseGrid"></div><div class="case-note"><b>Прозрачность:</b> перед запуском реальных открытий для каждого ларца будут опубликованы полный состав наград и точные вероятности. Сейчас кейсы бесплатные: проектная цена указана для макета и не списывается.</div></div>
+<div id="caseContent" hidden>
+<div class="case-nav" id="caseTabs"><button class="case-tab active" data-group="all">Все ларцы</button><button class="case-tab" data-group="crown">Королевские</button><button class="case-tab" data-group="ash">Пепельные</button><button class="case-tab" data-group="season">Сезонные</button><button class="case-tab" data-group="archive">Архивные</button></div>
+<div class="case-grid" id="caseGrid"></div>
+<div class="case-note"><b>Прозрачность:</b> перед запуском реальных открытий для каждого ларца будут опубликованы полный состав наград и точные вероятности. Сейчас кейсы бесплатные: проектная цена указана для макета и не списывается.</div>
+<div class="case-perks-grid">
+<article class="streak-card">
+<div class="eyebrow">Знак благосклонности · серия удачи</div><h3>Десять испытаний</h3>
+<p>Если 10 открытий подряд не выпадает обычная награда, Чертог дарует бесплатный бонусный обряд в кейсе «Две короны».</p>
+<div class="streak-meter"><span id="streakProgressBar"></span></div>
+<div class="streak-meta"><b id="streakProgressLabel">0 / 10 без обычной награды</b><span id="streakStateLabel">Серия начинается</span></div>
+<div class="bonus-odds"><b>Шансы бонусного обряда:</b> обычная 20% · необычная 35% · редкая 27% · реликтовая 14% · легендарная 4%</div>
+<button class="btn" type="button" id="claimBonusBtn" disabled>Бонус ещё не готов</button>
+<small class="demo-caption">Прогресс хранится только в этом браузере и служит демонстрацией. В реальной версии серия будет привязана к UUID на сервере.</small>
+</article>
+<article class="social-reward-card">
+<div class="eyebrow">Знак союза · приветственный дар</div><h3>Три печати «Двух корон»</h3>
+<p>За первую подтверждённую подписку на один из каналов РАСКОЛА — Telegram, YouTube или новости сайта — игрок получит 3 бесплатные прокрутки кейса «Две короны».</p>
+<form id="socialRewardForm" novalidate>
+<label class="social-email-label" for="socialRewardEmail">Электронная почта</label>
+<input id="socialRewardEmail" type="email" autocomplete="email" placeholder="name@example.com" required>
+<div class="social-channel-list">
+<label><input type="checkbox" name="socialChannel" value="telegram"> Telegram</label>
+<label><input type="checkbox" name="socialChannel" value="youtube"> YouTube</label>
+<label><input type="checkbox" name="socialChannel" value="news"> Новости сайта</label>
+</div>
+<button class="btn ghost" type="submit" id="socialRewardSubmit">Проверить подписку · демо</button>
+<p class="social-status" id="socialRewardStatus" role="status" aria-live="polite">Проверка каналов и начисление пока не подключены. Форма ничего не отправляет и не сохраняет.</p>
+</form>
+<small class="demo-caption">В рабочей версии награда выдаётся один раз на игровой UUID после серверной проверки подписки и подтверждения email. Выбрать можно один канал.</small>
+</article>
+</div>
+<section class="win-feed" aria-labelledby="winFeedTitle">
+<div class="win-feed-head"><div><div class="eyebrow">Недавние находки</div><h3 id="winFeedTitle">Голоса Чертога</h3></div><span class="demo-feed-tag">ДЕМО · ПРИМЕРЫ</span></div>
+<p class="win-feed-disclaimer">Это демонстрационные записи интерфейса, а не реальные игроки или реальные выигрыши.</p>
+<div class="win-feed-track" id="winFeedTrack" aria-live="off"></div>
+</section>
+</div>
 </section>
 <section class="wrap section reveal"><div class="section-head"><div><div class="eyebrow">Принципы сокровищницы</div><h2>Честная цена</h2></div><p>Внешность не должна превращаться в преимущество. Империал покупает стиль, а не силу.</p></div><div class="trust"><article><strong>0 преимуществ</strong><p>Никакого бонуса к урону, защите, опыту, добыче, экономике или прогрессу.</p></article><article><strong>1 И = 2 ₽</strong><p>Базовый курс Империала по проекту. Условия пополнения будут опубликованы отдельно.</p></article><article><strong>История операций</strong><p>Каждое списание, начисление и возврат должны иметь отдельную запись и ID операции.</p></article></div></section>
 </main>
