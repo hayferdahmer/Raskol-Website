@@ -81,7 +81,7 @@
   $('#filters').addEventListener('click',e=>{const button=e.target.closest('[data-cat]');if(!button)return;currentCategory=button.dataset.cat;currentCollection=null;$$('.filter').forEach(x=>x.classList.toggle('active',x===button));$$('.collection').forEach(x=>x.classList.remove('selected'));renderProducts();});
   $('#productSearch').addEventListener('input',renderProducts);
   $('#productSort').addEventListener('change',renderProducts);
-  $$('.collection').forEach(card=>card.addEventListener('click',()=>{currentCollection=card.dataset.collection;currentCategory='all';$$('.filter').forEach(x=>x.classList.toggle('active',x.dataset.cat==='all'));renderProducts();}));
+  $$('.collection').forEach(card=>card.addEventListener('click',()=>{currentCollection=card.dataset.collection;currentCategory='all';$$('.collection').forEach(x=>x.classList.toggle('selected',x===card));$$('.filter').forEach(x=>x.classList.toggle('active',x.dataset.cat==='all'));renderProducts();}));
   const productModal=$('#productModal');
   function openProduct(id){
     const p=products.find(x=>x.id===id);if(!p)return;
@@ -251,7 +251,7 @@
   caseModal.addEventListener('click',e=>{if(e.target===caseModal)closeCaseModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(productModal.classList.contains('open'))closeModal(productModal);if(caseModal.classList.contains('open'))closeCaseModal();}});
 
-  const revealTargets=$('.reveal');
+  const revealTargets=$$('.reveal');
   if('IntersectionObserver'in window&&!reducedMotion){
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.1,rootMargin:'0px 0px -35px 0px'});
     revealTargets.forEach(el=>observer.observe(el));

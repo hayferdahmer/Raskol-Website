@@ -19,8 +19,9 @@
     status.textContent='Формат кода принят, но Identity API ещё не подключён. Проверка не выполнялась, вход и привязка не созданы.';
   });
   $('#saveLimits').addEventListener('click',()=>{
-    const day=Math.max(0,Math.floor(Number($('#dailyLimit').value)||0));
-    const month=Math.max(0,Math.floor(Number($('#monthlyLimit').value)||0));
+    const day=Math.min(100000,Math.max(0,Math.floor(Number($('#dailyLimit').value)||0)));
+    const month=Math.min(1000000,Math.max(0,Math.floor(Number($('#monthlyLimit').value)||0)));
+    $('#dailyLimit').value=String(day);$('#monthlyLimit').value=String(month);
     $('#limitPreview').textContent='Предпросмотр: до '+day.toLocaleString('ru-RU')+' И в сутки и '+month.toLocaleString('ru-RU')+' И за календарный месяц. Настройки не сохранены: требуется вход и Wallet API.';
   });
 })();
