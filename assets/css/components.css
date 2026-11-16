@@ -51,15 +51,3 @@
 .rsk-card--document{min-height:0;margin-top:24px;padding:clamp(24px,5vw,48px);border-color:var(--rsk-color-border);background:linear-gradient(145deg,var(--rsk-color-panel-raised),var(--rsk-color-void))}
 .rsk-card--document::before{display:none}
 .rsk-panel--document{margin:28px 0;padding:18px 20px;border-left:2px solid var(--rsk-color-crimson-muted);background:rgba(76,32,43,.2);color:var(--rsk-color-silk);font:inherit}
-
-
-/* Ссылка пропуска навигации для пользователей клавиатуры */
-.rsk-skip-link{position:fixed;top:12px;left:12px;z-index:3001;display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border:1px solid var(--rsk-color-gold);background:var(--rsk-color-panel-raised);color:var(--rsk-color-silk);font:600 11px/1.3 var(--rsk-font-ui);letter-spacing:.04em;text-decoration:none;transform:translateY(calc(-100% - 20px))}
-.rsk-skip-link:focus,.rsk-skip-link:focus-visible{transform:translateY(0);outline:2px solid var(--rsk-color-gold);outline-offset:3px}
-@media(prefers-reduced-motion:no-preference){.rsk-skip-link{transition:transform .18s ease-out}}
-
-/* Универсальная страховка: пользовательское предпочтение важнее декоративной анимации */
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto!important}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-}
