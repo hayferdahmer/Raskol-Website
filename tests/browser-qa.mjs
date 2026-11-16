@@ -42,7 +42,29 @@ try{
     for(const viewport of viewports){
       await page.setViewportSize({width:viewport.width,height:viewport.height});
       await page.goto('http://127.0.0.1:4173'+route,{waitUntil:'domcontentloaded',timeout:20000});
+
       await page.waitForTimeout(120);
+      if(route==='/'){
+        const atmosphere=await page.evaluate(async()=>{
+          const art=document.querySelector('#heroArt'),embers=art?.querySelector('.rsk-cinema-embers'),canvas=document.querySelector('#embers');
+          const layers=['clouds','mist-back','mist-front'].map(name=>{
+            const el=art?.querySelector('[data-rsk-cinema-layer="'+name+'"]');
+            const image=getComputedStyle(el).backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1];
+            return {name,image,opacity:getComputedStyle(el).opacity};
+          });
+          const resources=await Promise.all(layers.map(async layer=>({name:layer.name,ok:layer.image?((await fetch(layer.image)).ok):false})));
+          return {layers,resources,emberDuration:embers?getComputedStyle(embers).animationDuration:null,emberOpacity:embers?getComputedStyle(embers).getPropertyValue('--rsk-cinema-opacity').trim():null,canvas:Boolean(canvas)};
+        });
+        if(atmosphere.layers.some(layer=>!layer.image)||atmosphere.resources.some(resource=>!resource.ok)||atmosphere.emberDuration!=='24s'||atmosphere.emberOpacity!=='.42'||!atmosphere.canvas){
+          report.runtimeErrors.push({route,viewport:viewport.width,message:'Cinematic texture loading or sparse ember regression',atmosphere});
+        }
+        if(viewport.width===390){
+          await page.emulateMedia({reducedMotion:'reduce'});
+          const stopped=await page.locator('#heroArt .rsk-cinema-layer').evaluateAll(els=>els.every(el=>getComputedStyle(el).animationDuration==='0s'));
+          if(!stopped)report.motion.push({route,viewport:viewport.width,message:'Cinematic layers must stop under reduced motion'});
+          await page.emulateMedia({reducedMotion:'no-preference'});
+        }
+      }
       const metrics=await page.evaluate(()=>({
         title:document.title,
         width:innerWidth,
@@ -88,6 +110,7 @@ try{
           return {scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,bodyBeforeDuration:duration,bodyBeforeSeconds:seconds};
         });
         if(motion.scrollBehavior!=='auto'||motion.bodyBeforeSeconds>0.001)report.motion.push({route,...motion});
+        await page.emulateMedia({reducedMotion:'no-preference'});
       }
     }
     await page.close();
