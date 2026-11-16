@@ -1,13 +1,14 @@
 /* RASKOL · Общие компоненты портала
    Слой объединяет повторяющиеся элементы мира, фракций, экосистемы и медиа. */
-.rsk-nav,.world-nav{display:flex;flex-wrap:wrap;gap:22px;color:#c7b8b8}
-.rsk-nav a,.world-nav a{display:inline-flex;align-items:center;min-height:40px;transition:color .25s ease}
-.rsk-nav a:hover,.world-nav a:hover,.world-back:hover{color:#e5a7b0}
+.rsk-nav,.rsk-nav--classes,.world-nav{display:flex;flex-wrap:wrap;gap:22px;color:#c7b8b8}
+.rsk-nav--classes{gap:24px}
+.rsk-nav a,.rsk-nav--classes a,.world-nav a{display:inline-flex;align-items:center;min-height:44px;transition:color .25s ease}
+.rsk-nav a:hover,.rsk-nav--classes a:hover,.world-nav a:hover,.world-back:hover{color:#e5a7b0}
 
 .rsk-button,.world-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border:1px solid rgba(193,126,137,.42);font:9px var(--rsk-font-ui);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;touch-action:manipulation;transition:background .3s,border-color .3s,transform .3s}
 .rsk-button:hover,.world-action:hover{background:rgba(166,106,117,.13);border-color:rgba(220,157,169,.75);transform:translateY(-2px)}
 .rsk-button--primary,.world-action.primary{background:linear-gradient(110deg,rgba(105,42,58,.55),rgba(33,18,25,.8));border-color:rgba(199,164,119,.42)}
-.rsk-button:focus-visible,.world-action:focus-visible,.rsk-nav a:focus-visible,.world-nav a:focus-visible,.world-footer a:focus-visible{outline:2px solid var(--rsk-color-gold);outline-offset:4px;border-radius:2px}
+.rsk-button:focus-visible,.world-action:focus-visible,.rsk-nav a:focus-visible,.rsk-nav--classes a:focus-visible,.world-nav a:focus-visible,.world-footer a:focus-visible{outline:2px solid var(--rsk-color-gold);outline-offset:4px;border-radius:2px}
 
 .rsk-card,.world-card{position:relative;min-height:230px;padding:28px;border:1px solid var(--rsk-color-border);background:linear-gradient(145deg,rgba(37,22,29,.88),rgba(13,9,12,.96));overflow:hidden;transition:border-color .35s,transform .4s,box-shadow .4s}
 .rsk-card::before,.world-card:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 90% 0,rgba(166,106,117,.13),transparent 58%);pointer-events:none}
