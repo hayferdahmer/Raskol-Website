@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090709">
+<meta name="description" content="Личный кабинет Империал — аккаунт, баланс, пополнение и контроль расходов РАСКОЛ.">
+<title>Личный кабинет · Империал · РАСКОЛ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/atmosphere.css"><link rel="stylesheet" href="../assets/css/shop.css">
+</head>
+<body>
+<header class="top"><div class="wrap topin"><a class="brand" href="../index.html">РАСКОЛ <small>ДВЕ КОРОНЫ · ИМПЕРИАЛ</small></a><nav class="nav"><a href="../index.html">Главная</a><a href="../shop/index.html">Магазин</a><a href="../shop/index.html#cases">Чертог кейсов</a><a href="../rules.html#paid">Правила покупок</a></nav><span class="wallet"><span class="coin">И</span><span>Баланс<br><b>Не подключён</b></span></span></div></header>
+<main class="wrap account-page">
+<section class="account-hero"><div class="eyebrow">Империал · личное пространство</div><h1>Личный кабинет</h1><p>Подключи игровой аккаунт, чтобы в будущем управлять балансом и косметическими покупками. Владение подтверждается одноразовым кодом из игры — не никнеймом.</p></section>
+<section class="account-auth account-card">
+<div class="eyebrow">Безопасное подключение · Minecraft UUID</div><h2>Войти через игровой аккаунт</h2>
+<div class="auth-steps"><div><b>01</b><span>Зайди на сервер и введи команду <code>/link</code>.</span></div><div><b>02</b><span>Введи одноразовый код, который выдаст сервер.</span></div><div><b>03</b><span>После проверки сайт свяжет профиль с UUID. Никнейм не используется как доказательство владения.</span></div></div>
+<label class="link-code-label" for="linkCode">Одноразовый код из игры</label><div class="auth-entry"><input id="linkCode" class="link-code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Код из /link"><button class="btn" id="verifyLinkCode" type="button">Войти / подключить</button></div>
+<p class="inline-status" id="linkStatus" aria-live="polite">Авторизация пока не активна: Identity API ещё не подключён. Код не отправляется и привязка не создаётся.</p>
+</section>
+<section class="account-hub">
+<div class="account-tabs" role="tablist" aria-label="Разделы личного кабинета">
+<button class="account-tab active" type="button" data-tab="balance" role="tab" aria-selected="true">Баланс</button>
+<button class="account-tab" type="button" data-tab="topup" role="tab" aria-selected="false">Пополнить</button>
+<button class="account-tab" type="button" data-tab="limits" role="tab" aria-selected="false">Ответственные траты</button>
+</div>
+<section class="account-pane active" id="tab-balance" role="tabpanel"><div class="account-card balance-card"><div><div class="eyebrow">Текущий баланс</div><h2>Империал</h2><div class="wallet-balance">— <small>ИМП.</small></div><p>Баланс станет доступен после подключения UUID и Wallet API.</p></div><div class="balance-actions"><button class="btn" type="button" data-open-tab="topup">Пополнить баланс</button><button class="btn ghost" type="button" data-open-tab="limits">Настроить лимиты</button></div></div><div class="account-card history-card"><div class="eyebrow">История операций</div><h3>Операций пока нет</h3><p>После подключения кошелька здесь появятся начисления, покупки, возвраты и идентификаторы транзакций.</p></div></section>
+<section class="account-pane" id="tab-topup" role="tabpanel" hidden><div class="account-card"><div class="eyebrow">Кошелёк · пополнение</div><h2>Пополнить баланс</h2><p>Курс проекта: 1 Империал = 2 ₽. Способы оплаты, комиссии, минимальная сумма и сроки зачисления будут опубликованы до запуска.</p><div class="topup-state"><div class="topup-emblem">И</div><div><h3>Пополнение пока недоступно</h3><p>Платёжный провайдер и серверный Wallet API не подключены. Нет реальных или тестовых зачислений; кнопки оплаты намеренно отсутствуют.</p></div><span class="status-pill">Отключено</span></div></div></section>
+<section class="account-pane" id="tab-limits" role="tabpanel" hidden><div class="limits-panel account-card"><div class="limits-copy"><div class="eyebrow">Личный контроль</div><h2>Ответственные траты</h2><p>Установи личные пределы на случайные открытия. В production уменьшение лимита должно действовать сразу, а повышение — только после периода охлаждения. Лимиты будут общими для всех устройств.</p><div class="limits-note" id="limitPreview" aria-live="polite">Это предварительная настройка интерфейса. Сохранение станет доступно после авторизации и подключения Wallet API.</div></div><div class="limits-controls"><label>Суточный лимит, ИМП.<input id="dailyLimit" type="number" min="0" max="100000" step="10" value="0"></label><label>Месячный лимит, ИМП.<input id="monthlyLimit" type="number" min="0" max="1000000" step="50" value="0"></label><button class="btn" id="saveLimits" type="button">Предпросмотр лимитов</button><small>0 = запрет случайных открытий. Пока это не сохранённая настройка и она не ограничивает расходы на сервере. Для реального применения нужна авторизация.</small></div></div></section>
+</section>
+</main>
+<footer class="footer"><div class="wrap footerin"><span>РАСКОЛ · ИМПЕРИАЛ · ЛИЧНЫЙ КАБИНЕТ</span><span><a href="../shop/index.html">В магазин</a> · <a href="../index.html">На главную</a></span><span>Тестовый интерфейс · авторизация и платежи отключены</span></div></footer>
+<script src="../assets/js/atmosphere.js" defer></script><script src="../assets/js/account.js" defer></script>
+</body></html>
