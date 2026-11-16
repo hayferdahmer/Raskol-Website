@@ -22,3 +22,14 @@
 
 .world-nav a,.world-footer a,.world-action{min-height:40px;display:inline-flex;align-items:center}
 @media(prefers-reduced-motion:reduce){.rsk-button,.world-action,.rsk-card,.world-card{transition:none}}
+
+/* Витрина и личный кабинет используют те же примитивы с локальной палитрой магазина. */
+.rsk-nav--commerce,.shop-page .nav,.account-page-root .nav{display:flex;gap:23px;font:9px var(--shop-ui);letter-spacing:.17em;text-transform:uppercase;color:#c8b9b8}
+.rsk-nav--commerce a,.shop-page .nav a,.account-page-root .nav a{transition:color .25s}
+.rsk-nav--commerce a:hover,.shop-page .nav a:hover,.account-page-root .nav a:hover{color:#fff}
+
+.rsk-button--commerce,.shop-page .btn,.account-page-root .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;border:1px solid rgba(190,123,136,.58);background:linear-gradient(125deg,#5b2634,#28141c);padding:14px 20px;font:600 9px var(--shop-ui);letter-spacing:.17em;text-transform:uppercase;text-decoration:none;touch-action:manipulation;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s,background .3s}
+.rsk-button--commerce:hover,.shop-page .btn:hover,.account-page-root .btn:hover{transform:translateY(-3px);border-color:#e2aab3;box-shadow:0 12px 35px rgba(134,44,62,.25)}
+.rsk-button--commerce.is-quiet,.shop-page .btn.ghost,.account-page-root .btn.ghost{background:transparent;border-color:rgba(210,188,186,.3)}
+.rsk-button--commerce:focus-visible,.shop-page .btn:focus-visible,.account-page-root .btn:focus-visible{outline:2px solid var(--shop-gold);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.rsk-button--commerce,.shop-page .btn,.account-page-root .btn{transition:none}}
