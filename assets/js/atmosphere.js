@@ -43,6 +43,39 @@
 
   if (motionQuery.matches) return;
 
+  // Небольшой 2.5D-параллакс ограничен несколькими пикселями и не двигает сам арт.
+  const parallaxScenes = Array.from(cinemaScenes);
+  if (finePointerQuery.matches && parallaxScenes.length) {
+    let pointerFrame = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    const renderParallax = () => {
+      currentX += (targetX - currentX) * 0.075;
+      currentY += (targetY - currentY) * 0.075;
+      parallaxScenes.forEach((scene) => {
+        scene.style.setProperty('--rsk-pointer-x', currentX.toFixed(3));
+        scene.style.setProperty('--rsk-pointer-y', currentY.toFixed(3));
+      });
+      if (Math.abs(targetX - currentX) > 0.002 || Math.abs(targetY - currentY) > 0.002) {
+        pointerFrame = window.requestAnimationFrame(renderParallax);
+      } else {
+        pointerFrame = 0;
+      }
+    };
+    window.addEventListener('pointermove', (event) => {
+      targetX = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 2;
+      targetY = (event.clientY / Math.max(window.innerHeight, 1) - 0.5) * 2;
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(renderParallax);
+    }, { passive: true });
+    window.addEventListener('pointerleave', () => {
+      targetX = 0;
+      targetY = 0;
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(renderParallax);
+    });
+  }
+
   const canvas = document.createElement('canvas');
   canvas.id = 'rsk-ash';
   canvas.setAttribute('aria-hidden', 'true');
