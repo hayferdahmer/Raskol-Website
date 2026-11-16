@@ -234,3 +234,53 @@
   .roll-item.is-landed { animation: none; }
   .roll-item .roll-icon { transition: none; }
 }
+
+
+/* Мобильная рулетка: анимация только через compositor-friendly transform */
+.roulette-track {
+  display: flex;
+  position: relative;
+  gap: 10px;
+  transform: translate3d(0,0,0);
+  transform-origin: 0 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+  contain: layout style;
+}
+.roulette-track > .roll-item {
+  box-sizing: border-box;
+  flex: 0 0 126px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.case-dialog.is-rolling .roulette-track,
+.case-dialog.is-rolling .roll-item {
+  filter: none !important;
+}
+.case-dialog.is-rolling .roll-item:after {
+  display: none !important;
+  animation: none !important;
+}
+.roulette-window {
+  -webkit-mask-image: linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+}
+.roulette-window:before {
+  transition: box-shadow .22s ease, filter .22s ease;
+}
+.case-dialog.is-rolling .roulette-window:before {
+  box-shadow: 0 0 16px 4px #d8ad7299, 0 0 38px 8px #d8ad7244;
+}
+@media(max-width:700px) {
+  .roulette-window { height: 124px; }
+  .roulette-track > .roll-item { flex-basis: 112px; height: 102px; }
+}
+@media(max-width:430px) {
+  .roulette-window { height: 116px; }
+  .roulette-track > .roll-item { flex-basis: 106px; height: 96px; }
+  .roll-item .roll-icon { font-size: 27px; }
+  .roll-item small { font-size: 8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .roulette-track { will-change: auto; }
+}

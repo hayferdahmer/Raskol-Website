@@ -58,7 +58,9 @@
     'last-vow':['Осколок последнего обета','След клятвенного пути','Титул верного до конца','Рамка нерушимой клятвы','Шлейф свечного пламени','Знамя последнего рубежа','Аура вечного обещания','Ворон последнего посланника','Мантия клятвохранителя','Печать последнего обета','Корона несгибаемой воли']
   };
   function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
-  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
+  // Проценты показываем с точностью до тысячной, убирая незначащие нули.
+  function formatPercent(value){const safe=Math.max(0.001,Number(value)||0);return Number(safe.toFixed(3)).toString().replace('.',',')+'%';}
+  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+formatPercent(chance)+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
     standard:{surcharge:0,factors:[1,1,1,1,1]},
     tempered:{surcharge:100,factors:[.82,1.05,1.25,1.55,1.8]},
@@ -150,7 +152,7 @@
     $('#ritualTotalNote').textContent=currentRollIsBonus?'Бонусная прокрутка за серию из 10 открытий. Списания нет.':('Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.');
     const keys=['common','uncommon','rare','relic','legendary'];
     const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
-    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
+    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+formatPercent(weights[i])+'%</b><small>'+labels[i]+'</small></div>').join('');
     $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
     renderPrizePool();
   }
@@ -193,9 +195,13 @@
   }
   function makeReel(winner){
     const pool=getCaseRewards(currentCase);
-    const sequence=Array.from({length:58},(_,i)=>pool[(i*7+Math.floor(Math.random()*pool.length))%pool.length]);
-    const winnerIndex=49;sequence[winnerIndex]=winner;
-    const track=$('#rouletteTrack');track.style.transition='none';track.style.filter='none';track.style.transform='translate3d(0,0,0)';
+    // Длинная дорожка даёт рулетке запас хода и не подводит победный предмет к краю.
+    const sequence=Array.from({length:64},()=>pool[Math.floor(Math.random()*pool.length)]);
+    const winnerIndex=54;sequence[winnerIndex]=winner;
+    const track=$('#rouletteTrack');
+    track.style.transition='none';
+    track.style.filter='none';
+    track.style.transform='translate3d(0,0,0)';
     track.innerHTML=sequence.map((item,index)=>'<div class="roll-item '+item.rarity+(index===winnerIndex?' is-predestined':'')+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>').join('');
     return {track,winnerIndex};
   }
@@ -266,15 +272,22 @@
     $('#rollResult').textContent=isBonus?'Дар десяти испытаний пробуждается…':'Древняя печать откликается…';
     $('#rollProgress').style.transform='scaleX(0)';
     reelAudio.lastTick=-1;
-    const duration=reducedMotion?1:11200;
+    const duration=reducedMotion?1:10800;
     const begin=()=>{
       dialog.classList.remove('is-charging');
       const viewport=$('.roulette-window');
-      const winnerRect=track.children[winnerIndex].getBoundingClientRect();
       const viewportRect=viewport.getBoundingClientRect();
-      const target=winnerRect.left-viewportRect.left+winnerRect.width/2-viewportRect.width/2;
+      const winnerRect=track.children[winnerIndex].getBoundingClientRect();
+      const marker=viewportRect.width/2;
+      const target=winnerRect.left-viewportRect.left+winnerRect.width/2-marker;
+      // Геометрию карточек измеряем один раз: никаких layout-read на каждом кадре iPhone.
+      const itemCenters=Array.from(track.children,card=>{
+        const rect=card.getBoundingClientRect();
+        return rect.left-viewportRect.left+rect.width/2;
+      });
       const started=performance.now();
       let previousPosition=0;
+      let nextTickIndex=0;
       const tick=now=>{
         const elapsed=Math.min(duration,Math.max(0,now-started));
         const p=elapsed/duration;
@@ -282,12 +295,14 @@
         const position=target*eased;
         track.style.transform='translate3d('+(-position)+'px,0,0)';
         const delta=Math.max(0,position-previousPosition);
-        const speed=delta/Math.max(1,now-(tick.lastTime||now))*1000;
+        const frameTime=Math.max(1,now-(tick.lastTime||now));
+        const speed=delta/frameTime*1000;
         previousPosition=position;tick.lastTime=now;
-        track.style.filter=speed>24?'blur('+Math.min(.72,speed/1250).toFixed(3)+'px)':'none';
-        const itemWidth=track.children[1]&&track.children[0]?track.children[1].offsetLeft-track.children[0].offsetLeft:127;
-        const crossed=Math.floor(position/itemWidth);
-        if(crossed>reelAudio.lastTick)playReelTick(crossed,speed);
+        // Вместо дорогого blur/filter — лёгкий световой след и звуковые отметки.
+        while(nextTickIndex<itemCenters.length && itemCenters[nextTickIndex]<=marker+position){
+          playReelTick(nextTickIndex,speed);
+          nextTickIndex++;
+        }
         if(p>.66){dialog.classList.add('is-braking');$('#rollResult').textContent='Инерция угасает…'}
         else if(p<.1)$('#rollResult').textContent='Разгон механизма…';
         else if(p<.58)$('#rollResult').textContent='Реликвии проносятся перед взором…';
