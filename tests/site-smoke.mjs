@@ -56,3 +56,9 @@ for(const width of ['900px','680px','380px'])assert.ok(mobileCss.includes('max-w
 assert.ok(mobileCss.includes('.nav a,.world-nav a,.support-nav a')&&mobileCss.includes('display: inline-flex !important'),'Mobile navigation must not hide existing links');
 assert.ok(mobileCss.includes('.catalog-grid')&&mobileCss.includes('.roulette-window')&&mobileCss.includes('.account-tabs')&&mobileCss.includes('.support-form-layout'),'Shop, roulette, account and support need mobile layouts');
 assert.ok(mobileCss.includes('prefers-reduced-motion')&&mobileCss.includes('hover: none'),'Mobile layer must respect reduced motion and touch input');
+
+assert.ok((await readFile(resolve(root,'shop/index.html'),'utf8')).includes('<body class="shop-page">'),'Shop needs an explicit scope for its mobile component rules');
+assert.ok((await readFile(resolve(root,'account/index.html'),'utf8')).includes('<body class="account-page-root">'),'Account needs an explicit mobile page scope');
+assert.ok(mobileCss.includes('.shop-page .hero')&&mobileCss.includes('.shop-page .hero-art'),'Shop hero rules must be scoped and must not override the homepage hero');
+assert.ok(!/^[ \\t]*\\.hero\\s*\\{/m.test(mobileCss)&&!/^[ \\t]*\\.section\\s*\\{/m.test(mobileCss),'Shared mobile CSS must not globally override homepage hero or section layout');
+assert.ok(mobileCss.includes('max-width: 430px')&&mobileCss.includes('.case-grid')&&mobileCss.includes('.class-detail'),'iPhone-width shop roulette and class detail layouts need explicit coverage');
