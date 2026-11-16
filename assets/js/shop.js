@@ -58,15 +58,16 @@
     'last-vow':['Осколок последнего обета','След клятвенного пути','Титул верного до конца','Рамка нерушимой клятвы','Шлейф свечного пламени','Знамя последнего рубежа','Аура вечного обещания','Ворон последнего посланника','Мантия клятвохранителя','Печать последнего обета','Корона несгибаемой воли']
   };
   function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
-  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=currentRollIsBonus?bonusOdds:(currentTier==='standard'?caseOdds[currentCase.id]:ritualTiers[currentTier].weights);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
+  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
-    standard:{surcharge:0,weights:[65,25,9,.9,.1]},
-    tempered:{surcharge:100,weights:[50,30,15,4,1]},
-    royal:{surcharge:250,weights:[35,30,22,10,3]},
-    imperial:{surcharge:500,weights:[20,25,30,18,7]}
+    standard:{surcharge:0,factors:[1,1,1,1,1]},
+    tempered:{surcharge:100,factors:[.82,1.05,1.25,1.55,1.8]},
+    royal:{surcharge:250,factors:[.58,.92,1.45,2.4,3.4]},
+    imperial:{surcharge:500,factors:[.32,.68,1.6,3.5,6.5]}
   };
   let currentTier='standard';
   const bonusOdds=[20,35,27,14,4];
+  function getRarityWeights(caseData,isBonus=false){if(isBonus)return bonusOdds;const base=caseOdds[caseData?.id]||caseOdds['two-crowns'];const factors=ritualTiers[currentTier].factors;const adjusted=base.map((value,index)=>value*factors[index]);const total=adjusted.reduce((sum,value)=>sum+value,0);return adjusted.map(value=>value/total*100);}
   const demoStateKey='raskol-case-demo-v2';
   let demoState={streak:0,bonusReady:false};
   try{const saved=JSON.parse(localStorage.getItem(demoStateKey)||'null');if(saved&&Number.isInteger(saved.streak)&&saved.streak>=0&&saved.streak<=10)demoState={streak:saved.streak,bonusReady:Boolean(saved.bonusReady)};}catch(_){/* Локальное демо может работать и без хранилища. */}
@@ -135,7 +136,7 @@
   }
   function chooseReward(weightsOverride){
     const keys=['common','uncommon','rare','relic','legendary'];
-    const weights=weightsOverride||(currentTier==='standard'?caseOdds[currentCase.id]:ritualTiers[currentTier].weights);
+    const weights=weightsOverride||getRarityWeights(currentCase,false);
     const roll=Math.random()*100;let edge=0,rarity='common';
     for(let i=0;i<keys.length;i++){edge+=weights[i];if(roll<edge){rarity=keys[i];break;}}
     const pool=getCaseRewards(currentCase).filter(item=>item.rarity===rarity);
@@ -144,7 +145,7 @@
   function renderRitual(){
     if(!currentCase)return;
     const tier=ritualTiers[currentTier],total=currentCase.price+tier.surcharge;
-    const weights=currentRollIsBonus?bonusOdds:(currentTier==='standard'?caseOdds[currentCase.id]:tier.weights);
+    const weights=getRarityWeights(currentCase,currentRollIsBonus);
     $('#ritualTotal').innerHTML=currentRollIsBonus?'БЕСПЛАТНО':total+' <i>ИМП.</i>';
     $('#ritualTotalNote').textContent=currentRollIsBonus?'Бонусная прокрутка за серию из 10 открытий. Списания нет.':('Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.');
     const keys=['common','uncommon','rare','relic','legendary'];
