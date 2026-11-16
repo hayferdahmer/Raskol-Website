@@ -8,7 +8,7 @@
     document.querySelectorAll('.account-pane').forEach(p=>{const active=p.id==='tab-'+name;p.hidden=!active;p.classList.toggle('active',active);});
     const url=new URL(window.location.href);url.searchParams.set('tab',name);history.replaceState(null,'',url);
   }
-  tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
+  tabs.forEach((t,index)=>{t.addEventListener('click',()=>activate(t.dataset.tab));t.addEventListener('keydown',event=>{const keys=['ArrowRight','ArrowDown','ArrowLeft','ArrowUp','Home','End'];if(!keys.includes(event.key))return;event.preventDefault();let next=index;if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%tabs.length;else next=(index-1+tabs.length)%tabs.length;tabs[next].focus();activate(tabs[next].dataset.tab);});});
   document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>activate(b.dataset.openTab)));
   const requested=new URLSearchParams(location.search).get('tab');
   activate(['balance','topup','limits'].includes(requested)?requested:'balance');
