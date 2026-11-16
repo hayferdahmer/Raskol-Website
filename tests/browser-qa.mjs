@@ -111,7 +111,7 @@ try{
 
   await caseTrigger.click();
   await shop.locator('#rollBtn').click();
-  await shop.waitForFunction(()=>document.querySelector('#rollBtn')?.textContent.includes('Повторить обряд'),{timeout:5000});
+  await shop.waitForFunction(()=>document.querySelector('#rollBtn')?.textContent.includes('Повторить обряд'),null,{timeout:5000});
   const result=await shop.locator('#rollResult').innerText();
   report.interactions.push({name:'reduced-motion roulette completes and announces result',passed:Boolean(result.trim())});
   if(!result.trim())report.runtimeErrors.push({route:'/shop/',message:'Reduced-motion roulette did not announce a result'});
