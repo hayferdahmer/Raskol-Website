@@ -33,3 +33,14 @@
 .rsk-button--commerce.is-quiet,.shop-page .btn.ghost,.account-page-root .btn.ghost{background:transparent;border-color:rgba(210,188,186,.3)}
 .rsk-button--commerce:focus-visible,.shop-page .btn:focus-visible,.account-page-root .btn:focus-visible{outline:2px solid var(--shop-gold);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.rsk-button--commerce,.shop-page .btn,.account-page-root .btn{transition:none}}
+
+
+/* Центр поддержки использует общую навигацию и кнопку с собственным вариантом материала. */
+.support-nav{display:flex;align-items:center;gap:22px;font:9px var(--rsk-font-ui);letter-spacing:.16em;text-transform:uppercase;color:#c7b8b8}
+.support-nav a{display:inline-flex;align-items:center;min-height:44px;transition:color .25s ease}
+.support-nav a:hover,.support-nav a[aria-current=page]{color:#f0dadd}
+.support-nav a:focus-visible{outline:2px solid var(--rsk-color-gold);outline-offset:4px}
+.support-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:14px 19px;border:1px solid rgba(193,126,137,.6);background:linear-gradient(130deg,#5b2936,#25151b);color:#f0dddf;font:600 9px var(--rsk-font-ui);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;touch-action:manipulation;transition:filter .2s,transform .2s}
+.support-button:hover{filter:brightness(1.2);transform:translateY(-1px)}
+.support-button:focus-visible{outline:2px solid var(--rsk-color-gold);outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.support-nav a,.support-button{transition:none}}
