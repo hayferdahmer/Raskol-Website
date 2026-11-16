@@ -1,13 +1,15 @@
-/* RASKOL · единый мобильный слой. Не меняет desktop-композицию и арт главной. */
+/* RASKOL · мобильная адаптация.
+   Коммерческие компоненты изолированы от главной страницы и страниц классов. */
 @media (max-width: 900px) {
   .topin { gap: 14px; }
   .nav { gap: 12px 16px; flex-wrap: wrap; }
   .wallet { flex: 0 0 auto; }
-  .hero { grid-template-columns: minmax(0,1fr) minmax(0,.85fr); gap: 18px; }
+  .shop-page .hero { grid-template-columns: minmax(0,1fr) minmax(0,.85fr); gap: 18px; }
   .collections { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .collection:first-child { grid-column: 1 / -1; }
   .catalog-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .case-intro { grid-template-columns: 1fr; }
+  .case-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .account-profile-stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .account-profile-preview,.account-card,.case-gate { min-width: 0; }
   .world-shell,.wrap,.support-shell { width: min(100% - 36px, 100%); }
@@ -26,7 +28,9 @@
     -webkit-overflow-scrolling: touch; scrollbar-width: thin;
     overscroll-behavior-inline: contain;
   }
-  .nav a,.world-nav a,.support-nav a { flex: 0 0 auto; min-height: 40px; display: inline-flex !important; align-items: center; }
+  .nav a,.world-nav a,.support-nav a {
+    flex: 0 0 auto; min-height: 40px; display: inline-flex !important; align-items: center;
+  }
   .grid,.spec-grid,.facts,.specs,.layout { grid-template-columns: minmax(0,1fr); }
   .detail-head { grid-template-columns: minmax(0,1fr); gap: 10px; }
   .detail-panel { position: relative; top: auto; min-height: 0; }
@@ -52,16 +56,19 @@
   .world-map-panel { min-height: 230px; padding: 30px 20px; }
   .world-footer,.support-footer { flex-direction: column; gap: 12px; }
   .world-footer a,.support-footer a { min-height: 40px; display: inline-flex; align-items: center; }
-  .hero { min-height: 0; padding: 54px 0 44px; grid-template-columns: minmax(0,1fr); gap: 14px; }
-  .hero:before { inset: 0; }
-  .hero h1 { font-size: clamp(54px, 16vw, 84px); line-height: .88; }
-  .hero-copy { font-size: clamp(18px,5vw,22px); }
-  .hero-art { height: clamp(220px,65vw,320px); }
-  .hero-art:before { width: min(70vw,260px); height: min(70vw,260px); }
-  .hero-art:after { width: min(56vw,210px); height: min(56vw,210px); }
-  .section { padding: 48px 0; }
-  .section-head { display: block; }
-  .section-head p { margin-top: 12px; }
+
+  /* Магазин: отдельная область, чтобы не ломать одноимённые блоки главной. */
+  .shop-page .hero { min-height: 0; padding: 54px 0 44px; grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .shop-page .hero:before { inset: 0; }
+  .shop-page .hero h1 { font-size: clamp(54px, 16vw, 84px); line-height: .88; }
+  .shop-page .hero-copy { font-size: clamp(18px,5vw,22px); }
+  .shop-page .hero-art { height: clamp(220px,65vw,320px); }
+  .shop-page .hero-art:before { width: min(70vw,260px); height: min(70vw,260px); }
+  .shop-page .hero-art:after { width: min(56vw,210px); height: min(56vw,210px); }
+  .shop-page .hero-actions { display: flex; flex-wrap: wrap; }
+  .shop-page .section { padding: 48px 0; }
+  .shop-page .section-head { display: block; }
+  .shop-page .section-head p { margin-top: 12px; }
   .collections,.catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .collection,.collection:first-child { min-height: 210px; padding: 18px; }
   .collection:first-child { grid-column: 1 / -1; }
@@ -83,8 +90,8 @@
   .modal { padding: 10px; align-items: center; }
   .modal-actions { display: flex; flex-wrap: wrap; }
   .modal-actions .btn { flex: 1 1 145px; min-height: 46px; }
-  .ritual-tiers { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .prize-pool-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .ritual-tiers,.prize-pool-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+
   .account-page { padding-bottom: 28px; }
   .account-hero { padding: 42px 0 28px; }
   .account-hero h1 { font-size: clamp(42px,12vw,66px); }
@@ -99,6 +106,7 @@
   .balance-actions .btn,.limits-controls .btn { min-height: 48px; }
   .limits-controls label { display: grid; gap: 8px; }
   .limits-controls input { width: 100%; min-height: 46px; }
+
   .support-top { height: auto; min-height: 68px; flex-wrap: wrap; padding: 10px 0; }
   .support-actions { grid-template-columns: minmax(0,1fr); }
   .support-action { min-height: 150px; }
@@ -109,21 +117,45 @@
   .support-button { min-height: 48px; width: 100%; }
   .support-footer div { flex-wrap: wrap; }
   .footerin { align-items: flex-start; flex-direction: column; gap: 12px; }
+
+  /* Каталог классов и длинные карточки */
+  .catalog-callout { align-items: flex-start !important; }
+  .class-detail { grid-template-columns: minmax(0,1fr) !important; gap: 22px; }
+  .class-data-row { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .spec-tabs { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .class-detail-art { min-width: 0; }
+  .class-detail-content { min-width: 0; overflow-wrap: anywhere; }
+}
+@media (max-width: 430px) {
+  .shop-page .hero { padding-top: 42px; }
+  .shop-page .hero h1 { font-size: clamp(50px,15vw,68px); }
+  .collections,.catalog-grid { gap: 9px; }
+  .product { padding: 9px; }
+  .product-art { height: 116px; }
+  .product-art svg { width: 86px; height: 86px; }
+  .case-grid { gap: 9px; }
+  .case-card { min-width: 0; padding: 12px; }
+  .case-name { font-size: 27px; }
+  .case-visual { height: 150px; }
+  .case-gate h3 { font-size: 32px; }
+  .roulette-window { height: 126px; }
+  .roll-item { flex-basis: 100px; height: 100px; }
+  .class-data-row { grid-template-columns: minmax(0,1fr); }
+  .class-card { min-width: 0; }
 }
 @media (max-width: 380px) {
-  .collections,.catalog-grid { grid-template-columns: minmax(0,1fr); }
+  .collections,.catalog-grid,.case-grid { grid-template-columns: minmax(0,1fr); }
   .collection:first-child { grid-column: auto; }
   .product { min-height: 0; }
   .account-profile-stats { grid-template-columns: minmax(0,1fr); }
-  .ritual-tiers { grid-template-columns: minmax(0,1fr); }
+  .ritual-tiers,.prize-pool-grid { grid-template-columns: minmax(0,1fr); }
   .world-brand,.brand { gap: 7px; letter-spacing: .12em; }
-  .account-profile-stats { grid-template-columns: minmax(0,1fr) !important; }
   .rsk-brand-copy small { letter-spacing: .16em; }
 }
 @media (hover: none) {
   .world-card:hover,.world-action:hover,.btn:hover,.collection:hover,.product:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-art:before,.hero-art:after,.relic { animation: none !important; }
+  .shop-page .hero-art:before,.shop-page .hero-art:after,.relic { animation: none !important; }
   .collection,.product,.world-card,.world-action,.btn { transition: none !important; }
 }
