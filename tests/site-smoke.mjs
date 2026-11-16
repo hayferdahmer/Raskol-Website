@@ -12,7 +12,7 @@ for(const path of htmlFiles){const html=await readFile(path,'utf8');if(relative(
 const sharedClassPages=['classes/index.html','classes/hunter.html','classes/mage.html','classes/priest.html','classes/rogue.html','classes/warlock.html','classes/warrior.html'];
 for(const path of sharedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('classes.css'),'Shared class stylesheet is missing from '+path);assert.ok(!/<style\b/i.test(html),'Repeated class-page styles must live in classes.css, not inline: '+path);}
 const specializedClassPages=[['classes/specializations.html','specializations.css'],['classes/specializations/arms.html','talent-tree.css']];
-for(const [path,stylesheet] of specializedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes(stylesheet),'Page-specific class stylesheet is missing from '+path);assert.ok(!/<style\\b/i.test(html),'Class specialization styles must be external, not inline: '+path);}
+for(const [path,stylesheet] of specializedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes(stylesheet),'Page-specific class stylesheet is missing from '+path);assert.ok(!/<style\b/i.test(html),'Class specialization styles must be external, not inline: '+path);}
 const portalPages=['world/index.html','factions/index.html','systems/index.html','map/index.html','media/index.html'];
 const componentsCss=await readFile(resolve(root,'assets/css/components.css'),'utf8'),portalCss=await readFile(resolve(root,'assets/css/world.css'),'utf8');
 for(const path of portalPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Portal component foundation is missing from '+path);}
