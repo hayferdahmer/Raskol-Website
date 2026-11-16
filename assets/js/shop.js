@@ -163,7 +163,7 @@
     }
     setTimeout(()=>host.replaceChildren(),1900);
   }
-  function saveDemoState(){try{localStorage.setItem(demoStateKey,JSON.stringify(demoState));}catch(_){/* Без localStorage bleibt der Fortschritt nur bis zum Neuladen erhalten. */}}
+  function saveDemoState(){try{localStorage.setItem(demoStateKey,JSON.stringify(demoState));}catch(_){/* Без localStorage прогресс сохранится только до перезагрузки страницы. */}}
   function renderLoyalty(){
     const count=Math.min(10,demoState.streak);
     const bar=$('#streakProgressBar'),label=$('#streakProgressLabel'),state=$('#streakStateLabel'),button=$('#claimBonusBtn');
@@ -234,7 +234,7 @@
     const email=$('#socialRewardEmail').value.trim();
     const selected=$('input[name="socialChannel"]:checked',socialForm);
     const status=$('#socialRewardStatus');
-    if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
+    if(!/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
     if(!selected.length){status.textContent='Выбери один канал, на который подписался.';return;}
     status.textContent='Демо-режим: запрос не отправлен, подписка не проверена и 3 прокрутки не начислены. Для настоящей награды нужен подключённый сервис подтверждения.';
   });
