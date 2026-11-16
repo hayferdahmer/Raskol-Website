@@ -35,7 +35,7 @@ await mkdir(resolve(root,'artifacts/browser-qa'),{recursive:true});
 
 try{
   for(const route of routes){
-    const page=await browser.newPage({viewport:{width:1440,height:1000}});
+    const context=await browser.newContext({viewport:{width:1440,height:1000}});\n    const page=await context.newPage();
     page.on('pageerror',error=>report.runtimeErrors.push({route,message:error.message}));
     for(const viewport of viewports){
       await page.setViewportSize({width:viewport.width,height:viewport.height});
@@ -83,7 +83,7 @@ try{
   }
 
   // Отдельный проход по интерактивным состояниям магазина и рулетки.
-  const shop=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+  const shopContext=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});\n  const shop=await shopContext.newPage();
   await shop.goto('http://127.0.0.1:4173/shop/',{waitUntil:'domcontentloaded'});
   await shop.waitForSelector('#catalogGrid [data-preview]');
   const productTrigger=shop.locator('#catalogGrid [data-preview]').first();
@@ -115,10 +115,10 @@ try{
   const result=await shop.locator('#rollResult').innerText();
   report.interactions.push({name:'reduced-motion roulette completes and announces result',passed:Boolean(result.trim())});
   if(!result.trim())report.runtimeErrors.push({route:'/shop/',message:'Reduced-motion roulette did not announce a result'});
-  await shop.close();
+  await shopContext.close();
 
   // Клавиатурная модель вкладок личного кабинета.
-  const account=await browser.newPage({viewport:{width:1280,height:900}});
+  const accountContext=await browser.newContext({viewport:{width:1280,height:900}});\n  const account=await accountContext.newPage();
   await account.goto('http://127.0.0.1:4173/account/',{waitUntil:'domcontentloaded'});
   await account.locator('#tab-balance-trigger').focus();
   await account.keyboard.press('ArrowRight');
@@ -128,7 +128,7 @@ try{
   const tabsOk=selected==='true'&&panelLabel===triggerId;
   report.interactions.push({name:'account tabs arrow navigation and accessible panel label',passed:tabsOk});
   if(!tabsOk)report.runtimeErrors.push({route:'/account/',message:'Account tabs keyboard or aria-labelledby relationship failed'});
-  await account.close();
+  await accountContext.close();
 } finally {
   await browser.close();
   await new Promise(resolveClose=>server.close(resolveClose));
