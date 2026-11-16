@@ -23,9 +23,9 @@
   const session = readState(sessionStorage, sessionKey);
   const hadSession = sessionStorage.getItem(sessionKey) !== null;
   const shouldAutoplay = !hadSession || Boolean(session.playing);
-  let resumeAt = session.index === index ? Math.max(0, Number(session.time) || 0) : 0;
   let index = Number.isInteger(session.index) ? session.index : (Number.isInteger(saved.index) ? saved.index : 0);
   index = Math.max(0, Math.min(tracks.length - 1, index));
+  let resumeAt = session.index === index ? Math.max(0, Number(session.time) || 0) : 0;
   let shuffle = Boolean(saved.shuffle);
   let repeat = Boolean(saved.repeat);
   let autoplayBlocked = false;
