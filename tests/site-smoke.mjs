@@ -31,7 +31,7 @@ assert.ok(home.includes("$$('[data-copy-address]')"),'Homepage address-copy cont
 assert.ok(!home.includes('encodeURIComponent(IP)'),'Homepage server status must use an approved public hostname, not an undefined IP variable');
 assert.ok(!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(home)&&!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(home),'Legacy host and IP must be removed from homepage');
 assert.ok(home.includes('Профиль игрока')&&!home.includes('Смотреть трейлер')&&!home.includes('trailerModal'),'Homepage CTA and trailer placeholder must be updated');
-const homeNav=home.match(/<nav class="nav-links"[^>]*>([\\s\\S]*?)<\\/nav>/i)?.[1]||'';
+const homeNavStart=home.indexOf('<nav class="nav-links"');const homeNavEnd=home.indexOf('</nav>',homeNavStart);const homeNav=home.slice(homeNavStart,homeNavEnd);
 assert.ok(!homeNav.includes('Классы')&&!homeNav.includes('FAQ'),'Classes and FAQ must not remain in the homepage top navigation');
 assert.ok(home.includes('href="#faq">Частые вопросы</a>'),'FAQ must remain in the footer navigation');
 assert.ok(siteUi.includes('opengameart.org/sites/default/files/The_Bards_Tale.mp3')&&siteUi.includes('audio.play()')&&siteUi.includes('audio.preload'),'Background music must be user-initiated and use the credited CC0 track');
