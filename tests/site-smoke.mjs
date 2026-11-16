@@ -15,6 +15,10 @@ const portalPages=['world/index.html','factions/index.html','systems/index.html'
 const componentsCss=await readFile(resolve(root,'assets/css/components.css'),'utf8'),portalCss=await readFile(resolve(root,'assets/css/world.css'),'utf8');
 for(const path of portalPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Portal component foundation is missing from '+path);}
 assert.ok(componentsCss.includes('.rsk-button')&&componentsCss.includes('.rsk-card')&&componentsCss.includes('.rsk-panel')&&componentsCss.includes('.rsk-nav'),'Shared component primitives are incomplete');
+const shopCssSource=await readFile(resolve(root,'assets/css/shop.css'),'utf8');
+for(const path of ['shop/index.html','account/index.html']){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Commerce component foundation is missing from '+path);}
+assert.ok(componentsCss.includes('.rsk-button--commerce')&&componentsCss.includes('.rsk-nav--commerce')&&componentsCss.includes('.shop-page .btn')&&componentsCss.includes('.account-page-root .btn'),'Commerce button and navigation primitives are incomplete');
+assert.ok(!/(?:^|\\})\\.nav\\{/m.test(shopCssSource)&&!/(?:^|\\})\\.btn\\{/m.test(shopCssSource),'Commerce navigation and button base rules must have one owner in components.css');
 assert.ok(!/^\\.world-action\\{/m.test(portalCss)&&!/^\\.world-card\\{/m.test(portalCss)&&!/^\\.world-nav\\{/m.test(portalCss)&&!/^\\.world-note\\{/m.test(portalCss),'Shared portal base component rules must have one owner in components.css; responsive overrides may remain local');
 
 assert.ok(htmlFiles.length>=5,'Expected public HTML pages');
