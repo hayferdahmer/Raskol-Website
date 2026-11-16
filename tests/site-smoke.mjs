@@ -44,7 +44,7 @@ assert.ok(siteUi.includes('shouldAutoplay')&&siteUi.includes('resumeAt')&&siteUi
 assert.ok(siteUi.includes('document.hidden) persist()')&&!siteUi.includes('if (document.hidden) audio.pause()'),'Background music must not pause when the browser tab is hidden');
 assert.ok(siteUi.includes('rsk-music-shuffle')&&siteUi.includes('rsk-music-repeat')&&siteUi.includes('rsk-music-progress'),'Music player must provide shuffle, repeat and seeking controls');
 assert.ok(siteUi.includes('rsk-page-transition')&&siteUi.includes('rsk-transition-crest')&&siteUiCss.includes('.rsk-music-player')&&siteUiCss.includes('#preloader .preload-crest'),'Global crest transition, branded preloader and compact music player are required');
-assert.equal((siteUiCss.match(/\\.rsk-music-player\\{/g)||[]).length,1,'Music player must have one canonical base rule');
+assert.equal((siteUiCss.match(/\.rsk-music-player\{/g)||[]).length,1,'Music player must have one canonical base rule');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('site-ui.js')&&html.includes('site-ui.css'),'Missing global site UI layer on '+relative(root,path));}
 assert.ok(media.includes('Прямые эфиры')&&media.includes('Интеграция ещё не подключена'),'Media hub must disclose that stream integration is not connected');
 assert.ok(home.includes('support/index.html'),'Homepage must link to the support center');
