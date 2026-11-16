@@ -180,3 +180,11 @@
 /* Выбранная тематическая коллекция каталога */
 .collection.selected{border-color:rgba(199,164,119,.82);box-shadow:0 0 0 1px rgba(199,164,119,.2),0 18px 48px rgba(0,0,0,.55),0 0 34px rgba(166,106,117,.16);transform:translateY(-4px)}
 .collection.selected:after{transform:rotate(45deg) scale(1.08);border-color:rgba(222,185,133,.72)}
+
+/* Доступность: видимый фокус, индивидуальные шансы и корректное скрытие диалогов */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--shop-gold);outline-offset:3px;box-shadow:0 0 0 4px rgba(199,164,119,.18)}
+.modal[aria-hidden="true"]{visibility:hidden;pointer-events:none}
+.modal[aria-hidden="false"]{visibility:visible;pointer-events:auto}
+.prize-pool-item small{grid-column:2;font-variant-numeric:tabular-nums}
+.account-tab:focus-visible{position:relative;z-index:2}
+@media(prefers-reduced-motion:reduce){.roulette-track,.roll-item:after{filter:none!important;animation:none!important}}
