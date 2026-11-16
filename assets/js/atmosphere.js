@@ -1,121 +1,176 @@
-/* RASKOL — лёгкие атмосферные частицы и reveal-анимации */
+/* RASKOL — атмосферный слой: пепел, мягкое свечение и появление контента */
 (() => {
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const canvas = document.createElement('canvas');
-  canvas.id = 'rsk-ash';
-  canvas.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(canvas);
+  'use strict';
 
-  // Курсор и мягкое свечение повторяют поведение главной страницы.
-  if (!reduced && window.matchMedia('(pointer: fine)').matches) {
-    const glow = document.createElement('div');
-    const cursor = document.createElement('div');
-    glow.className = 'cursor-glow';
-    cursor.className = 'custom-cursor';
-    cursor.setAttribute('aria-hidden', 'true');
-    document.body.append(glow, cursor);
-    document.body.classList.add('cursor-ready');
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointerQuery = window.matchMedia('(pointer: fine)');
+  const body = document.body;
+  if (!body) return;
 
-    window.addEventListener('pointermove', (event) => {
-      glow.style.left = event.clientX + 'px';
-      glow.style.top = event.clientY + 'px';
-      cursor.style.left = event.clientX + 'px';
-      cursor.style.top = event.clientY + 'px';
-    }, { passive: true });
-
-    const interactive = 'a, button, input, select, textarea, [role="button"]';
-    document.addEventListener('pointerover', (event) => {
-      if (event.target.closest?.(interactive)) document.body.classList.add('cursor-hover');
-    });
-    document.addEventListener('pointerout', (event) => {
-      if (!event.relatedTarget?.closest?.(interactive)) document.body.classList.remove('cursor-hover');
-    });
-  }
-
-  const targets = document.querySelectorAll(
-    'main > *, main section, .class-card, .detail-head, .facts, .fact, .spec, .foot'
+  const targets = body.querySelectorAll(
+    'main > *, main section, .class-card, .detail-head, .facts, .fact, .spec, .foot, .world-card, .world-section'
   );
-  targets.forEach((el, index) => {
-    el.classList.add('rsk-reveal');
-    el.style.transitionDelay = (Math.min(index % 6, 5) * 70) + 'ms';
+
+  targets.forEach((element, index) => {
+    element.classList.add('rsk-reveal');
+    element.style.transitionDelay = (Math.min(index % 6, 5) * 65) + 'ms';
   });
 
-  if ('IntersectionObserver' in window && !reduced) {
+  const revealImmediately = () => targets.forEach((element) => element.classList.add('is-visible'));
+  if (motionQuery.matches || !('IntersectionObserver' in window)) {
+    revealImmediately();
+  } else {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
-    targets.forEach((el) => observer.observe(el));
-  } else {
-    targets.forEach((el) => el.classList.add('is-visible'));
+    }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+    targets.forEach((element) => observer.observe(element));
   }
 
-  if (reduced) {
+  if (motionQuery.matches) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.id = 'rsk-ash';
+  canvas.setAttribute('aria-hidden', 'true');
+  body.appendChild(canvas);
+
+  const context = canvas.getContext('2d', { alpha: true });
+  if (!context) {
     canvas.remove();
     return;
   }
 
-  const ctx = canvas.getContext('2d', { alpha: true });
-  if (!ctx) return;
-  let width = 0, height = 0, dpr = 1, frame = 0;
+  let width = 0;
+  let height = 0;
+  let pixelRatio = 1;
+  let animationFrame = 0;
   const particles = [];
-  const count = Math.min(72, Math.max(28, Math.floor(window.innerWidth / 19)));
+  const particleCount = Math.min(68, Math.max(24, Math.floor(window.innerWidth / 21)));
   const random = (min, max) => min + Math.random() * (max - min);
 
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  function resizeCanvas() {
+    pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvas.width = Math.round(width * pixelRatio);
+    canvas.height = Math.round(height * pixelRatio);
+    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   }
+
   function createParticle(fromBottom = false) {
     return {
       x: random(0, width),
-      y: fromBottom ? height + random(0, 70) : random(0, height),
-      r: random(.55, 1.8),
-      vy: random(.12, .42),
-      vx: random(-.12, .12),
-      alpha: random(.12, .48),
+      y: fromBottom ? height + random(4, 90) : random(0, height),
+      radius: random(0.55, 1.65),
+      speed: random(0.1, 0.38),
+      drift: random(-0.1, 0.1),
+      alpha: random(0.1, 0.38),
       phase: random(0, Math.PI * 2),
-      sway: random(.003, .012)
+      pulse: random(0.002, 0.009)
     };
   }
-  function init() {
-    resize();
+
+  function resetParticles() {
     particles.length = 0;
-    for (let i = 0; i < count; i++) particles.push(createParticle());
-  }
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-    for (const p of particles) {
-      p.phase += p.sway;
-      p.x += p.vx + Math.sin(p.phase) * .18;
-      p.y -= p.vy;
-      if (p.y < -8 || p.x < -12 || p.x > width + 12) Object.assign(p, createParticle(true));
-      ctx.beginPath();
-      ctx.fillStyle = 'rgba(207, 139, 145,' + p.alpha + ')';
-      ctx.shadowBlur = p.r > 1.35 ? 8 : 3;
-      ctx.shadowColor = 'rgba(166, 83, 98, .35)';
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
+    for (let index = 0; index < particleCount; index += 1) {
+      particles.push(createParticle());
     }
-    ctx.shadowBlur = 0;
-    frame = window.requestAnimationFrame(draw);
   }
-  init();
-  window.addEventListener('resize', resize, { passive: true });
+
+  const pointer = {
+    active: false,
+    targetX: -100,
+    targetY: -100,
+    x: -100,
+    y: -100
+  };
+  let glow;
+  let cursor;
+
+  if (finePointerQuery.matches) {
+    glow = document.createElement('div');
+    cursor = document.createElement('div');
+    glow.className = 'cursor-glow';
+    cursor.className = 'custom-cursor';
+    glow.setAttribute('aria-hidden', 'true');
+    cursor.setAttribute('aria-hidden', 'true');
+    body.append(glow, cursor);
+    body.classList.add('cursor-ready');
+
+    window.addEventListener('pointermove', (event) => {
+      pointer.active = true;
+      pointer.targetX = event.clientX;
+      pointer.targetY = event.clientY;
+      body.classList.add('cursor-active');
+    }, { passive: true });
+
+    window.addEventListener('pointerout', (event) => {
+      if (event.relatedTarget !== null) return;
+      pointer.active = false;
+      body.classList.remove('cursor-active', 'cursor-hover');
+    });
+
+    const interactive = 'a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])';
+    document.addEventListener('pointerover', (event) => {
+      if (event.target.closest?.(interactive)) body.classList.add('cursor-hover');
+    });
+    document.addEventListener('pointerout', (event) => {
+      if (!event.relatedTarget?.closest?.(interactive)) body.classList.remove('cursor-hover');
+    });
+    window.addEventListener('blur', () => {
+      pointer.active = false;
+      body.classList.remove('cursor-active', 'cursor-hover');
+    });
+  }
+
+  function draw() {
+    context.clearRect(0, 0, width, height);
+
+    for (const particle of particles) {
+      particle.phase += particle.pulse;
+      particle.x += particle.drift + Math.sin(particle.phase) * 0.16;
+      particle.y -= particle.speed;
+
+      if (particle.y < -10 || particle.x < -14 || particle.x > width + 14) {
+        Object.assign(particle, createParticle(true));
+      }
+
+      context.beginPath();
+      context.fillStyle = 'rgba(207, 139, 145,' + particle.alpha + ')';
+      context.shadowBlur = particle.radius > 1.25 ? 7 : 2;
+      context.shadowColor = 'rgba(166, 83, 98, .3)';
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.shadowBlur = 0;
+
+    if (pointer.active && cursor && glow) {
+      pointer.x += (pointer.targetX - pointer.x) * 0.24;
+      pointer.y += (pointer.targetY - pointer.y) * 0.24;
+      cursor.style.left = pointer.x + 'px';
+      cursor.style.top = pointer.y + 'px';
+      glow.style.left = pointer.x + 'px';
+      glow.style.top = pointer.y + 'px';
+    }
+
+    animationFrame = window.requestAnimationFrame(draw);
+  }
+
+  resizeCanvas();
+  resetParticles();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      cancelAnimationFrame(frame);
-    } else if (!reduced) {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(draw);
+      window.cancelAnimationFrame(animationFrame);
+    } else {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(draw);
     }
   });
+
   draw();
 })();
