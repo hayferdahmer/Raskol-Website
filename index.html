@@ -122,7 +122,7 @@
       // Canvas particles: deliberately capped for small screens.
       const canvas=$('#embers'),ctx=canvas.getContext('2d');let particles=[],raf=0;function resize(){const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.floor(canvas.clientWidth*dpr);canvas.height=Math.floor(canvas.clientHeight*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const count=innerWidth<700?18:42;particles=Array.from({length:count},()=>({x:Math.random()*canvas.clientWidth,y:Math.random()*canvas.clientHeight,r:.5+Math.random()*1.5,v:.12+Math.random()*.38,a:.12+Math.random()*.32,phase:Math.random()*7}))}function draw(){ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);for(const p of particles){p.y-=p.v;p.x+=Math.sin(p.phase+=.006)*.18;if(p.y<-5){p.y=canvas.clientHeight+5;p.x=Math.random()*canvas.clientWidth}ctx.beginPath();ctx.fillStyle=`rgba(205,116,129,${p.a})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}raf=requestAnimationFrame(draw)}if(!reduced){resize();draw();addEventListener('resize',resize)}else{canvas.style.display='none'}
       // Публичная проверка доступности Java-сервера через MCSRVSTAT.
-      const statusUrl='https://api.mcsrvstat.us/3/'+encodeURIComponent(IP);
+      const statusUrl='https://api.mcsrvstat.us/3/'+encodeURIComponent('raskolpro.play.ski');
       const statusText=$('#serverStatus'),playersText=$('#serverPlayers'),versionText=$('#serverVersion'),checkText=$('#serverPing');
       async function refreshServerStatus(){
         try{
