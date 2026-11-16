@@ -58,11 +58,11 @@ try{
         h1:(()=>{const el=document.querySelector('main h1');if(!el)return null;const r=el.getBoundingClientRect();return {text:el.textContent.trim(),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),fontSize:getComputedStyle(el).fontSize};})()
       }));
       if(metrics.documentWidth>viewport.width+1||metrics.overflowElements.length)report.overflow.push({route,viewport:viewport.width,documentWidth:metrics.documentWidth,bodyWidth:metrics.bodyWidth,elements:metrics.overflowElements,scrollOverflow:metrics.scrollOverflow});
-      if((route==='/classes/specializations.html'&&viewport.width===320)||((route==='/shop/'||route==='/support/')&&viewport.width===320)||(route.startsWith('/classes/')&&route.endsWith('.html')&&viewport.width===320)||(route==='/'&&viewport.width===768))report.diagnostics.push({route,viewport:viewport.width,bodyWidth:metrics.bodyWidth,documentWidth:metrics.documentWidth,h1:metrics.h1,filterStyles:metrics.filterStyles});
+      if((route==='/classes/specializations.html'&&(viewport.width===320||viewport.width===390))||((route==='/shop/'||route==='/support/')&&viewport.width===320)||(route.startsWith('/classes/')&&route.endsWith('.html')&&viewport.width===320)||(route==='/'&&viewport.width===768))report.diagnostics.push({route,viewport:viewport.width,bodyWidth:metrics.bodyWidth,documentWidth:metrics.documentWidth,h1:metrics.h1,filterStyles:metrics.filterStyles});
       if(!metrics.hasMain||metrics.mainCount!==1)report.runtimeErrors.push({route,message:'Expected exactly one main landmark'});
       if(!metrics.skip||!metrics.skipTarget)report.keyboard.push({route,viewport:viewport.width,message:'Skip link or its target is missing'});
       if(viewport.width===1440||viewport.width===390||(viewport.width===320&&['/classes/hunter.html','/classes/specializations.html','/shop/','/support/'].includes(route))){
-        await page.addStyleTag({content:'.reveal{opacity:1!important;transform:none!important;transition:none!important}'});
+        await page.addStyleTag({content:'.reveal,.rsk-reveal{opacity:1!important;transform:none!important;transition:none!important}'});
         const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
         for(const v of axe.violations)report.axe.push({route,viewport:viewport.width,id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.slice(0,8).map(n=>({target:n.target,summary:n.failureSummary?.slice(0,260)}))});
         const shot=resolve(root,'artifacts/browser-qa',route==='/'?'home':route.replaceAll('/','_').replace(/^_+|_+$/g,''));
