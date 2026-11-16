@@ -215,3 +215,14 @@ body.cursor-hover .custom-cursor {
   .cursor-glow, .custom-cursor { display: none !important; }
   body.cursor-ready, body.cursor-ready a, body.cursor-ready button { cursor: auto; }
 }
+
+/* Состояния указателя: не показываем кольцо в углу до первого движения */
+.cursor-glow {
+  opacity: 0;
+  transition: opacity .25s ease;
+  will-change: left, top, opacity;
+}
+.custom-cursor { will-change: left, top, width, height; }
+body.cursor-ready .custom-cursor { opacity: 0; }
+body.cursor-ready.cursor-active .custom-cursor { opacity: 1; }
+body.cursor-active .cursor-glow { opacity: 1; }
