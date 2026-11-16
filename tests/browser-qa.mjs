@@ -104,7 +104,7 @@ try{
   await shop.waitForFunction(()=>document.activeElement?.matches('[data-preview]'),null,{timeout:2500});
   const productClosed=await shop.locator('#productModal').getAttribute('aria-hidden')==='true';
   const productReturned=await shop.evaluate(()=>document.activeElement?.matches('[data-preview]'));
-  report.interactions.push({name:'product dialog focus and Escape',passed:productOpen&&productFocus==='closeProductModal'&&productClosed&&productReturned});
+  report.interactions.push({name:'product dialog focus and Escape',passed:productOpen&&productFocus==='closeProductModal'&&productClosed&&productReturned,details:{productOpen,productFocus,productClosed,productReturned,triggerConnected:await productTrigger.evaluate(el=>el.isConnected)}});
   if(!(productOpen&&productFocus==='closeProductModal'&&productClosed&&productReturned))report.runtimeErrors.push({route:'/shop/',message:'Product dialog focus management failed'});
 
   await shop.locator('#ageCheck').check();
