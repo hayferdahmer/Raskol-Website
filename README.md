@@ -13,6 +13,7 @@
 ## Документация сайта
 
 - [`docs/SITE_MAP.md`](docs/SITE_MAP.md) — полная карта разделов, маршрутов и этапов развития портала.
+- [`docs/MOBILE_I18N_IDENTITY_PLAN.md`](docs/MOBILE_I18N_IDENTITY_PLAN.md) — план мобильной адаптации, локализации RU/EN и безопасной привязки игрового аккаунта.
 - [`docs/HOMEPAGE_CONTENT.md`](docs/HOMEPAGE_CONTENT.md) — структура главной страницы и готовые тексты для блоков.
 - [`docs/WORLD_PORTAL_CONTENT.md`](docs/WORLD_PORTAL_CONTENT.md) — канонические сведения и редакционные ограничения портала мира.
 - [`docs/WEB_API_BRIDGE.md`](docs/WEB_API_BRIDGE.md) — архитектура безопасного read-only API между сервером и сайтом.

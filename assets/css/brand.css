@@ -1,4 +1,5 @@
 /* Общая фирменная эмблема РАСКОЛА для всех страниц */
+@import url("./mobile.css");
 .brand,.world-brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
 .brand-emblem,.rsk-brand-crest{width:42px;height:48px;flex:0 0 auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(156,62,80,.34));mix-blend-mode:screen}
 .rsk-brand-copy{display:flex;flex-direction:column;line-height:1.05}
