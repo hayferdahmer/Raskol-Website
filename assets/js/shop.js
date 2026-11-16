@@ -59,7 +59,7 @@
   };
   function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
   // Проценты показываем с точностью до тысячной, убирая незначащие нули.
-  function formatPercent(value){const safe=Math.max(0.001,Number(value)||0);return Number(safe.toFixed(3)).toString().replace('.',',')+'%';}
+  function formatPercent(value){const safe=Math.min(100,Math.max(0.001,Number(value)||0));return Number(safe.toFixed(3)).toString().replace('.',',')+'%';}
   function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=getRarityWeights(currentCase,currentRollIsBonus);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+formatPercent(chance)+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
     standard:{surcharge:0,factors:[1,1,1,1,1]},
@@ -160,40 +160,7 @@
     const button=e.target.closest('[data-tier]');
     if(!button||rolling)return;
     currentTier=button.dataset.tier;renderRitual();
-  });
-  const reelAudio = { context: null, enabled: true, lastTick: -1 };
-  function playReelTone(frequency, duration, volume, type='sine') {
-    if (!reelAudio.enabled || reducedMotion) return;
-    try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      const context = reelAudio.context || (reelAudio.context = new AudioContextClass());
-      if (context.state === 'suspended') context.resume();
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      const now = context.currentTime;
-      oscillator.type = type;
-      oscillator.frequency.setValueAtTime(frequency, now);
-      oscillator.frequency.exponentialRampToValueAtTime(Math.max(35, frequency * .72), now + duration);
-      gain.gain.setValueAtTime(.0001, now);
-      gain.gain.exponentialRampToValueAtTime(volume, now + .012);
-      gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
-      oscillator.connect(gain);gain.connect(context.destination);
-      oscillator.start(now);oscillator.stop(now + duration + .025);
-    } catch (_) { /* Звук необязателен: рулетка работает и без Web Audio. */ }
-  }
-  function playReelTick(index, speed) {
-    if (index === reelAudio.lastTick) return;
-    reelAudio.lastTick = index;
-    const pitch = 420 + Math.min(520, speed * 110);
-    playReelTone(pitch, .045, .018, 'triangle');
-  }
-  function playReelImpact(rarity) {
-    const base = rarity === 'legendary' ? 660 : rarity === 'relic' ? 560 : rarity === 'rare' ? 470 : 390;
-    playReelTone(base, .42, .075, 'sine');
-    window.setTimeout(() => playReelTone(base * 1.5, .58, .045, 'sine'), 85);
-  }
-  function makeReel(winner){
+  });\n  function makeReel(winner){
     const pool=getCaseRewards(currentCase);
     // Длинная дорожка даёт рулетке запас хода и не подводит победный предмет к краю.
     const sequence=Array.from({length:64},()=>pool[Math.floor(Math.random()*pool.length)]);
@@ -271,7 +238,6 @@
     $('#rollBtn').disabled=true;$('#rollBtn').textContent='Печать снимается…';
     $('#rollResult').textContent=isBonus?'Дар десяти испытаний пробуждается…':'Древняя печать откликается…';
     $('#rollProgress').style.transform='scaleX(0)';
-    reelAudio.lastTick=-1;
     const duration=reducedMotion?1:10800;
     const begin=()=>{
       dialog.classList.remove('is-charging');
@@ -300,7 +266,6 @@
         previousPosition=position;tick.lastTime=now;
         // Вместо дорогого blur/filter — лёгкий световой след и звуковые отметки.
         while(nextTickIndex<itemCenters.length && itemCenters[nextTickIndex]<=marker+position){
-          playReelTick(nextTickIndex,speed);
           nextTickIndex++;
         }
         if(p>.66){dialog.classList.add('is-braking');$('#rollResult').textContent='Инерция угасает…'}
@@ -324,7 +289,7 @@
               track.style.transform='translate3d('+(-target)+'px,0,0)';
               const winnerCard=track.children[winnerIndex];
               winnerCard.classList.remove('is-predestined');winnerCard.classList.add('is-landed');
-              rolling=false;playReelImpact(winner.rarity);
+              rolling=false;
               window.setTimeout(()=>{dialog.classList.remove('is-impact');showWinner(winner,isBonus);},220);
             }
           };
@@ -334,17 +299,7 @@
       requestAnimationFrame(tick);
     };
     if(reducedMotion)begin();else window.setTimeout(begin,720);
-  }
-  const soundToggle=$('#reelSoundToggle');
-  if(soundToggle){
-    soundToggle.addEventListener('click',()=>{
-      reelAudio.enabled=!reelAudio.enabled;
-      soundToggle.setAttribute('aria-pressed',String(reelAudio.enabled));
-      soundToggle.textContent=reelAudio.enabled?'Звук: вкл.':'Звук: выкл.';
-      if(reelAudio.enabled)playReelTone(520,.12,.035,'sine');
-    });
-  }
-  $('#rollBtn').addEventListener('click',()=>roll(false));
+  }\n  $('#rollBtn').addEventListener('click',()=>roll(false));
   renderLoyalty();
   $('#claimBonusBtn').addEventListener('click',()=>{
     if(!demoState.bonusReady||rolling)return;
