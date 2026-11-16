@@ -110,6 +110,7 @@ try{
           return {scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,bodyBeforeDuration:duration,bodyBeforeSeconds:seconds};
         });
         if(motion.scrollBehavior!=='auto'||motion.bodyBeforeSeconds>0.001)report.motion.push({route,...motion});
+        await page.emulateMedia({reducedMotion:'no-preference'});
       }
     }
     await page.close();
