@@ -55,6 +55,11 @@
     imperial:{surcharge:500,weights:[20,25,30,18,7]}
   };
   let currentTier='standard';
+  const bonusOdds=[20,35,27,14,4];
+  const demoStateKey='raskol-case-demo-v2';
+  let demoState={streak:0,bonusReady:false};
+  try{const saved=JSON.parse(localStorage.getItem(demoStateKey)||'null');if(saved&&Number.isInteger(saved.streak)&&saved.streak>=0&&saved.streak<=10)demoState={streak:saved.streak,bonusReady:Boolean(saved.bonusReady)};}catch(_){/* Локальное демо может работать и без хранилища. */}
+  let currentRollIsBonus=false;
   const rarityNames = {common:'Обычная',uncommon:'Необычная',rare:'Редкая',relic:'Реликтовая',legendary:'Легендарная'};
   const rarityIcons = {common:'✧',uncommon:'❖',rare:'◈',relic:'♛',legendary:'✦'};
   const rarityColors = {common:'#aaa4a1',uncommon:'#83b18c',rare:'#86a9dc',relic:'#d5a4e8',legendary:'#e7bd76'};
@@ -101,7 +106,7 @@
   enter.addEventListener('click',()=>{if(enter.disabled)return;$('#caseGate').hidden=true;$('#caseContent').hidden=false;$('#caseContent').scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'start'});});
   const caseModal=$('#caseModal'),dialog=$('#caseDialog');
   function openCase(c){
-    if(rolling)return;currentCase=c;currentWinner=null;
+    if(rolling)return;currentCase=c;currentWinner=null;currentRollIsBonus=false;
     $('#modalTitle').textContent=c.name;$('#modalDesc').textContent=c.desc+' В коллекции — '+c.items+' косметических реликвий. Открытие бесплатное и не списывает указанную проектную цену.';
     $('#rollResult').textContent='Ларец запечатан. Готов ли ты снять печать?';
     $('#prizePool').innerHTML=rewards.map(item=>'<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+'</small></div>').join('');
@@ -115,9 +120,9 @@
     const track=$('#rouletteTrack');track.style.transition='none';track.style.transform='translateX(0)';
     track.innerHTML=Array.from({length:12},(_,i)=>{const item=rewards[i%rewards.length];return '<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>';}).join('');
   }
-  function chooseReward(){
+  function chooseReward(weightsOverride){
     const keys=['common','uncommon','rare','relic','legendary'];
-    const weights=ritualTiers[currentTier].weights;
+    const weights=weightsOverride||ritualTiers[currentTier].weights;
     const roll=Math.random()*100;let edge=0,rarity='common';
     for(let i=0;i<keys.length;i++){edge+=weights[i];if(roll<edge){rarity=keys[i];break;}}
     const pool=rewards.filter(item=>item.rarity===rarity);
@@ -126,11 +131,12 @@
   function renderRitual(){
     if(!currentCase)return;
     const tier=ritualTiers[currentTier],total=currentCase.price+tier.surcharge;
-    $('#ritualTotal').innerHTML=total+' <i>ИМП.</i>';
-    $('#ritualTotalNote').textContent='Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.';
+    const weights=currentRollIsBonus?bonusOdds:tier.weights;
+    $('#ritualTotal').innerHTML=currentRollIsBonus?'БЕСПЛАТНО':total+' <i>ИМП.</i>';
+    $('#ritualTotalNote').textContent=currentRollIsBonus?'Бонусная прокрутка за серию из 10 открытий. Списания нет.':('Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.');
     const keys=['common','uncommon','rare','relic','legendary'];
     const labels=['Обычная','Необычная','Редкая','Реликтовая','Легендарная'];
-    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(tier.weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
+    $('#oddsDisplay').innerHTML=keys.map((key,i)=>'<div class="o-'+key+'"><b>'+String(weights[i]).replace('.',',')+'%</b><small>'+labels[i]+'</small></div>').join('');
     $$('.ritual-tier').forEach(button=>button.classList.toggle('active',button.dataset.tier===currentTier));
   }
   $('#ritualTiers').addEventListener('click',e=>{
@@ -157,21 +163,40 @@
     }
     setTimeout(()=>host.replaceChildren(),1900);
   }
-  function showWinner(item){
-    currentWinner=item;dialog.classList.remove('is-rolling');dialog.classList.add('is-won');
+  function saveDemoState(){try{localStorage.setItem(demoStateKey,JSON.stringify(demoState));}catch(_){/* Без localStorage bleibt der Fortschritt nur bis zum Neuladen erhalten. */}}
+  function renderLoyalty(){
+    const count=Math.min(10,demoState.streak);
+    const bar=$('#streakProgressBar'),label=$('#streakProgressLabel'),state=$('#streakStateLabel'),button=$('#claimBonusBtn');
+    if(!bar||!label||!state||!button)return;
+    bar.style.width=(count*10)+'%';
+    label.textContent=count+' / 10 без обычной награды';
+    state.textContent=demoState.bonusReady?'Бонусный обряд готов':'До дара: '+(10-count);
+    button.disabled=!demoState.bonusReady||rolling;
+    button.textContent=demoState.bonusReady?'Открыть бесплатный бонус ↗':'Бонус ещё не готов';
+  }
+  function updateStreak(item,isBonus){
+    if(isBonus){demoState.streak=0;demoState.bonusReady=false;}
+    else if(item.rarity==='common'){demoState.streak=0;}
+    else{demoState.streak=Math.min(10,demoState.streak+1);if(demoState.streak>=10)demoState.bonusReady=true;}
+    saveDemoState();renderLoyalty();
+  }
+  function showWinner(item,isBonus){
+    currentWinner=item;updateStreak(item,isBonus);dialog.classList.remove('is-rolling');dialog.classList.add('is-won');
     $('#rollResult').textContent='Печать сорвана. Реликвия найдена.';
     $('#rollProgress').style.transform='scaleX(1)';
     const panel=$('#winPanel');panel.style.setProperty('--rarity-color',rarityColors[item.rarity]);panel.style.setProperty('--rarity-glow',rarityGlows[item.rarity]);panel.style.setProperty('--rarity-bg',rarityBackgrounds[item.rarity]);
     panel.innerHTML='<div class="win-kicker">Твоя находка · демонстрационный результат</div><div class="win-icon">'+item.icon+'</div><h3>'+item.name+'</h3><p>Косметическая реликвия · '+(item.rarity==='legendary'?'особая находка':'не влияет на игровой баланс')+'</p><span class="win-rarity">'+rarityNames[item.rarity]+' редкость</span>';
     panel.classList.add('show');$('#rollBtn').disabled=false;$('#rollBtn').textContent='Повторить обряд';celebrate(item.rarity);
   }
-  function roll(){
-    if(rolling)return;rolling=true;currentWinner=null;
-    const winner=chooseReward();const {track,winnerIndex}=makeReel(winner);
+  function roll(isBonus=false){
+    if(rolling)return;
+    if(isBonus&&!demoState.bonusReady)return;
+    rolling=true;currentWinner=null;currentRollIsBonus=Boolean(isBonus);renderRitual();
+    const winner=chooseReward(isBonus?bonusOdds:undefined);const {track,winnerIndex}=makeReel(winner);
     dialog.classList.remove('is-won');dialog.classList.add('is-charging','is-rolling');
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     $('#rollBtn').disabled=true;$('#rollBtn').textContent='Печать снимается…';
-    $('#rollResult').textContent='Древняя печать откликается…';
+    $('#rollResult').textContent=isBonus?'Дар десяти испытаний пробуждается…':'Древняя печать откликается…';
     $('#rollProgress').style.transform='scaleX(0)';
     const winnerCard=track.children[winnerIndex];
     const target=winnerCard.offsetLeft+(winnerCard.offsetWidth/2)-($('.roulette-window').clientWidth/2);
@@ -189,13 +214,38 @@
         else if(p<.94)$('#rollResult').textContent='Последние мгновения…';
         else $('#rollResult').textContent='Печать почти сорвана…';
         if(p<1)requestAnimationFrame(tick);
-        else {rolling=false;dialog.classList.remove('is-rolling');showWinner(winner);}
+        else {rolling=false;dialog.classList.remove('is-rolling');showWinner(winner,isBonus);}
       };
       requestAnimationFrame(tick);
     };
     if(reducedMotion)begin();else window.setTimeout(begin,720);
   }
-  $('#rollBtn').addEventListener('click',roll);
+  $('#rollBtn').addEventListener('click',()=>roll(false));
+  renderLoyalty();
+  $('#claimBonusBtn').addEventListener('click',()=>{
+    if(!demoState.bonusReady||rolling)return;
+    const crownCase=cases.find(item=>item.id==='two-crowns');
+    if(!crownCase)return;
+    openCase(crownCase);roll(true);
+  });
+  const socialForm=$('#socialRewardForm');
+  socialForm.addEventListener('submit',event=>{
+    event.preventDefault();
+    const email=$('#socialRewardEmail').value.trim();
+    const selected=$('input[name="socialChannel"]:checked',socialForm);
+    const status=$('#socialRewardStatus');
+    if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
+    if(!selected.length){status.textContent='Выбери один канал, на который подписался.';return;}
+    status.textContent='Демо-режим: запрос не отправлен, подписка не проверена и 3 прокрутки не начислены. Для настоящей награды нужен подключённый сервис подтверждения.';
+  });
+  const demoWins=[
+    {player:'Странник-01',item:'Знамя забытого двора',rarity:'uncommon',caseName:'Две короны',ago:'пример записи'},
+    {player:'Пепельный-02',item:'Аура регента',rarity:'rare',caseName:'Пеплопад',ago:'пример записи'},
+    {player:'Хранитель-03',item:'Печать двух корон',rarity:'relic',caseName:'Две короны',ago:'пример записи'},
+    {player:'Безымянный-04',item:'Корона затмения',rarity:'legendary',caseName:'Затмение',ago:'пример записи'},
+    {player:'Странник-05',item:'Гранатовая рамка',rarity:'uncommon',caseName:'Кровавая клятва',ago:'пример записи'}
+  ];
+  $('#winFeedTrack').innerHTML=demoWins.map(win=>'<article class="win-feed-item '+win.rarity+'"><span class="feed-relic">'+rarityIcons[win.rarity]+'</span><div><b>'+win.player+'</b><small>'+win.caseName+'</small><strong>'+win.item+'</strong><em>'+win.ago+'</em></div><span class="feed-rarity">'+rarityNames[win.rarity]+'</span></article>').join('');
   function closeCaseModal(){if(rolling)return;closeModal(caseModal);}
   $('#closeModal').addEventListener('click',closeCaseModal);$('#modalClose2').addEventListener('click',closeCaseModal);
   caseModal.addEventListener('click',e=>{if(e.target===caseModal)closeCaseModal();});
