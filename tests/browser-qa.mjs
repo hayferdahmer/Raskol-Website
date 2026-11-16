@@ -139,6 +139,20 @@ try{
   report.interactions.push({name:'account tabs arrow navigation and accessible panel label',passed:tabsOk});
   if(!tabsOk)report.runtimeErrors.push({route:'/account/',message:'Account tabs keyboard or aria-labelledby relationship failed'});
   await accountContext.close();
+
+  // На узких экранах плеер не перекрывает текст, но остаётся доступен для раскрытия.
+  const mobilePlayerContext=await browser.newContext({viewport:{width:390,height:844}});
+  const mobilePlayerPage=await mobilePlayerContext.newPage();
+  await mobilePlayerPage.goto('http://127.0.0.1:4173/classes/hunter.html',{waitUntil:'domcontentloaded'});
+  await mobilePlayerPage.waitForSelector('.rsk-music-player');
+  const playerCollapsed=await mobilePlayerPage.locator('.rsk-music-player').evaluate(el=>el.classList.contains('is-collapsed'));
+  await mobilePlayerPage.locator('.rsk-music-collapse').click();
+  const playerExpanded=!(await mobilePlayerPage.locator('.rsk-music-player').evaluate(el=>el.classList.contains('is-collapsed')));
+  const expandedState=await mobilePlayerPage.locator('.rsk-music-collapse').getAttribute('aria-expanded');
+  const mobilePlayerOk=playerCollapsed&&playerExpanded&&expandedState==='true';
+  report.interactions.push({name:'mobile player starts compact and expands on demand',passed:mobilePlayerOk});
+  if(!mobilePlayerOk)report.runtimeErrors.push({route:'/classes/hunter.html',message:'Mobile player compact default or expand control failed'});
+  await mobilePlayerContext.close();
 } finally {
   await browser.close();
   await new Promise(resolveClose=>server.close(resolveClose));
