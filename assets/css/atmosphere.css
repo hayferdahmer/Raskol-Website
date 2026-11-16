@@ -226,3 +226,26 @@ body.cursor-hover .custom-cursor {
 body.cursor-ready .custom-cursor { opacity: 0; }
 body.cursor-ready.cursor-active .custom-cursor { opacity: 1; }
 body.cursor-active .cursor-glow { opacity: 1; }
+
+
+/* Cinemagraph scaffolding: исходная иллюстрация остаётся неподвижной */
+[data-rsk-cinemagraph] { position: relative; isolation: isolate; overflow: clip; }
+[data-rsk-cinemagraph] [data-rsk-cinema-layer] {
+  position: absolute; inset: 0; z-index: var(--rsk-cinema-depth, 1);
+  width: 100%; height: 100%; pointer-events: none; opacity: 0;
+  transform: translate3d(0,0,0); transition: opacity 1.8s ease; will-change: transform, opacity;
+}
+[data-rsk-cinemagraph].rsk-cinema-active [data-rsk-cinema-layer] { opacity: var(--rsk-cinema-opacity, .7); }
+[data-rsk-cinema-layer="clouds"] { animation: rsk-cinema-clouds 92s linear infinite alternate; }
+[data-rsk-cinema-layer="mist-back"] { animation: rsk-cinema-mist-back 58s ease-in-out infinite alternate; }
+[data-rsk-cinema-layer="mist-front"] { animation: rsk-cinema-mist-front 74s ease-in-out infinite alternate; }
+[data-rsk-cinema-layer="embers"] { animation: rsk-cinema-embers 24s ease-in-out infinite alternate; }
+[data-rsk-cinema-layer="light"] { animation: rsk-cinema-light 8s ease-in-out infinite alternate; mix-blend-mode: screen; }
+@keyframes rsk-cinema-clouds { from { transform: translate3d(-1.4%,.2%,0) scale(1.025); } to { transform: translate3d(1.8%,-.5%,0) scale(1.06); } }
+@keyframes rsk-cinema-mist-back { from { transform: translate3d(-1.5%,1%,0) scale(1.04); } to { transform: translate3d(2%,-1%,0) scale(1.08); } }
+@keyframes rsk-cinema-mist-front { from { transform: translate3d(2%,0,0) scale(1.03); } to { transform: translate3d(-2%,-1.2%,0) scale(1.07); } }
+@keyframes rsk-cinema-embers { from { transform: translate3d(-.4%,.8%,0); opacity: .28; } to { transform: translate3d(.6%,-.6%,0); opacity: .68; } }
+@keyframes rsk-cinema-light { from { opacity: .35; filter: brightness(.92); } to { opacity: .72; filter: brightness(1.08); } }
+@media (prefers-reduced-motion: reduce) {
+  [data-rsk-cinemagraph] [data-rsk-cinema-layer] { animation: none !important; transition: none !important; opacity: 0 !important; }
+}
