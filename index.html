@@ -43,16 +43,17 @@
     .mobile-profile-link{display:none}.ip-copy{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.server-endpoint{min-width:0}.server-endpoint strong{overflow-wrap:anywhere}@media(max-width:740px){.nav-cta.profile-cta{display:none}.mobile-profile-link{display:block}.ip-copy{grid-template-columns:1fr}}
     </style>
   <link rel="stylesheet" href="assets/css/brand.css">
+<link rel="stylesheet" href="assets/css/site-ui.css">
 </head>
 <body>
-  <div class="preloader" id="preloader" aria-hidden="true"><div class="preload-mark"><div class="preload-crest"></div><div class="preload-label">Мир раскололся</div></div></div>
+  <div class="preloader" id="preloader" aria-hidden="true"><div class="preload-mark"><img class="preload-crest" src="assets/images/raskol-crest.webp" alt="Герб РАСКОЛА"><div class="preload-label">Мир раскололся</div></div></div>
   <div class="cursor-glow" id="cursorGlow"></div><div class="custom-cursor" id="customCursor" aria-hidden="true"></div>
   <header class="topbar" id="topbar"><div class="container nav-wrap">
     <a class="brand" href="#top" aria-label="РАСКОЛ — на главную">
       <img class="brand-emblem" src="assets/images/raskol-crest.webp" alt="Эмблема РАСКОЛ — две короны над расколотым щитом" width="42" height="48">
       <span class="brand-word"><strong>РАСКОЛ</strong><small>ДВЕ КОРОНЫ</small></span>
     </a>
-    <nav class="nav-links" id="navLinks" aria-label="Основная навигация"><a href="world/index.html">Мир РАСКОЛА</a><a href="factions/index.html">Короны</a><a href="classes/index.html">Классы</a><a href="systems/index.html">Системы</a><a href="media/index.html">Медиа</a><a href="support/index.html">Поддержка</a><a class="mobile-profile-link" href="account/index.html">Профиль игрока</a><a href="#season">Летопись</a><a href="#faq">FAQ</a></nav>
+    <nav class="nav-links" id="navLinks" aria-label="Основная навигация"><a href="world/index.html">Мир РАСКОЛА</a><a href="factions/index.html">Короны</a><a href="systems/index.html">Экосистема</a><a href="media/index.html">Медиа</a><a href="support/index.html">Поддержка</a><a class="mobile-profile-link" href="account/index.html">Профиль игрока</a><a href="#season">Летопись</a></nav>
     <div style="display:flex;gap:9px;align-items:center"><a class="nav-cta shop-cta" href="shop/index.html">Магазин <span class="arrow">✦</span></a><a class="nav-cta profile-cta" href="account/index.html">Профиль игрока <span class="arrow">↗</span></a></div>
     <button class="mobile-toggle" id="mobileToggle" aria-expanded="false" aria-controls="navLinks">МЕНЮ +</button>
   </div></header>
@@ -102,7 +103,7 @@
       <div class="faq-item"><button class="faq-q" aria-expanded="false" aria-controls="faq-answer-7"><span>Все игровые системы уже доступны?</span><span>＋</span></button><div class="faq-a" id="faq-answer-7" aria-hidden="true"><p>Нет. Часть систем реализована, часть находится в разработке, а некоторые направления остаются планами. На сайте будем указывать только проверенные статусы.</p></div></div>
     </div></div></section>
   </main>
-  <footer class="footer" id="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><a class="brand" href="#top"><span class="brand-word"><strong>РАСКОЛ</strong><small>ДВЕ КОРОНЫ</small></span></a><p>Две короны. Шесть путей. Мир, чью летопись продолжают игроки.</p></div><div><h4>Путь игрока</h4><div class="footer-links"><a href="world/index.html">Мир РАСКОЛА</a><a href="factions/index.html">Две короны</a><a href="classes/index.html">Классы</a><a href="systems/index.html">Игровые системы</a><a href="media/index.html">Медиаархив</a><a href="support/index.html">Поддержка</a><a href="#start">Подключение</a><a href="#faq">Вопросы</a></div></div><div><h4>Документы и связь</h4><div class="footer-links"><a href="rules.html">Правила</a><a href="offer.html">Публичная оферта</a><a href="privacy.html">Конфиденциальность</a><a href="support/index.html">Центр поддержки</a><span class="footer-link-disabled">Telegram · ссылка будет опубликована</span><span class="footer-link-disabled">Discord · ссылка будет опубликована</span></div></div></div><div class="footer-bottom"><span>© РАСКОЛ — ДВЕ КОРОНЫ · <span id="currentYear">2026</span></span><span class="footer-disclaimer">Не является продуктом Mojang или Microsoft. Сведения о продавце и обязательные документы будут опубликованы до открытия платных функций.</span></div></div></footer>
+  <footer class="footer" id="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><a class="brand" href="#top"><span class="brand-word"><strong>РАСКОЛ</strong><small>ДВЕ КОРОНЫ</small></span></a><p>Две короны. Шесть путей. Мир, чью летопись продолжают игроки.</p></div><div><h4>Путь игрока</h4><div class="footer-links"><a href="world/index.html">Мир РАСКОЛА</a><a href="factions/index.html">Две короны</a><a href="classes/index.html">Классы</a><a href="systems/index.html">Игровые системы</a><a href="media/index.html">Медиаархив</a><a href="support/index.html">Поддержка</a><a href="#start">Подключение</a><a href="#faq">Частые вопросы</a></div></div><div><h4>Документы и связь</h4><div class="footer-links"><a href="rules.html">Правила</a><a href="offer.html">Публичная оферта</a><a href="privacy.html">Конфиденциальность</a><a href="support/index.html">Центр поддержки</a><span class="footer-link-disabled">Telegram · ссылка будет опубликована</span><span class="footer-link-disabled">Discord · ссылка будет опубликована</span></div></div></div><div class="footer-bottom"><span>© РАСКОЛ — ДВЕ КОРОНЫ · <span id="currentYear">2026</span></span><span class="footer-disclaimer">Не является продуктом Mojang или Microsoft. Сведения о продавце и обязательные документы будут опубликованы до открытия платных функций.</span></div></div></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     (()=>{
@@ -151,5 +152,6 @@
       window.setInterval(refreshServerStatus,60000);
     })();
   </script>
+<script src="assets/js/site-ui.js" defer></script>
 </body>
 </html>
