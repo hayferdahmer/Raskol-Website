@@ -63,12 +63,12 @@ try{
       if(!metrics.hasMain||metrics.mainCount!==1)report.runtimeErrors.push({route,message:'Expected exactly one main landmark'});
       if(route==='/shop/'&&viewport.width===390&&!metrics.shopNavVisible)report.keyboard.push({route,viewport:viewport.width,message:'Shop navigation is hidden on mobile'});
       if(!metrics.skip||!metrics.skipTarget)report.keyboard.push({route,viewport:viewport.width,message:'Skip link or its target is missing'});
-      if(viewport.width===1440||viewport.width===390||(viewport.width===320&&['/classes/hunter.html','/classes/specializations.html','/shop/','/support/'].includes(route))||(viewport.width===768&&route==='/shop/')){
+      if([1440,768,390,320].includes(viewport.width)){
         await page.addStyleTag({content:'.reveal,.rsk-reveal{opacity:1!important;transform:none!important;transition:none!important}'});
         const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
         for(const v of axe.violations)report.axe.push({route,viewport:viewport.width,id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.slice(0,8).map(n=>({target:n.target,summary:n.failureSummary?.slice(0,260)}))});
         const shot=resolve(root,'artifacts/browser-qa',route==='/'?'home':route.replaceAll('/','_').replace(/^_+|_+$/g,''));
-        if(viewport.width===1440||viewport.width===390){
+        if([1440,768,390,320].includes(viewport.width)){
           const path=shot+'-'+viewport.width+'.png';
           await page.screenshot({path,animations:'disabled'});
           report.screenshots.push(path.replace(root+'/',''));
