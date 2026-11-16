@@ -26,7 +26,7 @@
 /* Глобальная страховка: пользовательское предпочтение важнее декоративной анимации */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto!important}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 
 /* Поддерживаем читаемость подписи герба в нижнем колонтитуле главной */
