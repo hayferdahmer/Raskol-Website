@@ -234,7 +234,7 @@
     const email=$('#socialRewardEmail').value.trim();
     const selected=$('input[name="socialChannel"]:checked',socialForm);
     const status=$('#socialRewardStatus');
-    if(!/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
     if(!selected.length){status.textContent='Выбери один канал, на который подписался.';return;}
     status.textContent='Демо-режим: запрос не отправлен, подписка не проверена и 3 прокрутки не начислены. Для настоящей награды нужен подключённый сервис подтверждения.';
   });
