@@ -159,13 +159,64 @@
     if(!button||rolling)return;
     currentTier=button.dataset.tier;renderRitual();
   });
+  const reelAudio = { context: null, enabled: true, lastTick: -1 };
+  function playReelTone(frequency, duration, volume, type='sine') {
+    if (!reelAudio.enabled || reducedMotion) return;
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      const context = reelAudio.context || (reelAudio.context = new AudioContextClass());
+      if (context.state === 'suspended') context.resume();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const now = context.currentTime;
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, now);
+      oscillator.frequency.exponentialRampToValueAtTime(Math.max(35, frequency * .72), now + duration);
+      gain.gain.setValueAtTime(.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume, now + .012);
+      gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+      oscillator.connect(gain);gain.connect(context.destination);
+      oscillator.start(now);oscillator.stop(now + duration + .025);
+    } catch (_) { /* Звук необязателен: рулетка работает и без Web Audio. */ }
+  }
+  function playReelTick(index, speed) {
+    if (index === reelAudio.lastTick) return;
+    reelAudio.lastTick = index;
+    const pitch = 420 + Math.min(520, speed * 110);
+    playReelTone(pitch, .045, .018, 'triangle');
+  }
+  function playReelImpact(rarity) {
+    const base = rarity === 'legendary' ? 660 : rarity === 'relic' ? 560 : rarity === 'rare' ? 470 : 390;
+    playReelTone(base, .42, .075, 'sine');
+    window.setTimeout(() => playReelTone(base * 1.5, .58, .045, 'sine'), 85);
+  }
   function makeReel(winner){
     const pool=getCaseRewards(currentCase);
-    const sequence=Array.from({length:44},(_,i)=>pool[(i*7+Math.floor(Math.random()*pool.length))%pool.length]);
-    const winnerIndex=37;sequence[winnerIndex]=winner;
-    const track=$('#rouletteTrack');track.style.transition='none';track.style.transform='translateX(0)';
-    track.innerHTML=sequence.map(item=>'<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>').join('');
+    const sequence=Array.from({length:58},(_,i)=>pool[(i*7+Math.floor(Math.random()*pool.length))%pool.length]);
+    const winnerIndex=49;sequence[winnerIndex]=winner;
+    const track=$('#rouletteTrack');track.style.transition='none';track.style.filter='none';track.style.transform='translate3d(0,0,0)';
+    track.innerHTML=sequence.map((item,index)=>'<div class="roll-item '+item.rarity+(index===winnerIndex?' is-predestined':'')+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>').join('');
     return {track,winnerIndex};
+  }
+  function reelPhysicsProgress(elapsed, duration) {
+    const acceleration = .95;
+    const braking = 4.15;
+    const cruise = Math.max(0, duration - acceleration - braking);
+    const brakeRate = 1.72;
+    const accelerationDistance = acceleration * (.12 + .88 * .5);
+    const brakeDistance = (1 - Math.exp(-brakeRate * braking)) / brakeRate;
+    const totalDistance = accelerationDistance + cruise + brakeDistance;
+    if (elapsed <= acceleration) {
+      const u = Math.max(0, elapsed / acceleration);
+      const integral = .12 * u + .88 * (u * u * u - .5 * u * u * u * u);
+      return integral * acceleration / totalDistance;
+    }
+    const afterAcceleration = elapsed - acceleration;
+    if (afterAcceleration <= cruise) return (accelerationDistance + afterAcceleration) / totalDistance;
+    const brakeTime = Math.min(braking, afterAcceleration - cruise);
+    const brakeTravel = (1 - Math.exp(-brakeRate * brakeTime)) / brakeRate;
+    return Math.min(1, (accelerationDistance + cruise + brakeTravel) / totalDistance);
   }
   function celebrate(rarity){
     const host=$('#celebration');host.innerHTML='';
@@ -209,12 +260,13 @@
     if(isBonus&&!demoState.bonusReady)return;
     rolling=true;currentWinner=null;currentRollIsBonus=Boolean(isBonus);renderRitual();
     const winner=chooseReward(isBonus?bonusOdds:undefined);const {track,winnerIndex}=makeReel(winner);
-    dialog.classList.remove('is-won');dialog.classList.add('is-charging','is-rolling');
+    dialog.classList.remove('is-won','is-braking','is-impact');dialog.classList.add('is-charging','is-rolling');
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     $('#rollBtn').disabled=true;$('#rollBtn').textContent='Печать снимается…';
     $('#rollResult').textContent=isBonus?'Дар десяти испытаний пробуждается…':'Древняя печать откликается…';
     $('#rollProgress').style.transform='scaleX(0)';
-    const duration=reducedMotion?1:10200;
+    reelAudio.lastTick=-1;
+    const duration=reducedMotion?1:11200;
     const begin=()=>{
       dialog.classList.remove('is-charging');
       const viewport=$('.roulette-window');
@@ -222,19 +274,47 @@
       const viewportRect=viewport.getBoundingClientRect();
       const target=winnerRect.left-viewportRect.left+winnerRect.width/2-viewportRect.width/2;
       const started=performance.now();
-      const progressAt=p=>{if(p<.12){const t=p/.12;return .06*t*t;}if(p<.72)return .06+.64*((p-.12)/.60);const t=(p-.72)/.28;return .70+.30*(t+t*t*t-t*t*t*t);};
+      let previousPosition=0;
       const tick=now=>{
-        const p=Math.min(1,(now-started)/duration);
-        const eased=reducedMotion?1:progressAt(p);
-        track.style.transform='translate3d('+(-target*eased)+'px,0,0)';
-        const speed=reducedMotion?0:(progressAt(Math.min(1,p+.003))-eased)/.003;track.style.filter=speed>0?'blur('+Math.min(.38,speed*.34).toFixed(3)+'px)':'none';
+        const elapsed=Math.min(duration,Math.max(0,now-started));
+        const p=elapsed/duration;
+        const eased=reducedMotion?1:reelPhysicsProgress(elapsed/1000,duration/1000);
+        const position=target*eased;
+        track.style.transform='translate3d('+(-position)+'px,0,0)';
+        const delta=Math.max(0,position-previousPosition);
+        const speed=delta/Math.max(1,now-(tick.lastTime||now))*1000;
+        previousPosition=position;tick.lastTime=now;
+        track.style.filter=speed>24?'blur('+Math.min(.72,speed/1250).toFixed(3)+'px)':'none';
+        const itemWidth=track.children[0]?.getBoundingClientRect().width||127;
+        const crossed=Math.floor(position/itemWidth);
+        if(crossed>reelAudio.lastTick)playReelTick(crossed,speed);
+        if(p>.66){dialog.classList.add('is-braking');$('#rollResult').textContent='Инерция угасает…'}
+        else if(p<.1)$('#rollResult').textContent='Разгон механизма…';
+        else if(p<.58)$('#rollResult').textContent='Реликвии проносятся перед взором…';
+        else if(p<.88)$('#rollResult').textContent='Механизм замедляется…';
+        else $('#rollResult').textContent='Последние обороты…';
         $('#rollProgress').style.transform='scaleX('+p+')';
-        if(p<.18)$('#rollResult').textContent='Печать трескается…';
-        else if(p<.58)$('#rollResult').textContent='Реликвии проходят перед взором…';
-        else if(p<.88)$('#rollResult').textContent='Колесо теряет ход…';
-        else $('#rollResult').textContent='Последние мгновения…';
-        if(p<1)requestAnimationFrame(tick);
-        else {track.style.transform='translate3d('+(-target)+'px,0,0)';track.style.filter='none';rolling=false;dialog.classList.remove('is-rolling');showWinner(winner,isBonus);}
+        if(elapsed<duration)requestAnimationFrame(tick);
+        else {
+          dialog.classList.remove('is-rolling','is-braking');dialog.classList.add('is-impact');
+          track.style.filter='none';
+          const settleStarted=performance.now();
+          const settle=stamp=>{
+            const t=Math.min(1,(stamp-settleStarted)/260);
+            const rebound=1-Math.pow(1-t,3);
+            const offset=4*(1-rebound);
+            track.style.transform='translate3d('+(-target-offset)+'px,0,0)';
+            if(t<1)requestAnimationFrame(settle);
+            else {
+              track.style.transform='translate3d('+(-target)+'px,0,0)';
+              const winnerCard=track.children[winnerIndex];
+              winnerCard.classList.remove('is-predestined');winnerCard.classList.add('is-landed');
+              rolling=false;playReelImpact(winner.rarity);
+              window.setTimeout(()=>{dialog.classList.remove('is-impact');showWinner(winner,isBonus);},220);
+            }
+          };
+          requestAnimationFrame(settle);
+        }
       };
       requestAnimationFrame(tick);
     };
