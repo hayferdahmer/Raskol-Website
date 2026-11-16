@@ -18,7 +18,7 @@
   html { scroll-padding-top: 76px; }
   body { overflow-x: hidden; }
   img,svg,video,canvas { max-width: 100%; }
-  .top { height: auto; min-height: 68px; }
+  .top { height: auto; min-height: 68px; flex-wrap: wrap; gap: 8px; padding: 10px 0; }
   .topin { min-height: 68px; height: auto; padding: 10px 0; flex-wrap: wrap; }
   .topin .brand,.world-top .world-brand,.support-top .brand { min-width: 0; }
   .nav,.world-nav,.support-nav {
@@ -29,7 +29,7 @@
     overscroll-behavior-inline: contain;
   }
   .nav a,.world-nav a,.support-nav a {
-    flex: 0 0 auto; min-height: 40px; display: inline-flex !important; align-items: center;
+    flex: 0 0 auto; min-height: 44px; display: inline-flex !important; align-items: center;
   }
   .grid,.spec-grid,.facts,.specs,.layout { grid-template-columns: minmax(0,1fr); }
   .detail-head { grid-template-columns: minmax(0,1fr); gap: 10px; }
@@ -75,8 +75,8 @@
   .collection h3,.collection:first-child h3 { font-size: clamp(27px,7vw,40px); }
   .collection:after { width: 90px; height: 90px; right: 18px; top: 18px; }
   .catalog-tools { align-items: stretch; }
-  .filters { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; padding: 3px 1px 8px; }
-  .filter { flex: 0 0 auto; min-height: 42px; }
+  .shop-page .filters { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; padding: 3px 1px 8px; }
+  .shop-page .filter { flex: 0 0 auto; min-height: 44px; }
   .catalog-search { width: 100%; min-height: 44px; }
   .product { min-width: 0; padding: 11px; }
   .product h3 { font-size: 22px; }
