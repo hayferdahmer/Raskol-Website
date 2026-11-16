@@ -21,6 +21,9 @@
   };
   const saved = readState(localStorage, stateKey);
   const session = readState(sessionStorage, sessionKey);
+  const hadSession = sessionStorage.getItem(sessionKey) !== null;
+  const shouldAutoplay = !hadSession || Boolean(session.playing);
+  let resumeAt = session.index === index ? Math.max(0, Number(session.time) || 0) : 0;
   let index = Number.isInteger(session.index) ? session.index : (Number.isInteger(saved.index) ? saved.index : 0);
   index = Math.max(0, Math.min(tracks.length - 1, index));
   let shuffle = Boolean(saved.shuffle);
@@ -104,7 +107,7 @@
   function persist() {
     try {
       localStorage.setItem(stateKey, JSON.stringify({ index, volume: audio.volume, shuffle, repeat, collapsed: player.classList.contains('is-collapsed') }));
-      sessionStorage.setItem(sessionKey, JSON.stringify({ index, time: Number.isFinite(audio.currentTime) ? audio.currentTime : 0, playing: !audio.paused }));
+      sessionStorage.setItem(sessionKey, JSON.stringify({ index, time: restoring ? resumeAt : (Number.isFinite(audio.currentTime) ? audio.currentTime : 0), playing: !audio.paused }));
     } catch (_) { /* Хранилище может быть отключено настройками браузера. */ }
   }
 
@@ -238,13 +241,15 @@
   audio.load();
   audio.addEventListener('loadedmetadata', () => {
     if (session.time > 0 && session.index === index && Number.isFinite(audio.duration)) {
-      audio.currentTime = Math.min(session.time, Math.max(0, audio.duration - 1));
+      audio.currentTime = Math.min(resumeAt, Math.max(0, audio.duration - 1));
     }
     restoring = false;
+    persist();
   }, { once: true });
 
   // Автозапуск пробуем сразу; запрет браузера не обходим, а показываем понятную кнопку.
-  startPlayback();
+  if (shouldAutoplay) startPlayback();
+  else status.textContent = 'Музыка выключена';
   window.addEventListener('pagehide', persist);
   document.addEventListener('visibilitychange', () => {
     // Не вызываем pause(): музыка продолжает играть в фоновой вкладке.
