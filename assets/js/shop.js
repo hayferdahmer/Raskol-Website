@@ -84,13 +84,15 @@
   $('#productSort').addEventListener('change',renderProducts);
   $$('.collection').forEach(card=>card.addEventListener('click',()=>{currentCollection=card.dataset.collection;currentCategory='all';$$('.collection').forEach(x=>x.classList.toggle('selected',x===card));$$('.filter').forEach(x=>x.classList.toggle('active',x.dataset.cat==='all'));renderProducts();}));
   const productModal=$('#productModal');
+  const modalReturnFocus=new WeakMap();
+  function openModal(modal,focusTarget){modalReturnFocus.set(modal,document.activeElement);modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';requestAnimationFrame(()=>focusTarget?.focus());}
   function openProduct(id){
     const p=products.find(x=>x.id===id);if(!p)return;
     $('#productModalType').textContent=p.type+' · '+(p.collection==='regalia'?'Регалии двух корон':p.collection==='ash'?'Пепел':p.collection==='crimson'?'Багрянец':'Сезонная серия');
     $('#productModalTitle').textContent=p.name;$('#productModalDesc').textContent=p.desc;$('#productModalArt').innerHTML=art(p.icon);$('#productModalPrice').innerHTML=p.price+' <small>ИМП.</small>';
-    productModal.classList.add('open');document.body.style.overflow='hidden';
+    openModal(productModal,$('#closeProductModal'));
   }
-  function closeModal(modal){modal.classList.remove('open');if(!$('.modal.open'))document.body.style.overflow='';}
+  function closeModal(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');if(!$('.modal.open'))document.body.style.overflow='';const target=modalReturnFocus.get(modal);if(target?.isConnected)target.focus();}
   $('#catalogGrid').addEventListener('click',e=>{const b=e.target.closest('[data-preview]');if(b)openProduct(b.dataset.preview);});
   $('#closeProductModal').addEventListener('click',()=>closeModal(productModal));
   productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal);});
@@ -115,10 +117,10 @@
     $('#winPanel').className='win-panel';$('#winPanel').innerHTML='';
     dialog.classList.remove('is-rolling','is-won');
     $('#rollBtn').disabled=false;$('#rollBtn').textContent='Начать обряд';
-    buildIdleReel();caseModal.classList.add('open');document.body.style.overflow='hidden';
+    buildIdleReel();openModal(caseModal,$('#closeModal'));
   }
   function buildIdleReel(){
-    const track=$('#rouletteTrack');track.style.transition='none';track.style.transform='translateX(0)';
+    const track=$('#rouletteTrack');track.style.transition='none';track.style.filter='none';track.style.transform='translate3d(0,0,0)';
     track.innerHTML=Array.from({length:12},(_,i)=>{const pool=getCaseRewards(currentCase);const item=pool[i%pool.length];return '<div class="roll-item '+item.rarity+'"><span class="roll-icon">'+item.icon+'</span><small>'+item.name+'</small></div>';}).join('');
   }
   function chooseReward(weightsOverride){
@@ -201,23 +203,27 @@
     $('#rollBtn').disabled=true;$('#rollBtn').textContent='Печать снимается…';
     $('#rollResult').textContent=isBonus?'Дар десяти испытаний пробуждается…':'Древняя печать откликается…';
     $('#rollProgress').style.transform='scaleX(0)';
-    const winnerCard=track.children[winnerIndex];
-    const target=winnerCard.offsetLeft+(winnerCard.offsetWidth/2)-($('.roulette-window').clientWidth/2);
-    const duration=reducedMotion?100:7800;
+    const duration=reducedMotion?1:10200;
     const begin=()=>{
       dialog.classList.remove('is-charging');
+      const viewport=$('.roulette-window');
+      const winnerRect=track.children[winnerIndex].getBoundingClientRect();
+      const viewportRect=viewport.getBoundingClientRect();
+      const target=winnerRect.left-viewportRect.left+winnerRect.width/2-viewportRect.width/2;
       const started=performance.now();
+      const progressAt=p=>{if(p<.12){const t=p/.12;return .06*t*t;}if(p<.72)return .06+.64*((p-.12)/.60);const t=(p-.72)/.28;return .70+.30*(1-Math.pow(1-t,5));};
       const tick=now=>{
         const p=Math.min(1,(now-started)/duration);
-        const eased=1-Math.pow(1-p,5);
+        const eased=reducedMotion?1:progressAt(p);
         track.style.transform='translate3d('+(-target*eased)+'px,0,0)';
+        track.style.filter=p<.72&&!reducedMotion?'blur(.32px)':'none';
         $('#rollProgress').style.transform='scaleX('+p+')';
         if(p<.18)$('#rollResult').textContent='Печать трескается…';
-        else if(p<.72)$('#rollResult').textContent='Реликвии проходят перед взором…';
-        else if(p<.94)$('#rollResult').textContent='Последние мгновения…';
-        else $('#rollResult').textContent='Печать почти сорвана…';
+        else if(p<.58)$('#rollResult').textContent='Реликвии проходят перед взором…';
+        else if(p<.88)$('#rollResult').textContent='Колесо теряет ход…';
+        else $('#rollResult').textContent='Последние мгновения…';
         if(p<1)requestAnimationFrame(tick);
-        else {rolling=false;dialog.classList.remove('is-rolling');showWinner(winner,isBonus);}
+        else {track.style.transform='translate3d('+(-target)+'px,0,0)';track.style.filter='none';rolling=false;dialog.classList.remove('is-rolling');showWinner(winner,isBonus);}
       };
       requestAnimationFrame(tick);
     };
@@ -252,7 +258,7 @@
   function closeCaseModal(){if(rolling)return;closeModal(caseModal);}
   $('#closeModal').addEventListener('click',closeCaseModal);$('#modalClose2').addEventListener('click',closeCaseModal);
   caseModal.addEventListener('click',e=>{if(e.target===caseModal)closeCaseModal();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(productModal.classList.contains('open'))closeModal(productModal);if(caseModal.classList.contains('open'))closeCaseModal();}});
+  document.addEventListener('keydown',e=>{const activeModal=$('.modal.open');if(!activeModal)return;if(e.key==='Escape'){e.preventDefault();if(activeModal===productModal)closeModal(productModal);else closeCaseModal();return;}if(e.key!=='Tab')return;const focusable=$('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',activeModal).filter(el=>el.getClientRects().length);if(!focusable.length){e.preventDefault();return;}const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}});
 
   const revealTargets=$$('.reveal');
   if('IntersectionObserver'in window&&!reducedMotion){
