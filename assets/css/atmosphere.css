@@ -251,3 +251,22 @@ body.cursor-active .cursor-glow { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   [data-rsk-cinemagraph] [data-rsk-cinema-layer] { animation: none !important; transition: none !important; opacity: var(--rsk-cinema-opacity, .7) !important; transform: none !important; }
 }
+
+
+/* Cinemagraph главной: неподвижная исходная иллюстрация — отдельный base layer. */
+.hero-art[data-rsk-cinemagraph] { position:absolute; inset:0; overflow:hidden; isolation:isolate; }
+.hero-art[data-rsk-cinemagraph] picture { position:absolute; inset:0; z-index:0; display:block; }
+.hero-art[data-rsk-cinemagraph] picture img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 48%; }
+.hero-art[data-rsk-cinemagraph] .rsk-cinema-layer { position:absolute; inset:-5%; display:block; pointer-events:none; opacity:0; transition:opacity 1.8s ease; will-change:transform,opacity; }
+.hero-art[data-rsk-cinemagraph].rsk-cinema-active .rsk-cinema-layer { opacity:var(--rsk-cinema-opacity,.7); }
+.hero-art .rsk-cinema-clouds { z-index:1; background:radial-gradient(ellipse at 18% 24%,rgba(9,9,14,.22),transparent 38%),radial-gradient(ellipse at 78% 18%,rgba(155,95,98,.18),transparent 42%); mix-blend-mode:screen; animation:rsk-cinema-clouds 92s ease-in-out infinite alternate; }
+.hero-art .rsk-cinema-mist-back { z-index:2; background:radial-gradient(ellipse at 48% 59%,rgba(184,164,161,.2),transparent 48%),radial-gradient(ellipse at 76% 70%,rgba(191,155,151,.16),transparent 42%); filter:blur(18px); animation:rsk-cinema-mist-back 58s ease-in-out infinite alternate; }
+.hero-art .rsk-cinema-mist-front { z-index:3; background:linear-gradient(0deg,rgba(184,159,158,.17),transparent 34%),radial-gradient(ellipse at 26% 84%,rgba(192,168,165,.22),transparent 32%); filter:blur(24px); animation:rsk-cinema-mist-front 74s ease-in-out infinite alternate; }
+.hero-art .rsk-cinema-light { z-index:4; background:radial-gradient(ellipse at 52% 47%,rgba(224,88,73,.17),transparent 18%),radial-gradient(ellipse at 82% 22%,rgba(255,180,150,.09),transparent 26%); mix-blend-mode:screen; animation:rsk-cinema-light 8s ease-in-out infinite alternate; }
+.hero-art .rsk-cinema-layer { --rsk-cinema-opacity:.42; }
+.hero-art .rsk-cinema-clouds { --rsk-cinema-opacity:.22; }
+.hero-art .rsk-cinema-mist-back { --rsk-cinema-opacity:.38; }
+.hero-art .rsk-cinema-mist-front { --rsk-cinema-opacity:.32; }
+.hero-art .rsk-cinema-light { --rsk-cinema-opacity:.26; }
+@media(max-width:700px) { .hero-art[data-rsk-cinemagraph] picture img { object-position:54% center; } .hero-art .rsk-cinema-layer { filter:blur(12px); } }
+@media(prefers-reduced-motion:reduce) { .hero-art[data-rsk-cinemagraph] .rsk-cinema-layer { animation:none!important; transition:none!important; transform:none!important; } }
