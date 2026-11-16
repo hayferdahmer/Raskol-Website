@@ -96,5 +96,5 @@ assert.ok(mobileCss.includes('max-width: 430px')&&mobileCss.includes('.case-grid
 
 
 const classCatalog=await readFile(resolve(root,'classes/index.html'),'utf8'),classStyles=await readFile(resolve(root,'assets/css/classes.css'),'utf8');
-assert.ok(!/\\sstyle\\s*=/.test(classCatalog),'Class catalog must not keep presentation in inline style attributes');
+assert.ok(!/\sstyle\s*=/.test(classCatalog),'Class catalog must not keep presentation in inline style attributes');
 for(const selector of ['.catalog-callout{','.catalog-callout__eyebrow{','.catalog-callout__title{','.catalog-callout__description{','.catalog-callout__actions{','.catalog-callout__link{'])assert.ok(classStyles.includes(selector),'Missing extracted class catalog component '+selector);
