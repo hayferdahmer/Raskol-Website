@@ -97,9 +97,11 @@ try{
   await shop.waitForSelector('#catalogGrid [data-preview]');
   const productTrigger=shop.locator('#catalogGrid [data-preview]').first();
   await productTrigger.click();
+  await shop.waitForFunction(()=>document.activeElement?.id==='closeProductModal',null,{timeout:2500});
   const productOpen=await shop.locator('#productModal').getAttribute('aria-hidden')==='false';
   const productFocus=await shop.evaluate(()=>document.activeElement?.id);
   await shop.keyboard.press('Escape');
+  await shop.waitForFunction(()=>document.activeElement?.matches('[data-preview]'),null,{timeout:2500});
   const productClosed=await shop.locator('#productModal').getAttribute('aria-hidden')==='true';
   const productReturned=await shop.evaluate(()=>document.activeElement?.matches('[data-preview]'));
   report.interactions.push({name:'product dialog focus and Escape',passed:productOpen&&productFocus==='closeProductModal'&&productClosed&&productReturned});
@@ -110,9 +112,11 @@ try{
   await shop.locator('#enterCaseHall').click();
   const caseTrigger=shop.locator('#caseGrid [data-case]').first();
   await caseTrigger.click();
+  await shop.waitForFunction(()=>document.activeElement?.id==='closeModal',null,{timeout:2500});
   const caseOpen=await shop.locator('#caseModal').getAttribute('aria-hidden')==='false';
   const caseFocus=await shop.evaluate(()=>document.activeElement?.id);
   await shop.keyboard.press('Escape');
+  await shop.waitForFunction(()=>document.activeElement?.matches('[data-case]'),null,{timeout:2500});
   const caseClosed=await shop.locator('#caseModal').getAttribute('aria-hidden')==='true';
   const caseReturned=await shop.evaluate(()=>document.activeElement?.matches('[data-case]'));
   report.interactions.push({name:'case dialog focus and Escape',passed:caseOpen&&caseFocus==='closeModal'&&caseClosed&&caseReturned});
