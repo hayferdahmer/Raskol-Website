@@ -1,4 +1,4 @@
-﻿#define AppVersion "0.5.0"
+﻿#define AppVersion "0.5.1"
 #define DistDir AddBackslash(SourcePath) + "..\dist"
 
 [Setup]
@@ -19,7 +19,7 @@ WizardStyle=modern
 SetupLogging=yes
 CloseApplications=no
 ArchitecturesInstallIn64BitMode=x64
-UninstallDisplayName=РАСКОЛ — HUD 0.5.0
+UninstallDisplayName=РАСКОЛ — HUD 0.5.1
 
 [Languages]
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
@@ -30,7 +30,7 @@ WelcomeLabel2=Мастер установит клиентский HUD и Fabric
 FinishedLabel=Установка завершена. Запусти Minecraft 26.2 через профиль Fabric.
 
 [Files]
-Source: "{#DistDir}\raskolhud-client-0.5.0.jar"; DestDir: "{code:GetModsDir}"; Flags: ignoreversion
+Source: "{#DistDir}\raskolhud-client-0.5.1.jar"; DestDir: "{code:GetModsDir}"; Flags: ignoreversion
 Source: "{#DistDir}\fabric-api-0.161.0+26.2.jar"; DestDir: "{code:GetModsDir}"; Flags: ignoreversion
 
 [InstallDelete]
