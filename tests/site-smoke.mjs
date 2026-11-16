@@ -10,11 +10,15 @@ const designTokens=await readFile(resolve(root,'assets/css/tokens.css'),'utf8');
 assert.ok(designTokens.includes('--rsk-color-void:#090709')&&designTokens.includes('--rsk-color-gold:#c7a477')&&designTokens.includes('--rsk-font-display:'),'Shared RASKOL design tokens are incomplete');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');if(relative(root,path)==='index.html')assert.ok(!html.includes('tokens.css'),'Homepage must remain isolated from the internal design-token layer');else assert.ok(html.includes('tokens.css'),'Internal page must load shared design tokens: '+relative(root,path));}
 const sharedClassPages=['classes/index.html','classes/hunter.html','classes/mage.html','classes/priest.html','classes/rogue.html','classes/warlock.html','classes/warrior.html'];
-for(const path of sharedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('classes.css'),'Shared class stylesheet is missing from '+path);assert.ok(!/<style\\b/i.test(html),'Repeated class-page styles must live in classes.css, not inline: '+path);}
+for(const path of sharedClassPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('classes.css'),'Shared class stylesheet is missing from '+path);assert.ok(!/<style\b/i.test(html),'Repeated class-page styles must live in classes.css, not inline: '+path);}
 const portalPages=['world/index.html','factions/index.html','systems/index.html','map/index.html','media/index.html'];
 const componentsCss=await readFile(resolve(root,'assets/css/components.css'),'utf8'),portalCss=await readFile(resolve(root,'assets/css/world.css'),'utf8');
 for(const path of portalPages){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Portal component foundation is missing from '+path);}
 assert.ok(componentsCss.includes('.rsk-button')&&componentsCss.includes('.rsk-card')&&componentsCss.includes('.rsk-panel')&&componentsCss.includes('.rsk-nav'),'Shared component primitives are incomplete');
+const shopCssSource=await readFile(resolve(root,'assets/css/shop.css'),'utf8');
+for(const path of ['shop/index.html','account/index.html']){const html=await readFile(resolve(root,path),'utf8');assert.ok(html.includes('components.css'),'Commerce component foundation is missing from '+path);}
+assert.ok(componentsCss.includes('.rsk-button--commerce')&&componentsCss.includes('.rsk-nav--commerce')&&componentsCss.includes('.shop-page .btn')&&componentsCss.includes('.account-page-root .btn'),'Commerce button and navigation primitives are incomplete');
+assert.ok(!shopCssSource.includes('.nav{display:flex;gap:23px;')&&!shopCssSource.includes('.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;'),'Commerce navigation and button base rules must have one owner in components.css');
 assert.ok(!/^\\.world-action\\{/m.test(portalCss)&&!/^\\.world-card\\{/m.test(portalCss)&&!/^\\.world-nav\\{/m.test(portalCss)&&!/^\\.world-note\\{/m.test(portalCss),'Shared portal base component rules must have one owner in components.css; responsive overrides may remain local');
 
 assert.ok(htmlFiles.length>=5,'Expected public HTML pages');
