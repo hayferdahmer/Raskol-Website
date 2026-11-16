@@ -98,6 +98,9 @@ try{
   const shop=await shopContext.newPage();
   await shop.goto('http://127.0.0.1:4173/shop/',{waitUntil:'domcontentloaded'});
   await shop.waitForSelector('#catalogGrid [data-preview]');
+  await shop.locator('#productSearch').focus();
+  const searchFocus=await shop.locator('#productSearch').evaluate(el=>{const style=getComputedStyle(el);return style.outlineStyle!=='none'&&parseFloat(style.outlineWidth)>=2;});
+  if(!searchFocus)report.keyboard.push({route:'/shop/',viewport:1440,message:'Product search has no visible keyboard focus ring'});
   const productTrigger=shop.locator('#catalogGrid [data-preview]').first();
   await productTrigger.click();
   await shop.waitForFunction(()=>document.activeElement?.id==='closeProductModal',null,{timeout:2500});
