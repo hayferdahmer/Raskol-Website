@@ -232,7 +232,7 @@
   socialForm.addEventListener('submit',event=>{
     event.preventDefault();
     const email=$('#socialRewardEmail').value.trim();
-    const selected=$('input[name="socialChannel"]:checked',socialForm);
+    const selected=$$('input[name="socialChannel"]:checked',socialForm);
     const status=$('#socialRewardStatus');
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){status.textContent='Укажи корректный адрес электронной почты.';return;}
     if(!selected.length){status.textContent='Выбери один канал, на который подписался.';return;}
