@@ -249,5 +249,5 @@ body.cursor-active .cursor-glow { opacity: 1; }
 @keyframes rsk-cinema-embers { from { transform: translate3d(-.4%,.8%,0); opacity: .28; } to { transform: translate3d(.6%,-.6%,0); opacity: .68; } }
 @keyframes rsk-cinema-light { from { opacity: .35; filter: brightness(.92); } to { opacity: .72; filter: brightness(1.08); } }
 @media (prefers-reduced-motion: reduce) {
-  [data-rsk-cinemagraph] [data-rsk-cinema-layer] { animation: none !important; transition: none !important; opacity: 0 !important; }
+  [data-rsk-cinemagraph] [data-rsk-cinema-layer] { animation: none !important; transition: none !important; opacity: var(--rsk-cinema-opacity, .7) !important; transform: none !important; }
 }
