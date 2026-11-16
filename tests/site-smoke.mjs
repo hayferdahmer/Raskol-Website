@@ -9,6 +9,7 @@ const htmlFiles=files.filter(path=>extname(path)==='.html'),jsFiles=files.filter
 assert.ok(htmlFiles.length>=5,'Expected public HTML pages');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');const ids=[...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);assert.equal(new Set(ids).size,ids.length,'Duplicate IDs in '+relative(root,path));for(const m of html.matchAll(/(?:href|src)="([^"]+)"/g)){const target=m[1].split('#')[0].split('?')[0];if(!target||target.startsWith('http:')||target.startsWith('https:')||target.startsWith('mailto:')||target.startsWith('tel:')||target.startsWith('data:')||target.startsWith('//'))continue;let resolved=resolve(join(path,'..'),decodeURIComponent(target));if(target.endsWith('/'))resolved=resolve(resolved,'index.html');assert.ok(files.includes(resolved),'Broken local reference in '+relative(root,path)+': '+target);}}
 for(const path of jsFiles)new vm.Script(await readFile(path,'utf8'),{filename:relative(root,path)});
+for(const path of htmlFiles){const html=await readFile(path,'utf8');for(const [index,match] of [...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)].entries()){if(match[1].trim())new vm.Script(match[1],{filename:relative(root,path)+' inline script '+index});}}
 for(const path of cssFiles){let depth=0;for(const ch of await readFile(path,'utf8')){if(ch==='{')depth++;if(ch==='}')depth--;assert.ok(depth>=0,'Unexpected CSS closing brace in '+relative(root,path));}assert.equal(depth,0,'Unclosed CSS block in '+relative(root,path));}
 const shop=await readFile(resolve(root,'assets/js/shop.js'),'utf8'),account=await readFile(resolve(root,'assets/js/account.js'),'utf8'),shopHtml=await readFile(resolve(root,'shop/index.html'),'utf8'),accountHtml=await readFile(resolve(root,'account/index.html'),'utf8');
 for(const id of ['productModal','caseModal','closeProductModal','closeModal','modalClose2','rouletteTrack','rollBtn','prizePool'])assert.ok(shopHtml.includes('id="'+id+'"'),'Missing shop element '+id);
@@ -23,6 +24,8 @@ assert.ok(account.includes('ArrowRight')&&account.includes('Home')&&account.incl
 const home=await readFile(resolve(root,'index.html'),'utf8'),media=await readFile(resolve(root,'media/index.html'),'utf8');
 assert.ok(files.includes(resolve(root,'assets/images/raskol-crest.webp')),'Shared RASKOL crest asset is missing');
 assert.ok(home.includes('raskolpro.play.ski')&&home.includes('raskol.play.ski'),'Both approved public connection addresses must be visible');
+assert.ok(home.includes("$$('[data-copy-address]')"),'Homepage address-copy controls must use a collection selector');
+assert.ok(!home.includes('encodeURIComponent(IP)'),'Homepage server status must use an approved public hostname, not an undefined IP variable');
 assert.ok(!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(home)&&!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(home),'Legacy host and IP must be removed from homepage');
 assert.ok(home.includes('Профиль игрока')&&!home.includes('Смотреть трейлер')&&!home.includes('trailerModal'),'Homepage CTA and trailer placeholder must be updated');
 assert.ok(media.includes('Прямые эфиры')&&media.includes('Интеграция ещё не подключена'),'Media hub must disclose that stream integration is not connected');
