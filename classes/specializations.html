@@ -22,9 +22,10 @@
 @media(max-width:560px){.wrap{width:min(100% - 32px,1200px)}.top{height:auto;min-height:68px}.nav{gap:12px}.nav a:nth-child(3){display:none}.hero{padding:62px 0 40px}.hero p{font-size:19px}.metrics{gap:20px}.metric strong{font-size:28px}.metric span{font-size:8px}.controls{display:block}.filters{margin-bottom:12px}.search{width:100%}.spec-grid{grid-template-columns:1fr}.spec-card{min-height:0}.summary{min-height:0}.foot{flex-direction:column}}
 </style>
 <link rel="stylesheet" href="../assets/css/brand.css">
+<link rel="stylesheet" href="../assets/css/site-ui.css">
 </head>
 <body><div class="wrap">
-<header class="top"><a class="brand" href="../index.html"><img class="rsk-brand-crest" src="../assets/images/raskol-crest.webp" alt="Герб РАСКОЛА" width="42" height="48"><span class="rsk-brand-copy">РАСКОЛ<small>ДВЕ КОРОНЫ</small></span></a><nav class="nav"><a href="../index.html">Главная</a><a href="index.html">Классы</a><a href="specializations.html">Специализации</a><a href="../media/index.html">Медиа</a></nav></header>
+<header class="top"><a class="brand" href="../index.html"><img class="rsk-brand-crest" src="../assets/images/raskol-crest.webp" alt="Герб РАСКОЛА" width="42" height="48"><span class="rsk-brand-copy">РАСКОЛ<small>ДВЕ КОРОНЫ</small></span></a><nav class="nav"><a href="../index.html">Главная</a><a href="specializations.html">Специализации</a><a href="../media/index.html">Медиа</a></nav></header>
 <main>
 <section class="hero"><div class="eyebrow">Второй этап пути · выбор с 15 уровня</div><h1>18 специализаций</h1><div class="rule"></div><p>Шесть классов открывают восемнадцать способов вести бой. У каждой специализации — собственное дерево из двадцати узлов: пассивные свойства, усиления, новые способности и завершающий талант.</p>
 <div class="metrics"><div class="metric"><strong>06</strong><span>Классов</span></div><div class="metric"><strong>18</strong><span>Путей</span></div><div class="metric"><strong>360</strong><span>Узлов деревьев</span></div></div></section>
@@ -76,4 +77,5 @@
 (()=>{const cards=[...document.querySelectorAll('.spec-card')],buttons=[...document.querySelectorAll('.filter[data-class]')],search=document.getElementById('spec-search'),count=document.getElementById('result-count');let selected='all';function apply(){const q=search.value.trim().toLocaleLowerCase('ru');let visible=0;for(const card of cards){const okClass=selected==='all'||card.dataset.class===selected;const okText=!q||card.dataset.search.toLocaleLowerCase('ru').includes(q)||card.textContent.toLocaleLowerCase('ru').includes(q);card.hidden=!(okClass&&okText);if(!card.hidden)visible++;}count.textContent=visible+' из 18 специализаций';}buttons.forEach(button=>button.addEventListener('click',()=>{selected=button.dataset.class;buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));apply();}));search.addEventListener('input',apply);})();
 </script>
 <script src="../assets/js/atmosphere.js" defer></script>
+<script src="../assets/js/site-ui.js" defer></script>
 </body></html>
