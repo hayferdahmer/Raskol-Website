@@ -271,7 +271,7 @@ body.cursor-active .cursor-glow { opacity: 1; }
 @media(max-width:700px) { .hero-art[data-rsk-cinemagraph] picture img { object-position:54% center; } .hero-art .rsk-cinema-layer { filter:blur(12px); } }
 @media(prefers-reduced-motion:reduce) { .hero-art[data-rsk-cinemagraph] .rsk-cinema-layer { animation:none!important; transition:none!important; transform:none!important; } }
 
-.hero-art .rsk-cinema-clouds { transform:translate3d(calc(var(--rsk-pointer-x,0) * -3px),calc(var(--rsk-pointer-y,0) * -2px),0); }
-.hero-art .rsk-cinema-mist-back { transform:translate3d(calc(var(--rsk-pointer-x,0) * 2px),calc(var(--rsk-pointer-y,0) * 1px),0); }
-.hero-art .rsk-cinema-mist-front { transform:translate3d(calc(var(--rsk-pointer-x,0) * -6px),calc(var(--rsk-pointer-y,0) * -4px),0); }
-.hero-art .rsk-cinema-light { transform:translate3d(calc(var(--rsk-pointer-x,0) * 1px),calc(var(--rsk-pointer-y,0) * 1px),0); }
+.hero-art .rsk-cinema-clouds { translate:calc(var(--rsk-pointer-x,0) * -3px) calc(var(--rsk-pointer-y,0) * -2px); }
+.hero-art .rsk-cinema-mist-back { translate:calc(var(--rsk-pointer-x,0) * 2px) calc(var(--rsk-pointer-y,0) * 1px); }
+.hero-art .rsk-cinema-mist-front { translate:calc(var(--rsk-pointer-x,0) * -6px) calc(var(--rsk-pointer-y,0) * -4px); }
+.hero-art .rsk-cinema-light { translate:calc(var(--rsk-pointer-x,0) * 1px) calc(var(--rsk-pointer-y,0) * 1px); }
