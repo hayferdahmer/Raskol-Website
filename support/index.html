@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090709">
+<meta name="description" content="Центр поддержки РАСКОЛА: обращения, жалобы, апелляции и база знаний.">
+<title>Поддержка · РАСКОЛ — Две короны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/atmosphere.css">
+<link rel="stylesheet" href="../assets/css/brand.css">
+<link rel="stylesheet" href="support.css">
+</head>
+<body>
+<div class="support-shell">
+<header class="support-top">
+  <a class="brand" href="../index.html"><img class="rsk-brand-crest" src="../assets/images/raskol-crest.webp" alt="Герб РАСКОЛА" width="42" height="48"><span class="rsk-brand-copy">РАСКОЛ<small>ДВЕ КОРОНЫ</small></span></a>
+  <nav class="support-nav" aria-label="Основная навигация">
+    <a href="../index.html">Главная</a><a href="../world/index.html">Мир</a><a href="../classes/index.html">Классы</a><a href="../rules.html">Правила</a><a href="index.html" aria-current="page">Поддержка</a>
+  </nav>
+</header>
+<main>
+<section class="support-hero">
+  <div class="support-eyebrow">Центр помощи · РАСКОЛ</div>
+  <h1>Служба поддержки</h1>
+  <div class="support-rule"></div>
+  <p>Вопросы, сообщения о нарушениях и апелляции должны попадать в нужные руки. Выбери тему — мы покажем, какие сведения понадобятся.</p>
+  <div class="support-status"><span class="status-dot"></span><span>Интерфейс центра поддержки готовится к подключению</span></div>
+</section>
+<section class="support-actions" aria-label="Разделы поддержки">
+  <a class="support-action" href="#new-request"><span class="support-icon">✉</span><span class="support-kicker">01 · Обращение</span><strong>Создать обращение</strong><small>Техническая помощь, платежи, игровой прогресс и другие вопросы</small><b>Перейти к форме ↗</b></a>
+  <a class="support-action" href="#my-requests"><span class="support-icon">⌑</span><span class="support-kicker">02 · История</span><strong>Мои обращения</strong><small>Статусы, ответы администрации и история переписки</small><b>Посмотреть статус ↗</b></a>
+  <a class="support-action" href="#complaints"><span class="support-icon">⚖</span><span class="support-kicker">03 · Разбирательство</span><strong>Жалобы</strong><small>Сообщить о нарушении игроком или представителем команды</small><b>Как подать жалобу ↗</b></a>
+  <a class="support-action" href="#appeals"><span class="support-icon">✧</span><span class="support-kicker">04 · Пересмотр</span><strong>Апелляции</strong><small>Запросить пересмотр блокировки или другого решения</small><b>Условия апелляции ↗</b></a>
+</section>
+
+<section class="support-section" id="new-request">
+  <div class="support-section-head"><div><span class="support-eyebrow">Связь с командой</span><h2>Новое обращение</h2></div><p>Опиши ситуацию спокойно и по существу. Чем точнее сведения, тем проще администрации разобраться.</p></div>
+  <div class="support-form-layout">
+    <form class="ticket-form" id="ticketForm">
+      <div class="form-grid">
+        <label class="field"><span>Категория обращения</span><select id="ticketCategory" required>
+          <option value="Жалоба на игрока">Жалоба на игрока</option>
+          <option value="Жалоба на администратора">Жалоба на администратора</option>
+          <option value="Обжалование блокировки">Обжалование блокировки</option>
+          <option value="Потеря предметов / прогресса">Потеря предметов / игрового прогресса</option>
+          <option value="Техническая проблема">Техническая проблема</option>
+          <option value="Донат и платежи">Донат и платежи</option>
+          <option value="Предложение по развитию">Предложение по развитию сервера</option>
+          <option value="Другое">Другое</option>
+        </select></label>
+        <label class="field"><span>Тема</span><input id="ticketSubject" maxlength="100" placeholder="Кратко опиши вопрос" required></label>
+      </div>
+      <label class="field"><span>Описание ситуации</span><textarea id="ticketMessage" rows="7" maxlength="5000" placeholder="Что произошло? Когда? Что ты уже пробовал сделать?" required></textarea><small class="field-hint">Не публикуй пароли, платёжные данные и личную информацию других игроков.</small></label>
+      <label class="field"><span>Вложения (необязательно)</span><input id="ticketFiles" type="file" multiple accept="image/*,.txt,.log,.pdf"><small class="field-hint">В текущей версии файлы не загружаются и не отправляются.</small></label>
+      <div class="form-actions"><button class="support-button" type="submit">Сформировать предпросмотр</button><span class="form-note">Это демонстрация формы, не отправка обращения.</span></div>
+    </form>
+    <aside class="support-aside">
+      <div class="aside-mark">⚜</div><h3>Конфиденциальность</h3>
+      <p>В рабочей системе обращение будет доступно только его автору и уполномоченным сотрудникам администрации.</p>
+      <ul><li>У каждого обращения будет уникальный номер</li><li>Ответы и изменения статуса сохранятся в истории</li><li>Уведомления появятся после подключения аккаунта</li></ul>
+      <div class="aside-warning">Сейчас авторизация и серверная система тикетов не подключены. Не вводи реальные персональные данные.</div>
+    </aside>
+  </div>
+  <div class="ticket-preview" id="ticketPreview" hidden aria-live="polite">
+    <div class="preview-head"><span class="support-eyebrow">Предпросмотр · не отправлено</span><span class="preview-status">Локально в этой вкладке</span></div>
+    <h3 id="previewSubject"></h3><div class="preview-category" id="previewCategory"></div><p id="previewMessage"></p><div class="preview-files" id="previewFiles"></div>
+    <p class="preview-disclaimer">Черновик существует только на этой странице. Он не отправлен администрации, не сохранён в аккаунте и исчезнет после закрытия или обновления вкладки.</p>
+  </div>
+</section>
+
+<section class="support-section compact-section" id="my-requests">
+  <div class="support-section-head"><div><span class="support-eyebrow">Личный кабинет</span><h2>Мои обращения</h2></div><p>Здесь будет единая история запросов и ответов администрации.</p></div>
+  <div class="locked-panel"><div class="locked-icon">⌑</div><div><h3>История обращений пока недоступна</h3><p>Для приватного списка нужна авторизация сайта и серверное хранилище тикетов. После подключения здесь появятся номер, дата, категория, статус и последнее сообщение по каждому запросу.</p></div><span class="status-pill">Ожидает интеграции</span></div>
+</section>
+
+<section class="support-section" id="complaints">
+  <div class="support-section-head"><div><span class="support-eyebrow">Правила и разбирательства</span><h2>Жалобы</h2></div><p>Жалоба — способ сообщить о конкретном нарушении, а не инструмент для спора или давления на другого игрока.</p></div>
+  <div class="two-panels">
+    <article class="info-panel"><span class="panel-index">01</span><h3>На игрока</h3><p>Укажи игровой ник нарушителя, примерное время и место события. Добавь доказательства: скриншоты, видео или фрагменты чата, если они есть.</p><ul><li>Опиши конкретное действие</li><li>Не редактируй доказательства так, чтобы менялся их смысл</li><li>Не публикуй личные данные участников</li></ul></article>
+    <article class="info-panel"><span class="panel-index">02</span><h3>На администратора</h3><p>Опиши действия сотрудника, дату, контекст и причину, по которой считаешь решение некорректным. Такие обращения должны рассматриваться уполномоченным лицом, не участвовавшим в ситуации.</p><ul><li>Приведи факты и хронологию</li><li>Сохрани исходные сообщения и уведомления</li><li>Избегай оскорблений и предположений о мотивах</li></ul></article>
+  </div>
+</section>
+
+<section class="support-section compact-section" id="appeals">
+  <div class="support-section-head"><div><span class="support-eyebrow">Пересмотр решения</span><h2>Апелляции</h2></div><p>Если ты считаешь наказание ошибочным или несоразмерным, запроси повторное рассмотрение.</p></div>
+  <div class="appeal-panel"><div><h3>Обжалование блокировки</h3><p>Подготовь игровой ник, тип и дату наказания, а также краткое объяснение своей позиции. Если есть новые доказательства, приложи их к обращению.</p></div><a class="text-link" href="../rules.html#appeals">Открыть раздел обжалования в правилах ↗</a></div>
+</section>
+
+<section class="support-section knowledge-section" id="knowledge">
+  <div class="support-section-head"><div><span class="support-eyebrow">Самостоятельная помощь</span><h2>База знаний</h2></div><p>Короткие ответы на частые вопросы. Материалы будут расширяться по мере запуска игровых систем.</p></div>
+  <div class="knowledge-list">
+    <details><summary>Как подключиться к серверу?</summary><p>Добавь в список серверов Minecraft адрес Anycast <code>raskolpro.play.ski</code>. Альтернативный адрес SRV — <code>raskol.play.ski</code>. Целевая версия клиента — Minecraft 26.2.</p></details>
+    <details><summary>Что приложить к техническому обращению?</summary><p>Опиши шаги, после которых появилась ошибка, укажи примерное время и добавь текст ошибки или лог. Не прикладывай файлы с паролями и токенами.</p></details>
+    <details><summary>Что делать, если пропали предметы?</summary><p>Не выходи из игры до фиксации ситуации, если это безопасно. Запиши координаты, время, предметы и обстоятельства. Не пытайся самостоятельно повторить баг ради доказательства.</p></details>
+    <details><summary>Как подать жалобу?</summary><p>Выбери соответствующую категорию, укажи участников и время события, приложи исходные доказательства. Не публикуй жалобу в открытом чате вместо приватного обращения.</p></details>
+    <details><summary>Где посмотреть статус обращения?</summary><p>После запуска авторизации и серверной системы тикетов статус будет отображаться в разделе «Мои обращения». Сейчас личная история недоступна.</p></details>
+    <details><summary>Можно ли изменить или дополнить обращение?</summary><p>В рабочей системе автор сможет отправить дополнительное сообщение в существующую историю, не создавая дубликат. Эта функция появится вместе с тикетами.</p></details>
+  </div>
+</section>
+</main>
+<footer class="support-footer"><span>РАСКОЛ · ДВЕ КОРОНЫ</span><div><a href="../rules.html">Правила</a><a href="../index.html">На главную</a></div></footer>
+</div>
+<script src="../assets/js/atmosphere.js" defer></script>
+<script src="support.js" defer></script>
+</body>
+</html>
