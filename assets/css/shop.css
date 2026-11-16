@@ -104,3 +104,28 @@
 .modal-actions .btn:not(:disabled){animation:ritualPulse 2.8s ease-in-out infinite}
 @keyframes ritualPulse{0%,100%{box-shadow:0 0 18px rgba(166,58,76,.16)}50%{box-shadow:0 0 30px rgba(199,164,119,.28)}}
 @media(prefers-reduced-motion:reduce){.modal-actions .btn{animation:none!important}}
+
+/* Личный кабинет: баланс, авторизация и отдельные вкладки */
+.account-page{padding-top:54px;padding-bottom:80px;max-width:1080px}
+.account-hero{padding:36px 0 28px;border-bottom:1px solid var(--shop-line);margin-bottom:24px}
+.account-hero h1{font:500 clamp(42px,7vw,76px) var(--shop-display);margin:8px 0;color:var(--shop-ink)}
+.account-hero p{max-width:720px;color:var(--shop-muted);font-size:13px;line-height:1.8}
+.account-auth{margin-bottom:28px}
+.account-auth h2,.account-pane h2{font:500 32px var(--shop-display);margin:8px 0 14px}
+.auth-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.auth-steps>div{display:flex;gap:12px;padding:13px;border:1px solid var(--shop-line);background:rgba(0,0,0,.16);font-size:11px;color:var(--shop-muted);line-height:1.6}
+.auth-steps b{font:24px var(--shop-display);color:var(--shop-gold)}
+.auth-entry{display:flex;gap:10px;max-width:560px}.auth-entry .link-code-input{flex:1;min-width:0}
+.account-tabs{display:flex;gap:8px;border-bottom:1px solid var(--shop-line);margin-bottom:18px;overflow:auto}
+.account-tab{border:1px solid transparent;border-bottom:0;background:transparent;color:var(--shop-muted);padding:13px 18px;white-space:nowrap;cursor:pointer;font:10px var(--shop-ui);letter-spacing:.1em;text-transform:uppercase}
+.account-tab.active{color:var(--shop-gold);border-color:var(--shop-line);background:rgba(45,25,33,.65)}
+.account-pane[hidden]{display:none}
+.account-pane{display:grid;gap:14px}
+.balance-card{display:flex;justify-content:space-between;gap:25px;align-items:center}
+.balance-actions{display:grid;gap:8px;min-width:220px}
+.history-card h3{font:500 25px var(--shop-display);margin:8px 0}
+.history-card p,.account-pane p{color:var(--shop-muted);font-size:11px;line-height:1.7}
+.account-pane .topup-state{margin-top:18px}
+.account-pane .limits-panel{grid-template-columns:1fr 1fr}
+@media(max-width:760px){.auth-steps{grid-template-columns:1fr}.balance-card{align-items:flex-start;flex-direction:column}.balance-actions{width:100%;min-width:0}.account-pane .limits-panel{grid-template-columns:1fr}}
+@media(max-width:520px){.auth-entry{flex-direction:column}.account-tabs{gap:0}.account-tab{padding:12px 10px;font-size:9px}.account-page{padding-top:28px}}
