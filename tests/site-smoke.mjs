@@ -22,6 +22,7 @@ for(const id of ['two-crowns','blood-oath','ashfall','black-embers','winter-sols
 assert.ok(shop.includes('modalReturnFocus')&&shop.includes('activeModal'),'Modal focus management is missing');
 assert.ok(account.includes('ArrowRight')&&account.includes('Home')&&account.includes('End'),'Account tab keyboard controls are missing');
 const home=await readFile(resolve(root,'index.html'),'utf8'),media=await readFile(resolve(root,'media/index.html'),'utf8');
+const support=await readFile(resolve(root,'support/index.html'),'utf8');
 assert.ok(files.includes(resolve(root,'assets/images/raskol-crest.webp')),'Shared RASKOL crest asset is missing');
 assert.ok(home.includes('raskolpro.play.ski')&&home.includes('raskol.play.ski'),'Both approved public connection addresses must be visible');
 assert.ok(home.includes("$$('[data-copy-address]')"),'Homepage address-copy controls must use a collection selector');
@@ -29,5 +30,9 @@ assert.ok(!home.includes('encodeURIComponent(IP)'),'Homepage server status must 
 assert.ok(!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(home)&&!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(home),'Legacy host and IP must be removed from homepage');
 assert.ok(home.includes('Профиль игрока')&&!home.includes('Смотреть трейлер')&&!home.includes('trailerModal'),'Homepage CTA and trailer placeholder must be updated');
 assert.ok(media.includes('Прямые эфиры')&&media.includes('Интеграция ещё не подключена'),'Media hub must disclose that stream integration is not connected');
+assert.ok(home.includes('support/index.html'),'Homepage must link to the support center');
+for(const category of ['Жалоба на игрока','Жалоба на администратора','Обжалование блокировки','Потеря предметов / прогресса','Техническая проблема','Донат и платежи','Предложение по развитию','Другое'])assert.ok(support.includes(category),'Missing support ticket category '+category);
+assert.ok(support.includes('не отправляются')&&support.includes('авторизация сайта и серверное хранилище тикетов'),'Support prototype must clearly disclose that ticket submission is not connected');
+assert.ok(support.includes('Мои обращения')&&support.includes('База знаний')&&support.includes('Апелляции'),'Support center is missing a core section');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('rsk-brand-crest')||html.includes('brand-emblem')||html.includes('rsk-document-brand'),'Missing RASKOL crest on '+relative(root,path));assert.ok(!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(html)&&!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(html),'A raw server IP or legacy host is published in '+relative(root,path));}
 console.log('PASS: '+htmlFiles.length+' HTML, '+jsFiles.length+' JS and '+cssFiles.length+' CSS files; IDs, local paths, syntax, styles and key interactions checked.');
