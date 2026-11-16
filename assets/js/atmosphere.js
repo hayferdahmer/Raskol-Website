@@ -30,6 +30,17 @@
     targets.forEach((element) => observer.observe(element));
   }
 
+  // Слои синематографа включаются только после появления реальной разметки и масок.
+  const cinemaScenes = body.querySelectorAll('[data-rsk-cinemagraph]');
+  if (cinemaScenes.length && 'IntersectionObserver' in window) {
+    const cinemaObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle('rsk-cinema-active', entry.isIntersecting));
+    }, { threshold: 0.01 });
+    cinemaScenes.forEach((scene) => cinemaObserver.observe(scene));
+  } else if (cinemaScenes.length && !motionQuery.matches) {
+    cinemaScenes.forEach((scene) => scene.classList.add('rsk-cinema-active'));
+  }
+
   if (motionQuery.matches) return;
 
   const canvas = document.createElement('canvas');
