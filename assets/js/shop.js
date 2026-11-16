@@ -37,6 +37,16 @@
   ];
   const rarityByIndex=['common','common','common','uncommon','uncommon','uncommon','rare','rare','relic','relic','legendary'];
   const rewardIcons=['♜','✧','†','▣','〰','⚑','◈','♧','♟','♛','✦'];
+  const caseOdds={
+    'two-crowns':[65,25,9,.9,.1],
+    'blood-oath':[55,28,13,3.5,.5],
+    'ashfall':[72,20,7,.9,.1],
+    'black-embers':[60,25,11,3,1],
+    'winter-solstice':[68,22,8,1.5,.5],
+    'eclipse':[45,30,17,6,2],
+    'old-kingdom':[78,16,5,.8,.2],
+    'last-vow':[50,28,15,5,2]
+  };
   const caseThemes={
     'two-crowns':['Знак северного дома','Пепел коронации','Титул младшего наследника','Рамка золотой печати','Шлейф королевского бала','Знамя западного двора','Аура регента','Ворон королевской почты','Мантия первого престола','Печать двух корон','Корона объединённых земель'],
     'blood-oath':['Клеймо кровной клятвы','След алого клинка','Титул последнего свидетеля','Рамка багряной присяги','Шлейф алой стали','Знамя дома крови','Аура красного зарева','Ворон кровавого гонца','Мантия красного суда','Печать нерушимого обета','Корона алого договора'],
@@ -48,7 +58,7 @@
     'last-vow':['Осколок последнего обета','След клятвенного пути','Титул верного до конца','Рамка нерушимой клятвы','Шлейф свечного пламени','Знамя последнего рубежа','Аура вечного обещания','Ворон последнего посланника','Мантия клятвохранителя','Печать последнего обета','Корона несгибаемой воли']
   };
   function getCaseRewards(caseData){return (caseThemes[caseData?.id]||caseThemes['two-crowns']).map((name,index)=>({name,icon:rewardIcons[index],rarity:rarityByIndex[index],label:rarityNames[rarityByIndex[index]]}));}
-  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=currentRollIsBonus?bonusOdds:ritualTiers[currentTier].weights;const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
+  function renderPrizePool(){if(!currentCase)return;const pool=getCaseRewards(currentCase),weights=currentRollIsBonus?bonusOdds:(currentTier==='standard'?caseOdds[currentCase.id]:ritualTiers[currentTier].weights);const counts=rarityByIndex.reduce((map,key)=>(map[key]=(map[key]||0)+1,map),{});$('#prizePool').innerHTML=pool.map(item=>{const chance=weights[['common','uncommon','rare','relic','legendary'].indexOf(item.rarity)]/counts[item.rarity];return '<div class="prize-pool-item '+item.rarity+'"><span>'+item.icon+'</span><b>'+item.name+'</b><small>'+item.label+' · '+String(Number(chance.toFixed(4))).replace('.',',')+'%</small></div>';}).join('');const head=$('.prize-pool-head span');if(head)head.textContent=pool.length+' предметов · индивидуальные шансы до открытия';}
   const ritualTiers = {
     standard:{surcharge:0,weights:[65,25,9,.9,.1]},
     tempered:{surcharge:100,weights:[50,30,15,4,1]},
@@ -125,7 +135,7 @@
   }
   function chooseReward(weightsOverride){
     const keys=['common','uncommon','rare','relic','legendary'];
-    const weights=weightsOverride||ritualTiers[currentTier].weights;
+    const weights=weightsOverride||(currentTier==='standard'?caseOdds[currentCase.id]:ritualTiers[currentTier].weights);
     const roll=Math.random()*100;let edge=0,rarity='common';
     for(let i=0;i<keys.length;i++){edge+=weights[i];if(roll<edge){rarity=keys[i];break;}}
     const pool=getCaseRewards(currentCase).filter(item=>item.rarity===rarity);
@@ -134,7 +144,7 @@
   function renderRitual(){
     if(!currentCase)return;
     const tier=ritualTiers[currentTier],total=currentCase.price+tier.surcharge;
-    const weights=currentRollIsBonus?bonusOdds:tier.weights;
+    const weights=currentRollIsBonus?bonusOdds:(currentTier==='standard'?caseOdds[currentCase.id]:tier.weights);
     $('#ritualTotal').innerHTML=currentRollIsBonus?'БЕСПЛАТНО':total+' <i>ИМП.</i>';
     $('#ritualTotalNote').textContent=currentRollIsBonus?'Бонусная прокрутка за серию из 10 открытий. Списания нет.':('Ларец '+currentCase.price+' И + подношение '+tier.surcharge+' И = '+total+' И. Сумма демонстрационная, не списывается.');
     const keys=['common','uncommon','rare','relic','legendary'];
