@@ -176,3 +176,7 @@
 @media(max-width:700px){.case-perks-grid{grid-template-columns:1fr}.win-feed-track{grid-template-columns:repeat(2,minmax(0,1fr))}.streak-card,.social-reward-card,.win-feed{padding:17px}}
 @media(max-width:440px){.social-channel-list{grid-template-columns:1fr}.win-feed-track{grid-template-columns:1fr}.streak-meta{flex-direction:column;gap:4px}.win-feed-head{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.streak-meter span{transition:none}}
+
+/* Выбранная тематическая коллекция каталога */
+.collection.selected{border-color:rgba(199,164,119,.82);box-shadow:0 0 0 1px rgba(199,164,119,.2),0 18px 48px rgba(0,0,0,.55),0 0 34px rgba(166,106,117,.16);transform:translateY(-4px)}
+.collection.selected:after{transform:rotate(45deg) scale(1.08);border-color:rgba(222,185,133,.72)}
