@@ -62,6 +62,7 @@ try{
           await page.emulateMedia({reducedMotion:'reduce'});
           const stopped=await page.locator('#heroArt .rsk-cinema-layer').evaluateAll(els=>els.every(el=>getComputedStyle(el).animationDuration==='0s'));
           if(!stopped)report.motion.push({route,viewport:viewport.width,message:'Cinematic layers must stop under reduced motion'});
+          await page.emulateMedia({reducedMotion:'no-preference'});
         }
       }
       const metrics=await page.evaluate(()=>({
