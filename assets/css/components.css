@@ -20,5 +20,5 @@
 .rsk-panel,.world-note{margin-top:20px;padding:18px 20px;border-left:2px solid var(--rsk-color-crimson-muted);background:rgba(20,12,16,.72);color:var(--rsk-color-mist);font:13px/1.7 var(--rsk-font-ui)}
 .rsk-panel strong,.world-note strong{color:var(--rsk-color-silk)}
 
-@media(hover:hover) and (pointer:fine){.rsk-button:hover,.world-action:hover{filter:brightness(1.04)}}
-@media(prefers-reduced-motion:reduce){.rsk-button,.world-action,.rsk-card,.world-card{transition:none}.rsk-button:hover,.world-action:hover,.rsk-card:hover,.world-card:hover{transform:none}}
+.world-nav a,.world-footer a,.world-action{min-height:40px;display:inline-flex;align-items:center}
+@media(prefers-reduced-motion:reduce){.rsk-button,.world-action,.rsk-card,.world-card{transition:none}}
