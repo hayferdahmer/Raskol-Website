@@ -1,0 +1,72 @@
+/* RASKOL · Общие дизайн-токены внутренних страниц
+   Главная страница намеренно не подключает этот слой. */
+:root{
+  color-scheme:dark;
+
+  /* Цвета бренда и поверхностей */
+  --rsk-color-void:#090709;
+  --rsk-color-abyss:#0b080a;
+  --rsk-color-panel:#171014;
+  --rsk-color-panel-raised:#21151b;
+  --rsk-color-wine:#6e303d;
+  --rsk-color-crimson-muted:#a66a75;
+  --rsk-color-rose-metal:#c17e89;
+  --rsk-color-gold:#c7a477;
+  --rsk-color-silk:#e8ddda;
+  --rsk-color-mist:#b9a9a8;
+  --rsk-color-muted:#8d7d80;
+  --rsk-color-border:rgba(193,126,137,.24);
+
+  /* Семантические роли */
+  --rsk-color-bg:var(--rsk-color-void);
+  --rsk-color-surface:var(--rsk-color-panel);
+  --rsk-color-surface-raised:var(--rsk-color-panel-raised);
+  --rsk-color-text:var(--rsk-color-silk);
+  --rsk-color-text-secondary:var(--rsk-color-mist);
+  --rsk-color-text-muted:var(--rsk-color-muted);
+  --rsk-color-accent:var(--rsk-color-crimson-muted);
+  --rsk-color-accent-strong:var(--rsk-color-wine);
+  --rsk-color-focus:var(--rsk-color-gold);
+
+  /* Типографика */
+  --rsk-font-display:'Cormorant Garamond',Georgia,serif;
+  --rsk-font-ui:'Inter',Arial,sans-serif;
+  --rsk-font-size-xs:.75rem;
+  --rsk-font-size-sm:.875rem;
+  --rsk-font-size-md:1rem;
+  --rsk-font-size-lg:1.25rem;
+  --rsk-font-size-xl:1.5rem;
+  --rsk-line-height-body:1.65;
+  --rsk-line-height-tight:1.05;
+
+  /* Шаг 4 px */
+  --rsk-space-1:4px;
+  --rsk-space-2:8px;
+  --rsk-space-3:12px;
+  --rsk-space-4:16px;
+  --rsk-space-5:20px;
+  --rsk-space-6:24px;
+  --rsk-space-8:32px;
+  --rsk-space-10:40px;
+  --rsk-space-12:48px;
+  --rsk-space-16:64px;
+  --rsk-space-20:80px;
+
+  /* Геометрия и глубина */
+  --rsk-radius-sm:2px;
+  --rsk-radius-md:6px;
+  --rsk-radius-lg:12px;
+  --rsk-shadow-panel:0 18px 48px rgba(0,0,0,.34);
+  --rsk-shadow-glow:0 0 30px rgba(110,39,55,.16);
+  --rsk-border-subtle:1px solid var(--rsk-color-border);
+
+  /* Движение */
+  --rsk-motion-fast:180ms;
+  --rsk-motion-base:280ms;
+  --rsk-motion-slow:350ms;
+  --rsk-ease-standard:cubic-bezier(.2,.65,.25,1);
+
+  /* Контентные ширины */
+  --rsk-content-portal:1180px;
+  --rsk-content-commerce:1320px;
+}
