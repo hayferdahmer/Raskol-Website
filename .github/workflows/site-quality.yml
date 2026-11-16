@@ -23,3 +23,29 @@ jobs:
           node-version: 22
       - name: Run site smoke tests
         run: node tests/site-smoke.mjs
+
+  browser:
+    name: Responsive browser and accessibility QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser test tools
+        run: npm install --no-save --no-package-lock playwright @axe-core/playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run responsive and accessibility QA
+        run: node tests/browser-qa.mjs
+      - name: Upload browser screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raskol-browser-qa
+          path: artifacts/browser-qa/
+          if-no-files-found: ignore
+          retention-days: 7
