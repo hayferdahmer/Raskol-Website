@@ -15,6 +15,8 @@ for(const id of ['productModal','caseModal','closeProductModal','closeModal','mo
 for(const id of ['linkCode','verifyLinkCode','linkStatus','dailyLimit','monthlyLimit','saveLimits','limitPreview'])assert.ok(accountHtml.includes('id="'+id+'"'),'Missing account element '+id);
 assert.ok(shop.includes('getBoundingClientRect()'),'Roulette geometry must be measured from rendered rectangles');assert.ok(shop.includes('t+t*t*t-t*t*t*t'),'Roulette deceleration must ease continuously into its stop');
 assert.ok(shop.includes('function getCaseRewards('),'Case-specific reward pools are missing');assert.ok(shop.includes('function getRarityWeights('),'Case-specific tier probability calculation is missing');
+assert.ok(shop.includes("$('.ritual-tier').forEach("),'Ritual tier controls must be selected as a collection');
+assert.ok(!shop.includes("$('.ritual-tier').forEach("),'A single querySelector result cannot be iterated as a collection');
 const oddsMatch=shop.match(/const caseOdds=\{([\s\S]*?)\n  \};/);assert.ok(oddsMatch,'Per-case odds tables are missing');const oddsTables=[...oddsMatch[1].matchAll(/\[([^\]]+)\]/g)].map(m=>m[1].split(',').map(Number));assert.equal(oddsTables.length,8,'Expected one base odds table per case');for(const weights of oddsTables)assert.ok(Math.abs(weights.reduce((sum,n)=>sum+n,0)-100)<0.000001,'Each case odds table must total exactly 100%');
 for(const id of ['two-crowns','blood-oath','ashfall','black-embers','winter-solstice','eclipse','old-kingdom','last-vow'])assert.ok(shop.includes("'"+id+"'"),'Missing case reward pool '+id);
 assert.ok(shop.includes('modalReturnFocus')&&shop.includes('activeModal'),'Modal focus management is missing');
