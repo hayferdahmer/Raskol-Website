@@ -1,0 +1,72 @@
+/* РАСКОЛ — единая типографика и композиция юридических документов */
+
+/* Краткие служебные документы */
+body.legal-simple{
+  margin:0;min-height:100vh;color:var(--rsk-color-silk);
+  background:radial-gradient(ellipse at 50% 0%,rgba(83,31,44,.24),transparent 55%),var(--rsk-color-void);
+  font:18px/1.65 Georgia,serif;
+}
+.legal-simple *{box-sizing:border-box}
+.legal-simple .wrap{width:min(860px,calc(100% - 36px));margin:0 auto;padding:10vh 0}
+.legal-simple .eyebrow{font:600 10px/1.4 var(--rsk-font-ui);letter-spacing:.25em;text-transform:uppercase;color:var(--rsk-color-crimson-muted)}
+.legal-simple h1{font-size:clamp(38px,7vw,64px);line-height:1.02;font-weight:500;margin:12px 0 22px}
+.legal-simple p{color:var(--rsk-color-mist)}
+.legal-simple .rsk-card--document a{color:#d7a0aa;text-decoration:none;border-bottom:1px solid rgba(215,160,170,.4)}
+.legal-simple .rsk-card--document a:hover{color:#fff}
+.legal-simple .back{display:inline-block;margin-top:14px;font:600 10px var(--rsk-font-ui);letter-spacing:.16em;text-transform:uppercase}
+
+/* Полный кодекс мира */
+body.legal-rules{
+  margin:0;color:var(--rsk-color-silk);
+  background:radial-gradient(ellipse at 50% 0,rgba(83,31,44,.25),transparent 48%),var(--rsk-color-void);
+  font:15px/1.7 var(--rsk-font-ui);
+}
+.legal-rules *{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+.legal-rules a{color:inherit;text-decoration:none}
+.legal-rules .wrap{width:min(1240px,calc(100% - 40px));margin:auto}
+.legal-rules .top{height:72px;border-bottom:1px solid var(--rsk-color-border);display:flex;align-items:center;justify-content:space-between}
+.legal-rules .brand{font:600 17px var(--rsk-font-display);letter-spacing:.2em}
+.legal-rules .brand small{display:block;color:var(--rsk-color-crimson-muted);font:8px var(--rsk-font-ui);letter-spacing:.28em}
+.legal-rules .top a:last-child{font:9px var(--rsk-font-ui);letter-spacing:.16em;text-transform:uppercase;color:#d3a2a8}
+.legal-rules .hero{padding:85px 0 45px;text-align:center}
+.legal-rules .eyebrow{font:600 9px var(--rsk-font-ui);letter-spacing:.3em;text-transform:uppercase;color:var(--rsk-color-crimson-muted)}
+.legal-rules h1{font:500 clamp(55px,8vw,100px)/.9 var(--rsk-font-display);letter-spacing:.06em;text-transform:uppercase;margin:16px 0}
+.legal-rules .hero p{max-width:680px;margin:0 auto;color:var(--rsk-color-mist);font:21px/1.5 var(--rsk-font-display)}
+.legal-rules .seal{width:74px;height:74px;border:1px solid var(--rsk-color-gold);margin:30px auto 0;display:grid;place-items:center;transform:rotate(45deg);color:var(--rsk-color-gold);font:30px var(--rsk-font-display)}
+.legal-rules .seal span{transform:rotate(-45deg)}
+.legal-rules .draft{margin:30px auto 0;max-width:850px;padding:15px 20px;border:1px solid rgba(199,164,119,.35);background:rgba(199,164,119,.07);color:#d6c2a6;font-size:11px}
+.legal-rules .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;padding:40px 0 100px}
+.legal-rules .side{position:sticky;top:25px;align-self:start;border:1px solid var(--rsk-color-border);background:rgba(22,14,18,.72);padding:18px}
+.legal-rules .side strong{display:block;font:500 25px var(--rsk-font-display);margin-bottom:12px}
+.legal-rules .side a{display:block;padding:8px 0;border-bottom:1px solid rgba(193,126,137,.1);color:var(--rsk-color-mist);font-size:10px}
+.legal-rules .side a:hover{color:var(--rsk-color-gold)}
+.legal-rules .chapter{padding:0 0 42px;margin-bottom:42px;border-bottom:1px solid var(--rsk-color-border);scroll-margin-top:25px}
+.legal-rules .chapter-head{display:flex;align-items:baseline;gap:15px;margin-bottom:18px}
+.legal-rules .num{font:500 17px var(--rsk-font-display);color:var(--rsk-color-gold)}
+.legal-rules h2{font:500 clamp(32px,4vw,48px)/1 var(--rsk-font-display);margin:0;letter-spacing:.03em}
+.legal-rules .chapter p{color:var(--rsk-color-mist);font-size:12px}
+.legal-rules .rule{padding:15px 18px;margin:10px 0;border-left:1px solid rgba(166,106,117,.65);background:linear-gradient(90deg,rgba(76,32,43,.2),transparent);color:#d9ceca;font-size:12px}
+.legal-rules .rule b{color:var(--rsk-color-gold);font-weight:600}
+.legal-rules .rule small{display:block;color:var(--rsk-color-muted);font-size:9px;margin-top:5px}
+.legal-rules .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.legal-rules .tile{padding:17px;border:1px solid var(--rsk-color-border);background:rgba(26,16,21,.55)}
+.legal-rules .tile strong{display:block;font:500 23px var(--rsk-font-display);color:var(--rsk-color-gold);margin-bottom:5px}
+.legal-rules .tile p{margin:0}
+.legal-rules .callout{padding:20px;border:1px solid rgba(166,106,117,.35);background:linear-gradient(135deg,rgba(76,32,43,.28),rgba(18,12,15,.8));margin:22px 0}
+.legal-rules .callout strong{color:#e6c3a6}
+.legal-rules .paid{border-color:rgba(199,164,119,.4)}
+.legal-rules .footer{border-top:1px solid var(--rsk-color-border);padding:25px 0;color:var(--rsk-color-muted);font-size:10px}
+.legal-rules .footerin{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+@media(max-width:800px){
+  .legal-rules .layout{grid-template-columns:1fr;gap:25px}
+  .legal-rules .side{position:relative;top:auto}
+  .legal-rules .side nav{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+  .legal-rules .grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .legal-rules .hero{padding:60px 0 25px}
+  .legal-rules .wrap{width:calc(100% - 28px)}
+  .legal-rules .chapter-head{display:block}
+  .legal-rules .chapter-head .num{display:block;margin-bottom:7px}
+}
