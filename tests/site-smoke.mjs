@@ -31,8 +31,9 @@ assert.ok(home.includes("$$('[data-copy-address]')"),'Homepage address-copy cont
 assert.ok(!home.includes('encodeURIComponent(IP)'),'Homepage server status must use an approved public hostname, not an undefined IP variable');
 assert.ok(!/ip\d+-\d+-\d+-\d+\.joinserver\.xyz/.test(home)&&!/\b\d{1,3}(?:\.\d{1,3}){3}\b/.test(home),'Legacy host and IP must be removed from homepage');
 assert.ok(home.includes('Профиль игрока')&&!home.includes('Смотреть трейлер')&&!home.includes('trailerModal'),'Homepage CTA and trailer placeholder must be updated');
-assert.ok(!home.match(/<nav[^>]*>[\\s\\S]*?>Классы<\\/a>/i),'Classes must not remain in the homepage top navigation');
-assert.ok(!home.match(/<nav[^>]*>[\\s\\S]*?>FAQ<\\/a>/i)&&home.includes('href="#faq">Частые вопросы</a>'),'FAQ belongs in the footer navigation, not the top navigation');
+const homeNav=home.match(/<nav class="nav-links"[^>]*>([\\s\\S]*?)<\\/nav>/i)?.[1]||'';
+assert.ok(!homeNav.includes('Классы')&&!homeNav.includes('FAQ'),'Classes and FAQ must not remain in the homepage top navigation');
+assert.ok(home.includes('href="#faq">Частые вопросы</a>'),'FAQ must remain in the footer navigation');
 assert.ok(siteUi.includes('opengameart.org/sites/default/files/The_Bards_Tale.mp3')&&siteUi.includes('audio.play()')&&siteUi.includes('audio.preload'),'Background music must be user-initiated and use the credited CC0 track');
 assert.ok(siteUi.includes('rsk-page-transition')&&siteUi.includes('rsk-transition-crest')&&siteUiCss.includes('.rsk-music-player')&&siteUiCss.includes('#preloader .preload-crest'),'Global crest transition, branded preloader and compact music player are required');
 for(const path of htmlFiles){const html=await readFile(path,'utf8');assert.ok(html.includes('site-ui.js')&&html.includes('site-ui.css'),'Missing global site UI layer on '+relative(root,path));}
