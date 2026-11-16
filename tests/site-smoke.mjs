@@ -121,3 +121,11 @@ for(const asset of ['cinema-clouds.svg','cinema-mist-back.svg','cinema-mist-fron
  const svg=await readFile(resolve(root,'assets/images',asset),'utf8');
  assert.ok(svg.includes('<feTurbulence')&&svg.includes('<feColorMatrix')&&svg.includes('viewBox="0 0 1800 1000"'),'Atmosphere texture must contain an alpha-masked organic noise field: '+asset);
 }
+
+
+const worldPage=await readFile(resolve(root,'world/index.html'),'utf8');
+const worldStyles=await readFile(resolve(root,'assets/css/world.css'),'utf8');
+assert.ok(worldPage.includes('data-art-slot="world-two-kingdoms"'),'World hero must expose the dedicated future illustration slot');
+assert.ok(worldPage.includes('aria-hidden="true"'),'Decorative world hero art slot must be hidden from assistive technology');
+assert.ok(worldStyles.includes('.world-hero-art::before')&&worldStyles.includes('--world-hero-position'),'World hero must include its own contrast overlay and responsive art positioning');
+assert.ok(worldStyles.includes('min-height:540px'),'World hero must reserve enough vertical space for the mobile art composition');
