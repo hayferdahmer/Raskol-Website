@@ -35,7 +35,7 @@ const homeNavStart=home.indexOf('<nav class="nav-links"');const homeNavEnd=home.
 assert.ok(!homeNav.includes('Классы')&&!homeNav.includes('FAQ'),'Classes and FAQ must not remain in the homepage top navigation');
 assert.ok(home.includes('href="#faq">Частые вопросы</a>'),'FAQ must remain in the footer navigation');
 assert.ok(siteUi.includes('opengameart.org/sites/default/files/The_Bards_Tale.mp3')&&siteUi.includes('audio.play()')&&siteUi.includes('audio.preload'),'Background music must use the credited CC0 source');
-assert.ok((siteUi.match(/opengameart.org\\/sites\\/default\\/files\\//g)||[]).length>=6,'The RASKOL soundtrack needs at least six CC0 tracks');
+assert.ok((siteUi.split('opengameart.org/sites/default/files/').length-1)>=6,'The RASKOL soundtrack needs at least six CC0 tracks');
 assert.ok(siteUi.includes('shouldAutoplay')&&siteUi.includes('resumeAt')&&siteUi.includes('sessionStorage'),'Autoplay attempt and playback position must persist between page navigations');
 assert.ok(siteUi.includes('document.hidden) persist()')&&!siteUi.includes('if (document.hidden) audio.pause()'),'Background music must not pause when the browser tab is hidden');
 assert.ok(siteUi.includes('rsk-music-shuffle')&&siteUi.includes('rsk-music-repeat')&&siteUi.includes('rsk-music-progress'),'Music player must provide shuffle, repeat and seeking controls');
