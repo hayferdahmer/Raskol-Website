@@ -30,7 +30,7 @@ const server=createServer(async(req,res)=>{
 await new Promise((ok,fail)=>server.listen(4173,'127.0.0.1',err=>err?fail(err):ok()));
 
 const browser=await chromium.launch({headless:true});
-const report={routes:routes.length,viewports:viewports.map(x=>x.width),screenshots:[],overflow:[],axe:[],runtimeErrors:[],keyboard:[],motion:[],interactions:[]};
+const report={routes:routes.length,viewports:viewports.map(x=>x.width),screenshots:[],overflow:[],diagnostics:[],axe:[],runtimeErrors:[],keyboard:[],motion:[],interactions:[]};
 await mkdir(resolve(root,'artifacts/browser-qa'),{recursive:true});
 
 try{
@@ -45,18 +45,23 @@ try{
       const metrics=await page.evaluate(()=>({
         title:document.title,
         width:innerWidth,
-        documentWidth:Math.max(document.documentElement.scrollWidth,document.body?.scrollWidth||0),
+        documentWidth:document.documentElement.scrollWidth,
+        bodyWidth:document.body?.scrollWidth||0,
         hasMain:Boolean(document.querySelector('main')),
         mainCount:document.querySelectorAll('main').length,
         skip:Boolean(document.querySelector('.rsk-skip-link')),
         skipTarget:(()=>{const a=document.querySelector('.rsk-skip-link');return a?Boolean(document.querySelector(a.getAttribute('href'))):false;})(),
-        visibleButtons:[...document.querySelectorAll('button')].filter(x=>x.getClientRects().length).length
+        visibleButtons:[...document.querySelectorAll('button')].filter(x=>x.getClientRects().length).length,
+        overflowElements:[...document.querySelectorAll('body *')].filter(el=>{const rect=el.getBoundingClientRect();if(rect.width<=0||rect.height<=0||rect.right<=innerWidth+1)return false;for(let p=el.parentElement;p&&p!==document.body;p=p.parentElement){const ox=getComputedStyle(p).overflowX;if(ox==='auto'||ox==='scroll')return false;}return true;}).slice(0,10).map(el=>{const r=el.getBoundingClientRect(),st=getComputedStyle(el);return {tag:el.tagName.toLowerCase(),id:el.id,className:typeof el.className==='string'?el.className:'',left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),fontSize:st.fontSize,overflowX:st.overflowX};}),
+        filterStyles:location.pathname.includes('specializations')?[...document.querySelectorAll('.filter')].slice(0,3).map(el=>{const st=getComputedStyle(el);return {text:el.textContent.trim(),color:st.color,background:st.backgroundColor,opacity:st.opacity,fontSize:st.fontSize};}):[],
+        h1:(()=>{const el=document.querySelector('main h1');if(!el)return null;const r=el.getBoundingClientRect();return {text:el.textContent.trim(),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),fontSize:getComputedStyle(el).fontSize};})()
       }));
-      if(metrics.documentWidth>viewport.width+1)report.overflow.push({route,viewport:viewport.width,documentWidth:metrics.documentWidth});
+      if(metrics.documentWidth>viewport.width+1||metrics.overflowElements.length)report.overflow.push({route,viewport:viewport.width,documentWidth:metrics.documentWidth,bodyWidth:metrics.bodyWidth,elements:metrics.overflowElements});
+      if((route==='/classes/specializations.html'&&viewport.width===390)||((route==='/shop/'||route==='/support/')&&viewport.width===320))report.diagnostics.push({route,viewport:viewport.width,bodyWidth:metrics.bodyWidth,documentWidth:metrics.documentWidth,h1:metrics.h1,filterStyles:metrics.filterStyles});
       if(!metrics.hasMain||metrics.mainCount!==1)report.runtimeErrors.push({route,message:'Expected exactly one main landmark'});
       if(!metrics.skip||!metrics.skipTarget)report.keyboard.push({route,viewport:viewport.width,message:'Skip link or its target is missing'});
       if(viewport.width===1440||viewport.width===390){
-        const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+        await page.addStyleTag({content:'.reveal{opacity:1!important;transform:none!important;transition:none!important}'});\n        const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
         for(const v of axe.violations)report.axe.push({route,viewport:viewport.width,id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.slice(0,8).map(n=>({target:n.target,summary:n.failureSummary?.slice(0,260)}))});
         const shot=resolve(root,'artifacts/browser-qa',route==='/'?'home':route.replaceAll('/','_').replace(/^_+|_+$/g,''));
         if(viewport.width===1440||viewport.width===390){
@@ -151,7 +156,7 @@ const summary={
   reducedMotionFindings:report.motion.length,
   interactionChecks:report.interactions
 };
-await writeFile(resolve(root,'artifacts/browser-qa/report.json'),JSON.stringify({summary,report},null,2));
+await writeFile(resolve(root,'artifacts/browser-qa/report.json'),JSON.stringify({summary,report},null,2));\nconsole.log('BROWSER_QA_DIAGNOSTICS '+JSON.stringify(report.diagnostics));
 console.log('BROWSER_QA_SUMMARY '+JSON.stringify(summary));
 if(report.overflow.length||report.axe.some(x=>x.impact==='critical'||x.impact==='serious')||report.runtimeErrors.length||report.keyboard.length||report.motion.length||report.interactions.some(x=>!x.passed)){
   console.error('BROWSER_QA_FINDINGS '+JSON.stringify({overflow:report.overflow,axe:report.axe,runtimeErrors:report.runtimeErrors,keyboard:report.keyboard,motion:report.motion,interactions:report.interactions},null,2));
