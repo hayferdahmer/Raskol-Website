@@ -5,50 +5,10 @@
 .hero-art[data-rsk-cinemagraph]:after { z-index:0; }
 .hero-art[data-rsk-cinemagraph] .rsk-cinema-layer { position:absolute; inset:-9%; display:block; pointer-events:none; opacity:0; transition:opacity 1.4s ease; will-change:transform,opacity,background-position; }
 .hero-art[data-rsk-cinemagraph].rsk-cinema-active .rsk-cinema-layer { opacity:var(--rsk-cinema-opacity,.5); }
-.hero-art .rsk-cinema-clouds {
-  z-index:1; --rsk-cinema-opacity:.62;
-  background:
-    radial-gradient(ellipse 34% 19% at 18% 28%,rgba(190,177,183,.28),transparent 75%),
-    radial-gradient(ellipse 42% 23% at 68% 24%,rgba(160,148,159,.34),transparent 74%),
-    radial-gradient(ellipse 32% 18% at 88% 42%,rgba(199,170,171,.22),transparent 76%),
-    radial-gradient(ellipse 48% 20% at 42% 12%,rgba(115,106,124,.3),transparent 78%);
-  background-size:145% 125%; background-repeat:no-repeat;
-  filter:blur(13px); mix-blend-mode:screen;
-  animation:rsk-cinema-clouds 48s ease-in-out infinite alternate;
-  translate:calc(var(--rsk-pointer-x,0) * -5px) calc(var(--rsk-pointer-y,0) * -3px);
-}
-.hero-art .rsk-cinema-mist-back {
-  z-index:2; --rsk-cinema-opacity:.58;
-  background:
-    radial-gradient(ellipse 48% 13% at 30% 65%,rgba(220,205,205,.38),transparent 72%),
-    radial-gradient(ellipse 55% 15% at 76% 71%,rgba(192,173,178,.36),transparent 74%),
-    linear-gradient(180deg,transparent 48%,rgba(178,164,173,.14) 66%,transparent 83%);
-  background-size:150% 135%; filter:blur(20px); mix-blend-mode:screen;
-  animation:rsk-cinema-mist-back 31s ease-in-out infinite alternate;
-  translate:calc(var(--rsk-pointer-x,0) * 4px) calc(var(--rsk-pointer-y,0) * 2px);
-}
-.hero-art .rsk-cinema-mist-front {
-  z-index:3; --rsk-cinema-opacity:.52;
-  background:
-    radial-gradient(ellipse 48% 17% at 14% 83%,rgba(205,187,190,.44),transparent 72%),
-    radial-gradient(ellipse 54% 18% at 66% 88%,rgba(192,176,181,.38),transparent 73%),
-    radial-gradient(ellipse 38% 13% at 92% 78%,rgba(221,195,190,.28),transparent 72%);
-  background-size:155% 140%; filter:blur(24px); mix-blend-mode:screen;
-  animation:rsk-cinema-mist-front 39s ease-in-out infinite alternate;
-  translate:calc(var(--rsk-pointer-x,0) * -9px) calc(var(--rsk-pointer-y,0) * -5px);
-}
-.hero-art .rsk-cinema-embers {
-  z-index:4; --rsk-cinema-opacity:.88;
-  background-image:
-    radial-gradient(circle,rgba(255,174,112,.98) 0 1.4px,rgba(255,104,69,.42) 2px,transparent 4px),
-    radial-gradient(circle,rgba(255,126,83,.92) 0 1px,transparent 3px),
-    radial-gradient(circle,rgba(255,204,142,.9) 0 1.2px,transparent 3.5px);
-  background-size:190px 230px,270px 310px,340px 280px;
-  background-position:20px 40px,90px 130px,170px 20px;
-  background-repeat:repeat;
-  filter:drop-shadow(0 0 5px rgba(255,105,65,.7)); mix-blend-mode:screen;
-  animation:rsk-cinema-embers 13s linear infinite;
-}
+.hero-art .rsk-cinema-clouds { z-index:1; --rsk-cinema-opacity:.58; background-image:url("../images/cinema-clouds.svg"); background-size:145% 125%; background-repeat:no-repeat; filter:blur(8px); mix-blend-mode:screen; animation:rsk-cinema-clouds 64s ease-in-out infinite alternate; translate:calc(var(--rsk-pointer-x,0) * -5px) calc(var(--rsk-pointer-y,0) * -3px); }
+.hero-art .rsk-cinema-mist-back { z-index:2; --rsk-cinema-opacity:.54; background-image:url("../images/cinema-mist-back.svg"); background-size:150% 135%; background-repeat:no-repeat; filter:blur(12px); mix-blend-mode:screen; animation:rsk-cinema-mist-back 43s ease-in-out infinite alternate; translate:calc(var(--rsk-pointer-x,0) * 4px) calc(var(--rsk-pointer-y,0) * 2px); }
+.hero-art .rsk-cinema-mist-front { z-index:3; --rsk-cinema-opacity:.48; background-image:url("../images/cinema-mist-front.svg"); background-size:155% 140%; background-repeat:no-repeat; filter:blur(16px); mix-blend-mode:screen; animation:rsk-cinema-mist-front 51s ease-in-out infinite alternate; translate:calc(var(--rsk-pointer-x,0) * -9px) calc(var(--rsk-pointer-y,0) * -5px); }
+.hero-art .rsk-cinema-embers { z-index:4; --rsk-cinema-opacity:.42; background-image:radial-gradient(circle at 17% 78%,rgba(255,142,92,.72) 0 1px,transparent 2px),radial-gradient(circle at 31% 88%,rgba(255,111,75,.54) 0 1px,transparent 2px),radial-gradient(circle at 68% 74%,rgba(255,161,103,.62) 0 1px,transparent 2px),radial-gradient(circle at 83% 86%,rgba(255,113,80,.48) 0 1px,transparent 2px),radial-gradient(circle at 57% 93%,rgba(255,184,121,.52) 0 1px,transparent 2px); mix-blend-mode:screen; animation:rsk-cinema-embers 24s ease-in-out infinite alternate; }
 .hero-art .rsk-cinema-light {
   z-index:5; --rsk-cinema-opacity:.48;
   background:
@@ -64,10 +24,7 @@
 }
 @keyframes rsk-cinema-mist-back { from { transform:translate3d(-3%,1%,0) scale(1.02); } to { transform:translate3d(4%,-1%,0) scale(1.1); } }
 @keyframes rsk-cinema-mist-front { from { transform:translate3d(4%,0,0) scale(1.02); } to { transform:translate3d(-5%,-2%,0) scale(1.1); } }
-@keyframes rsk-cinema-embers {
-  from { background-position:20px 40px,90px 130px,170px 20px; opacity:.62; }
-  to { background-position:20px -420px,90px -500px,170px -380px; opacity:1; }
-}
+@keyframes rsk-cinema-embers { from { transform:translate3d(-.4%,.8%,0); opacity:.28; } to { transform:translate3d(.6%,-.6%,0); opacity:.68; } }
 @keyframes rsk-cinema-light { from { opacity:.38; filter:brightness(.9); } to { opacity:.78; filter:brightness(1.2); } }
 @media(max-width:700px) {
   .hero-art[data-rsk-cinemagraph] picture img { object-position:54% center; }
