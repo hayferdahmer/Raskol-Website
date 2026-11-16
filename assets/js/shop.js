@@ -320,6 +320,15 @@
     };
     if(reducedMotion)begin();else window.setTimeout(begin,720);
   }
+  const soundToggle=$('#reelSoundToggle');
+  if(soundToggle){
+    soundToggle.addEventListener('click',()=>{
+      reelAudio.enabled=!reelAudio.enabled;
+      soundToggle.setAttribute('aria-pressed',String(reelAudio.enabled));
+      soundToggle.textContent=reelAudio.enabled?'Звук: вкл.':'Звук: выкл.';
+      if(reelAudio.enabled)playReelTone(520,.12,.035,'sine');
+    });
+  }
   $('#rollBtn').addEventListener('click',()=>roll(false));
   renderLoyalty();
   $('#claimBonusBtn').addEventListener('click',()=>{
